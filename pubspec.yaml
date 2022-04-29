@@ -14,12 +14,33 @@ dependencies:
   intl: ^0.17.0
   open_file: ^3.2.1
   path_provider: ^2.0.9
-  printing: ^5.3.0
-  url_launcher: ^6.0.6
+
+  get: ^4.6.1
+  get_storage: ^2.0.3
+
   logger: ^1.1.0
-  flutter_html_to_pdf: ^0.7.0
   webview_flutter: ^3.0.2
-  share_plus: ^4.0.4
+
+#  url_launcher: ^6.0.6
+#  share_plus: ^4.0.4
+  printing: ^5.3.0
+  flutter_html_to_pdf: ^0.7.0
+
+
+  #  webview_flutter: ^3.0.0
+#  webview_flutter:
+    #      path: ../webviewflutter_bitbucket/webview_flutter
+#    git:
+#      url: https://wjdev-004@bitbucket.org/wjdev-004/webviewflutter.git
+#      path: webview_flutter
+#      ref: master
+
+#    git:
+#      url: https://wjdev-004@bitbucket.org/wjdev-004/webview_flutter.git
+
+#    git:
+#      url: http://19002135:19002135!@scm.wjthinkbig.com:9444/r/MiddleClientLib.git
+#      path: webview_flutter
 
 dev_dependencies:
   flutter_lints: ^1.0.4
