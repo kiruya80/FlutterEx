@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
@@ -39,7 +40,6 @@ class HomeController extends GetxController {
 // final items = <String>[].obs;
 // final myMap = <String, int>{}.obs;
 
-
   @override
   void onInit() {
     super.onInit();
@@ -49,8 +49,14 @@ class HomeController extends GetxController {
     // });
   }
 
-  // @override
-  // void onClose()
-  //   Print.e("onClose");
-  // }
+  Future<List<HomeItem>> getHomeItems() async {
+    List<HomeItem> homeItems = [];
+
+    homeItems.add(new HomeItem(name: 'Permission', icon: ''));
+    homeItems.add(new HomeItem(name: 'Web Print', icon: ''));
+    homeItems.add(new HomeItem(name: 'Test 1', icon: ''));
+    homeItems.add(new HomeItem(name: 'Test 2', icon: ''));
+
+    return homeItems;
+  }
 }

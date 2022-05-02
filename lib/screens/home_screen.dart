@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
+import 'package:flutterex/datas/model/home_item.dart';
+import 'package:flutterex/screens/components/home_list_item.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 
 /// 가이드 화면
 class HomeScreen extends StatelessWidget {
@@ -12,6 +13,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Print.e("HomeScreen =============");
     HomeController controller = Get.find<HomeController>();
 
     return Obx(() {
@@ -30,33 +32,53 @@ class HomeScreen extends StatelessWidget {
           // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
           maintainBottomViewPadding: false,
           child: Container(
-            color: Colors.white,
-            width: Get.width,
-            height: Get.height,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Print.e("onTap === ");
-                      // writeCounter('파일 저장하기');
-                      controller.title.value = "test";
-                    },
-                    child: Text('url변경 ${controller.title.value}'),
-                  ),
-                  const SizedBox(
-                    height: 6.0,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Print.e("onTap === ");
-                      // writeCounter('파일 저장하기');
-                      controller.title.value = "test";
-                    },
-                    child: Text('url변경 ${controller.title.value}'),
-                  ),
-                ]),
-          ),
+              color: Colors.white,
+              width: Get.width,
+              height: Get.height,
+              child: FutureBuilder<List<HomeItem>>(
+                future: controller.getHomeItems(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<HomeItem>> snapshot) {
+                  //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
+
+                  if (snapshot.hasData == false) {
+                    Print.e("snapshot.hasData == false =============");
+                    return const Expanded(
+                        child: Center(child: CircularProgressIndicator()));
+                  } else if (snapshot.hasError) {
+                    Print.e("snapshot.hasError =============");
+                    return Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Error: ${snapshot.error}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ));
+                  } else {
+                    Print.e("snapshot.data != null =============");
+                    List<HomeItem> items = snapshot.data!;
+                    return Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: items.length,
+                        itemBuilder: (BuildContext context, int position) {
+                          HomeItem item = items[position];
+
+                          return Column(
+                            children: <HomeListItemForm>[
+                              HomeListItemForm(item: item),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+              )),
         ),
       );
     });
