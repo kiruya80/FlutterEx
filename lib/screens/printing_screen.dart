@@ -92,7 +92,7 @@ class PrintingScreen extends StatelessWidget {
                             Print.e(
                                 "ElevatedButton : ${textEdController.text}");
                             url = textEdController.text.trim();
-                            if (url != null && url.isEmpty) {
+                            if (url != null && url.isNotEmpty) {
                               Print.e("ElevatedButton : $url");
                               controller.webviewUrl.value = url;
                               _webviewController.loadUrl(url);
