@@ -1,40 +1,41 @@
 import 'dart:convert';
 
-class HomeItem {
-  String name;
-  String routeName;
-  String icon;
+import 'dart:ui';
 
-  HomeItem({
-    required this.name,
-    required this.routeName,
-    required this.icon,
+import 'package:flutter/src/painting/text_style.dart';
+
+class FontItem {
+  TextStyle? textStyle;
+
+  String styleName;
+
+  FontItem({
+    required this.textStyle,
+    required this.styleName,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'routeName': routeName,
-      'icon': icon,
+      'textStyle': textStyle,
+      'styleName': styleName,
     };
   }
 
-  factory HomeItem.fromMap(Map<String, dynamic> map) {
-    return HomeItem(
-      name: map['name'],
-      routeName: map['routeName'],
-      icon: map['icon'],
+  factory FontItem.fromMap(Map<String, dynamic> map) {
+    return FontItem(
+      textStyle: map['textStyle'],
+      styleName: map['styleName'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory HomeItem.fromJson(String source) =>
-      HomeItem.fromMap(json.decode(source));
+  factory FontItem.fromJson(String source) =>
+      FontItem.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'HomeItem{name: $name, routeName: $routeName, icon: $icon}';
+    return 'FontItem{textStyle: $textStyle , styleName: $styleName}';
   }
 }
 

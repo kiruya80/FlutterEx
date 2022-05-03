@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutterex/controllers/home_controller.dart';
-import 'package:flutterex/datas/model/home_item.dart';
-import 'package:flutterex/screens/components/home_list_item.dart';
+import 'package:flutterex/controllers/font_controller.dart';
+import 'package:flutterex/datas/model/font_item.dart';
+import 'package:flutterex/screens/components/font_list_item.dart';
+import 'package:flutterex/screens/components/text_style.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
-/// 가이드 화면
-class HomeScreen extends StatelessWidget {
-  static const routeName = '/';
+class FontScreen extends StatelessWidget {
+  static const routeName = '/font';
 
-  const HomeScreen({Key? key}) : super(key: key);
+  const FontScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Print.e("HomeScreen =============");
-    HomeController controller = Get.find<HomeController>();
+    Print.e("FontScreen =============");
+    FontController controller = Get.find<FontController>();
 
-    // return Obx(() {
-    // return KeyboardWidget(
     return Scaffold(
-      // Scaffold 기본 UI형태 appBar, body, BottomNavigationBar, FloatingActionButton, FloatingActionButtonLocation
       appBar: AppBar(
-        title: Text('Flutter Sample'),
+        title:
+            QcText.headline6(controller.title.value, fontColor: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
-      // SafeArea 디자인한 UI가 화면에 잘리지 않고 정상적으로 보이게
+
       body: SafeArea(
         // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
         // maintainBottomViewPadding: false,
@@ -31,10 +35,10 @@ class HomeScreen extends StatelessWidget {
             color: Colors.white,
             width: Get.width,
             height: Get.height,
-            child: FutureBuilder<List<HomeItem>>(
-              future: controller.getHomeItems(),
+            child: FutureBuilder<List<FontItem>>(
+              future: controller.makeFontData(),
               builder: (BuildContext context,
-                  AsyncSnapshot<List<HomeItem>> snapshot) {
+                  AsyncSnapshot<List<FontItem>> snapshot) {
                 //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                 if (snapshot.hasData == false) {
                   return Container(
@@ -52,17 +56,17 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ));
                 } else {
-                  List<HomeItem> items = snapshot.data!;
+                  List<FontItem> items = snapshot.data!;
                   return Container(
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: items.length,
                       itemBuilder: (BuildContext context, int position) {
-                        HomeItem item = items[position];
+                        FontItem item = items[position];
 
                         return Column(
-                          children: <HomeListItemForm>[
-                            HomeListItemForm(item: item),
+                          children: <FontListItemForm>[
+                            FontListItemForm(item: item),
                           ],
                         );
                       },
@@ -72,7 +76,24 @@ class HomeScreen extends StatelessWidget {
               },
             )),
       ),
+
+      // body: SingleChildScrollView(
+      //   scrollDirection: Axis.vertical,
+      //   child: Column(
+      //     children: [
+      //       Container(
+      //         width: Get.width,
+      //         height: 150,
+      //         color: Colors.amberAccent,
+      //       ),
+      //       Container(
+      //         width: Get.width,
+      //         height: 150,
+      //         color: Colors.blueAccent,
+      //       ),
+      //     ],
+      //   ),
+      // )
     );
-    // });
   }
 }

@@ -1,28 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
+import 'package:flutterex/datas/model/font_item.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/components/text_style.dart';
 import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
-class HomeListItemForm extends StatefulWidget {
-  final HomeItem item;
+class FontListItemForm extends StatefulWidget {
+  final FontItem item;
 
-  const HomeListItemForm({Key? key, required this.item}) : super(key: key);
+  const FontListItemForm({Key? key, required this.item}) : super(key: key);
 
   @override
-  _HomeListItemFormState createState() => _HomeListItemFormState(item);
+  _FontListItemFormState createState() => _FontListItemFormState(item);
 }
 
-class _HomeListItemFormState extends State<HomeListItemForm> {
+class _FontListItemFormState extends State<FontListItemForm> {
   final homeController = Get.find<HomeController>();
 
-  // Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  HomeItem item;
+  FontItem item;
 
-  _HomeListItemFormState(this.item);
+  _FontListItemFormState(this.item);
 
   @override
   void initState() {
@@ -39,22 +39,20 @@ class _HomeListItemFormState extends State<HomeListItemForm> {
             width: 1,
           ),
           borderRadius: BorderRadius.circular(5)),
-      // padding: const EdgeInsets.only(right: 30.0),
       margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-              // flex: 4,
-              child: GestureDetector(
-            onTap: () {
-              Print.e("item.routeName == ${item.routeName}");
-              Get.toNamed(item.routeName);
-            },
+            // flex: 4,
             child: Container(
-                margin: const EdgeInsets.all(20),
-                child: QcText.subtitle1(item.name)),
-          ))
+                margin: const EdgeInsets.all(5),
+                child: QcText.common(
+                  item.styleName,
+                  textStyle: item.textStyle,
+                  multiLine: true,
+                )),
+          )
         ],
       ),
     );
