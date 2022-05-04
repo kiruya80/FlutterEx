@@ -26,7 +26,9 @@ dependencies:
   printing: ^5.3.0
   flutter_html_to_pdf: ^0.7.0
   permission_handler: ^9.2.0
+  shared_preferences: ^2.0.13
 
+#  auto_size_text: ^3.0.0
 
   #  webview_flutter: ^3.0.0
 #  webview_flutter:

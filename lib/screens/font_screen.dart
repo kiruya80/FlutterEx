@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/font_controller.dart';
 import 'package:flutterex/datas/model/font_item.dart';
 import 'package:flutterex/screens/components/font_list_item.dart';
-import 'package:flutterex/screens/components/text_style.dart';
+import 'package:flutterex/widget/text_widget.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 

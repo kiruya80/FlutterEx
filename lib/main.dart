@@ -4,6 +4,7 @@ import 'package:flutterex/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -14,33 +15,48 @@ void main() {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
+  final _prefs = SharedPreferences.getInstance();
+
+  Future<void> samplePref() async {
+    final SharedPreferences prefs = await _prefs;
+
+    var blockAppList = prefs.getString('SETTING_CHILD_MANAGEMENT_BLOCKS') ??
+        'DEFAULT_BLOCK_PACKAGES';
+    prefs.setString(
+        'SETTING_CHILD_MANAGEMENT_BLOCKS', 'SETTING_CHILD_MANAGEMENT_BLOCKS');
+  }
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
 
-    return GetMaterialApp(
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: child!
-        );
-      },
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: GetMaterialApp(
+          builder: (BuildContext context, Widget? child) {
+            return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: child!);
+          },
 
-      // navigatorObservers: [MiddleNavObserver.instance],
-      locale: Get.deviceLocale,
-      fallbackLocale: const Locale('ko', 'KR'),
+          // navigatorObservers: [MiddleNavObserver.instance],
+          locale: Get.deviceLocale,
+          fallbackLocale: const Locale('ko', 'KR'),
 
-      smartManagement: SmartManagement.keepFactory,
-      debugShowCheckedModeBanner: kDebugMode,
-      title: "Flutter Sample",
-      getPages: GetXRouterContainer().allPageRouter,
-      initialRoute: HomeScreen.routeName,
+          smartManagement: SmartManagement.keepFactory,
+          debugShowCheckedModeBanner: kDebugMode,
+          title: "Flutter Sample",
+          getPages: GetXRouterContainer().allPageRouter,
+          initialRoute: HomeScreen.routeName,
 
-      // theme: Themes.darkTheme,
-      // darkTheme: Themes.darkTheme,
-      // themeMode: ThemeService().theme,
-    );
+          // theme: Themes.darkTheme,
+          // darkTheme: Themes.darkTheme,
+          // themeMode: ThemeService().theme,
+        ));
   }
 }
