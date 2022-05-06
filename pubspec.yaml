@@ -27,6 +27,7 @@ dependencies:
   flutter_html_to_pdf: ^0.7.0
   permission_handler: ^9.2.0
   shared_preferences: ^2.0.13
+  fluttertoast: ^8.0.9
 
 #  auto_size_text: ^3.0.0
 

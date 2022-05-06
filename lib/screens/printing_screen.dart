@@ -124,15 +124,11 @@ class _PrintingScreenState extends State<PrintingScreen> {
                         ElevatedButton(
                             onPressed: () async {
                               if (controller.isTextValidate()!) {
-                                // controller.webviewUrl.value =
-                                //     textEdController.text;
-
                                 String moveUrl =
                                     controller.makeUrl(textEdController.text);
-                                if (moveUrl.isNotEmpty) {
+                                if (moveUrl.isNotEmpty && moveUrl.isURL) {
                                   _webviewController.loadUrl(controller
                                       .makeUrl(textEdController.text));
-                                  // _webviewController .loadUrl('https://www.daum.net/');
 
                                   Print.e(
                                       "webviewUrl  ${controller.webviewUrl.value}");
@@ -147,6 +143,14 @@ class _PrintingScreenState extends State<PrintingScreen> {
                                   Get.snackbar(
                                     '웹페이지 이동!',
                                     moveUrl + ' 이동합니다',
+                                    backgroundColor: Colors.black,
+                                    colorText: Colors.white,
+                                    snackPosition: SnackPosition.BOTTOM,
+                                  );
+                                } else {
+                                  Get.snackbar(
+                                    '알림',
+                                    'URL 형식으로 입력해주세요',
                                     backgroundColor: Colors.black,
                                     colorText: Colors.white,
                                     snackPosition: SnackPosition.BOTTOM,
