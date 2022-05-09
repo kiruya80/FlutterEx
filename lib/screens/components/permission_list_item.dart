@@ -115,12 +115,32 @@ class _PermissionListItemFormState extends State<PermissionListItemForm> {
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1);
                       } else if (permissionResult.isPermanentlyDenied == true) {
-                        Fluttertoast.showToast(
-                            msg: "권한 승인 거부 앱설정으로 이동",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1);
-                        await openAppSettings();
+                        if (Get.isDialogOpen == true) {
+                          Get.back();
+                        }
+                        Get.dialog(
+                          AlertDialog(
+                            title: const Text('알림'),
+                            content: const Text('앱 설정으로 이동하시겠습니까?'),
+                            actions: [
+                              TextButton(
+                                child: const Text("닫기"),
+                                onPressed: () => Get.back(),
+                              ),
+                              TextButton(
+                                child: const Text("이동"),
+                                onPressed: () async {
+                                  Fluttertoast.showToast(
+                                      msg: "권한 승인 거부 앱설정으로 이동",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1);
+                                  await openAppSettings();
+                                },
+                              ),
+                            ],
+                          ),
+                        );
                       } else {
                         Fluttertoast.showToast(
                             msg: "권한 승인 실패",

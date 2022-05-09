@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/font_screen.dart';
+import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
@@ -58,6 +59,10 @@ class HomeController extends GetxController {
 
     homeItems.add(
         new HomeItem(name: 'Font', routeName: FontScreen.routeName, icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'Multi language',
+        routeName: MultiLangScreen.routeName,
+        icon: ''));
     homeItems.add(new HomeItem(
         name: 'Permission', routeName: PermissionScreen.routeName, icon: ''));
     homeItems.add(new HomeItem(

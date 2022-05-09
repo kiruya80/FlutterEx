@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutterex/get_x_router.dart';
+import 'package:flutterex/langs/Languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // await GetStorage.init();
   // await Firebase.initializeApp();
   // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
@@ -44,7 +45,10 @@ class MyApp extends StatelessWidget {
                 child: child!);
           },
 
-          // navigatorObservers: [MiddleNavObserver.instance],
+          // localizationsDelegates: context.localizationDelegates,
+          // supportedLocales: context.supportedLocales,
+
+          translations: Languages(),
           locale: Get.deviceLocale,
           fallbackLocale: const Locale('ko', 'KR'),
 
