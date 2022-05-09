@@ -71,7 +71,7 @@ class _HomeListItemFormState extends State<HomeListItemForm> {
             child: OutlinedButton(
                 onPressed: () async {
                   Print.e("item.routeName == ${item.routeName}");
-                  Get.toNamed(item.routeName);
+                  Get.toNamed(item.routeName, arguments: {'name': item.name});
                 },
                 style: OutlinedButton.styleFrom(
                   minimumSize: Size.fromHeight(80),

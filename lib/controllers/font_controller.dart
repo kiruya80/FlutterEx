@@ -1,4 +1,5 @@
 import 'package:flutterex/datas/model/font_item.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
 class FontController extends GetxController {
@@ -8,6 +9,12 @@ class FontController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    final args = Get.arguments;
+    final name = args['name'];
+    Print.e('name : $name');
+    title.value = name;
+
     makeFontData();
   }
 

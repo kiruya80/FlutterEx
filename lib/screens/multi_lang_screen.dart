@@ -13,7 +13,6 @@ class MultiLangScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Print.e("FontScreen =============");
     MultiLangController controller = Get.find<MultiLangController>();
-    controller.title.value = 'multi_title'.tr;
     return Scaffold(
       appBar: AppBar(
         title:
@@ -65,19 +64,46 @@ class MultiLangScreen extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
+                  /**
+                   * ㄴ Row (가로로 아이템이 쌓임)
+                   * ㄴ Colum (세로로 아이템이 쌓임)
+                   *
+                   * MainAxisAlignment 아이템이 쌓이는 방향
+                   * CrossAxisAlignment 아이템 하나의 방향
+                   *
+                   */
                   Container(
                     width: Get.width,
-                    height: 80,
+                    height: 200,
                     color: Colors.amberAccent,
-                  ),
-                  SizedBox(
-                    height: 20,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          Text('Hello, Flutter Beginner!'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
                   ),
                   Container(
                     width: Get.width,
-                    height: 80,
+                    height: 200,
                     color: Colors.blueAccent,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.end,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          Text('Hello, Flutter Beginner!'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
                   ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // Container(
+                  //   width: Get.width,
+                  //   height: 80,
+                  //   color: Colors.blueAccent,
+                  // ),
                 ],
               ),
             )),

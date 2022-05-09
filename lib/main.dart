@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterex/get_x_router.dart';
-import 'package:flutterex/langs/Languages.dart';
+import 'package:flutterex/langs/languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
 import 'package:get/get.dart';
 

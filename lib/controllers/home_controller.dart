@@ -5,11 +5,12 @@ import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
+import 'package:flutterex/screens/widget_type_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  var title = "타이틀".obs;
+  var title = "".obs;
   List<String> languages = [];
   List<String> languages1 = <String>[].obs;
   final _subMenu = <Object>[].obs;
@@ -49,6 +50,11 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
 
+    // final args = Get.arguments;
+    // final name = args['name'];
+    // Print.e('name : $name');
+    // title.value = name;
+
     // ever(guideType, (_) {
     //   reqGuideInfo();
     // });
@@ -57,16 +63,24 @@ class HomeController extends GetxController {
   Future<List<HomeItem>> getHomeItems() async {
     List<HomeItem> homeItems = [];
 
-    homeItems.add(
-        new HomeItem(name: 'Font', routeName: FontScreen.routeName, icon: ''));
     homeItems.add(new HomeItem(
-        name: 'Multi language',
+        name: 'title_font'.tr, routeName: FontScreen.routeName, icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'title_widget'.tr,
+        routeName: WidgetTypeScreen.routeName,
+        icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'title_multi_lang'.tr,
         routeName: MultiLangScreen.routeName,
         icon: ''));
     homeItems.add(new HomeItem(
-        name: 'Permission', routeName: PermissionScreen.routeName, icon: ''));
+        name: 'title_permission'.tr,
+        routeName: PermissionScreen.routeName,
+        icon: ''));
     homeItems.add(new HomeItem(
-        name: 'Web Print', routeName: PrintingScreen.routeName, icon: ''));
+        name: 'title_web_print'.tr,
+        routeName: PrintingScreen.routeName,
+        icon: ''));
 
     return homeItems;
   }

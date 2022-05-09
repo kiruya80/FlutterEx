@@ -3,6 +3,7 @@ import 'package:flutterex/controllers/home_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/components/home_list_item.dart';
 import 'package:flutterex/utils/print_log.dart';
+import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
 /// 가이드 화면
@@ -16,12 +17,15 @@ class HomeScreen extends StatelessWidget {
     Print.e("HomeScreen =============");
     HomeController controller = Get.find<HomeController>();
 
+    controller.title.value = 'title_main'.tr;
+
     // return Obx(() {
     // return KeyboardWidget(
     return Scaffold(
       // Scaffold 기본 UI형태 appBar, body, BottomNavigationBar, FloatingActionButton, FloatingActionButtonLocation
       appBar: AppBar(
-        title: Text('Flutter Sample'),
+        title:
+            QcText.headline6(controller.title.value, fontColor: Colors.white),
       ),
       // SafeArea 디자인한 UI가 화면에 잘리지 않고 정상적으로 보이게
       body: SafeArea(

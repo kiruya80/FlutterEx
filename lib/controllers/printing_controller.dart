@@ -14,6 +14,11 @@ class PrintingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    final args = Get.arguments;
+    final name = args['name'];
+    Print.e('name : $name');
+    title.value = name;
+
   }
 
   bool? isTextValidate() {

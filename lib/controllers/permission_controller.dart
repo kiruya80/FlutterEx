@@ -14,6 +14,11 @@ class PermissionController extends GetxController {
   void onInit() {
     super.onInit();
 
+    final args = Get.arguments;
+    final name = args['name'];
+    Print.e('name : $name');
+    title.value = name;
+
     getPermissionItems();
   }
 
