@@ -76,6 +76,11 @@ class HomeScreen extends StatelessWidget {
               },
             )),
       ),
+      floatingActionButton: FloatingActionButton(
+        // tooltip: 'Increment',
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ), // This
     );
     // });
   }

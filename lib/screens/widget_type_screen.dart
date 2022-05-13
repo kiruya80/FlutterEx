@@ -377,7 +377,7 @@ class WidgetTypeScreen extends StatelessWidget {
                   ),
                   QcText.headline3('IntrinsicHeight 사용 전 '),
                   Container(
-                    height: 300,
+                    height: 150,
                     child: DecoratedBox(
                       decoration: BoxDecoration(color: Colors.grey),
                       child: Row(
@@ -402,10 +402,10 @@ class WidgetTypeScreen extends StatelessWidget {
                     height: 2,
                     color: Colors.black,
                   ),
-                  QcText.headline3('IntrinsicHeight 사용 후 '),
+                  QcText.headline3('IntrinsicHeight 가로 '),
                   // 이 위젯은 처리비용이 매우 비싸므로 지양해야 합니다.
                   Container(
-                    height: 300,
+                    height: 150,
                     child: IntrinsicHeight(
                       child: DecoratedBox(
                         decoration: BoxDecoration(color: Colors.grey),
@@ -419,6 +419,38 @@ class WidgetTypeScreen extends StatelessWidget {
                             DecoratedBox(
                               decoration: BoxDecoration(color: Colors.green),
                               child: Text('bbb\nbbb\nbbb'),
+                            ),
+                            DecoratedBox(
+                              decoration: BoxDecoration(color: Colors.blue),
+                              child: Text('ccc'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Container(
+                    height: 2,
+                    color: Colors.black,
+                  ),
+                  QcText.headline3('IntrinsicHeight 세로 '),
+                  // 이 위젯은 처리비용이 매우 비싸므로 지양해야 합니다.
+                  Container(
+                    height: 150,
+                    child: IntrinsicWidth(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: Colors.grey),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            DecoratedBox(
+                              decoration: BoxDecoration(color: Colors.red),
+                              child: Text('aaaaaa'),
+                            ),
+                            DecoratedBox(
+                              decoration: BoxDecoration(color: Colors.green),
+                              child: Text('bbbbbbbbb'),
                             ),
                             DecoratedBox(
                               decoration: BoxDecoration(color: Colors.blue),
@@ -593,10 +625,11 @@ class WidgetTypeScreen extends StatelessWidget {
                     color: Colors.black,
                   ),
                   QcText.headline3('FractionalTranslation '),
+                  // 페인팅 시점에 자식의 크기의 설정된 비율만큼의 거리를 이동시킵니다.
                   Container(
                     height: 300,
                     child: FractionalTranslation(
-                      translation: Offset(1, 1),
+                      translation: Offset(1, 0),
                       child: const Text('Hello World!'),
                     ),
                   ),

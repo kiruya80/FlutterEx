@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/font_screen.dart';
+import 'package:flutterex/screens/http_api_screen.dart';
 import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
@@ -80,6 +81,10 @@ class HomeController extends GetxController {
     homeItems.add(new HomeItem(
         name: 'title_web_print'.tr,
         routeName: PrintingScreen.routeName,
+        icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'HttpApiScreen'.tr,
+        routeName: HttpApiScreen.routeName,
         icon: ''));
 
     return homeItems;
