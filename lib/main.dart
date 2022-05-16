@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterex/constants/constant.dart';
 import 'package:flutterex/get_x_router.dart';
 import 'package:flutterex/langs/languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
@@ -61,7 +62,22 @@ class MyApp extends StatelessWidget {
 
           theme: ThemeData(
             useMaterial3: true,
-            primaryColor: Colors.purple[800],
+            // primaryColor: Colors.purple[800],
+            colorScheme: Constants.lightColorScheme,
+            // colorScheme: Get.isDarkMode
+            //     ? Constants.darkColorScheme
+            //     : Constants.lightColorScheme,
+
+            // colorScheme:
+            // typography:
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            // primaryColor: Colors.purple[800],
+            colorScheme: Constants.darkColorScheme,
+
+            // colorScheme:
+            // typography:
           ),
           // theme: ThemeData(
           //   // Define the default brightness and colors.

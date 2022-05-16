@@ -78,7 +78,15 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         // tooltip: 'Increment',
-        onPressed: () {},
+        onPressed: () {
+          // Get.changeTheme(
+          //   Get.isDarkMode ? ThemeData.light() : ThemeData.dark(),
+          // );
+          // 이걸로 해야 머터리얼3 디자인 테마 변경 가능
+          Get.changeThemeMode(
+            Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
+          );
+        },
         child: Icon(Icons.add),
       ), // This
     );
