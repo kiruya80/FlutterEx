@@ -4,6 +4,7 @@ import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/components/home_list_item.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 /// 가이드 화면
@@ -14,7 +15,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Print.e("HomeScreen =============");
+    QcLog.e("HomeScreen =============");
     HomeController controller = Get.find<HomeController>();
 
     controller.title.value = 'title_main'.tr;
@@ -24,15 +25,15 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       // Scaffold 기본 UI형태 appBar, body, BottomNavigationBar, FloatingActionButton, FloatingActionButtonLocation
       appBar: AppBar(
-        title:
-            QcText.headline6(controller.title.value, fontColor: Colors.white),
+        // backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        title: QcText.headline6(controller.title.value),
       ),
       // SafeArea 디자인한 UI가 화면에 잘리지 않고 정상적으로 보이게
       body: SafeArea(
         // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
         // maintainBottomViewPadding: false,
         child: Container(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.background,
             width: Get.width,
             height: Get.height,
             child: FutureBuilder<List<HomeItem>>(
@@ -83,9 +84,15 @@ class HomeScreen extends StatelessWidget {
           //   Get.isDarkMode ? ThemeData.light() : ThemeData.dark(),
           // );
           // 이걸로 해야 머터리얼3 디자인 테마 변경 가능
+          Fluttertoast.cancel();
           Get.changeThemeMode(
             Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
           );
+          Fluttertoast.showToast(
+              msg: Get.isDarkMode ? 'theme_light'.tr : 'theme_dark'.tr,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1);
         },
         child: Icon(Icons.add),
       ), // This

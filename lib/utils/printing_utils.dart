@@ -8,10 +8,10 @@ class PrintingUtils {
     // String html = await _controller.evaluateJavascript("window.document.getElementsByTagName('html')[0].outerHTML;");
     // String html = await _controller.evaluateJavascript(
     //     "encodeURIComponent(document.documentElement.outerHTML)");
-    Print.e("html ============== $html");
-    Print.e("baseUrl ============== $baseUrl");
+    QcLog.e("html ============== $html");
+    QcLog.e("baseUrl ============== $baseUrl");
     var data = Uri.decodeComponent(html);
-    Print.e("data ============== $data");
+    QcLog.e("data ============== $data");
     // encodeURIComponent(document.documentElement.outerHTML)"
 
     // final decodeData = utf8.decode(html.); // 한글 깨짐 인코딩

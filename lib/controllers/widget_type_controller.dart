@@ -10,7 +10,7 @@ class WidgetTypeController extends GetxController {
 
     final args = Get.arguments;
     final name = args['name'];
-    Print.e('name : $name');
+    QcLog.e('name : $name');
     title.value = name;
 
     // title.value = 'multi_title'.tr;

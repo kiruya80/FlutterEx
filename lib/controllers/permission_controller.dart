@@ -16,7 +16,7 @@ class PermissionController extends GetxController {
 
     final args = Get.arguments;
     final name = args['name'];
-    Print.e('name : $name');
+    QcLog.e('name : $name');
     title.value = name;
 
     getPermissionItems();
@@ -51,7 +51,7 @@ class PermissionController extends GetxController {
 
   Future<void> requestPermission(Permission permission) async {
     final permissionResult = await permission.request();
-    Print.e("permissionResult == $permissionResult");
+    QcLog.e("permissionResult == $permissionResult");
 
     // return permissionResult.isGranted == true;
   }

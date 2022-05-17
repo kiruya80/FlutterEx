@@ -16,7 +16,7 @@ class PrintingController extends GetxController {
     super.onInit();
     final args = Get.arguments;
     final name = args['name'];
-    Print.e('name : $name');
+    QcLog.e('name : $name');
     title.value = name;
 
   }
@@ -42,7 +42,7 @@ class PrintingController extends GetxController {
     }
     bool _validURL = Uri.parse(_url).isAbsolute;
     var host = Uri.parse(_url).host;
-    Print.e("host  : $host");
+    QcLog.e("host  : $host");
 
     if (_validURL) {
       return _url;

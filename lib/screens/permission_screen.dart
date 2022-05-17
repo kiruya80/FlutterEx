@@ -12,7 +12,7 @@ class PermissionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Print.e("PermissionScreen =============");
+    QcLog.e("PermissionScreen =============");
     PermissionController controller = Get.find<PermissionController>();
 
     return Obx(() {
@@ -36,7 +36,7 @@ class PermissionScreen extends StatelessWidget {
           // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
           // maintainBottomViewPadding: false,
           child: Container(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.background,
               width: Get.width,
               height: Get.height,
               child:

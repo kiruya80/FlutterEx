@@ -97,7 +97,7 @@ class _PermissionListItemFormState extends State<PermissionListItemForm> {
                       // callback?.call(item.permission);
                       // callback?.call();
                       final permissionResult = await item.permission.request();
-                      Print.e(
+                      QcLog.e(
                           "permissionResult === ${item.permission.toString()}, ${permissionResult.name}");
                       item.status.value = permissionResult.name.toUpperCase();
                       // openAppSettings();

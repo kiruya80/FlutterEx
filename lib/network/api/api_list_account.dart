@@ -46,7 +46,7 @@ class ApiListAccount {
       var response = await QcHttpClient.instance.get(
         "posts/1",
       );
-      Print.e('response === $response');
+      QcLog.e('response === $response');
 
       // return PostSample.fromMap(response['RESP_RESULT']);
       return ResponseModel(jsonEncode(response), PostSample.fromJson(response));

@@ -12,6 +12,8 @@ class Languages extends Translations {
           'title_permission': '권한',
           'title_web_print': '웹 프린트',
           'title_http_api': 'Api 샘플',
+          'theme_light': 'Light 테마',
+          'theme_dark': 'Dark 테마',
           'api_get_posts': 'GET	/posts',
           'api_get_posts_1': 'GET	/posts/1',
           'api_get_comments': 'GET	/posts/1/comments',

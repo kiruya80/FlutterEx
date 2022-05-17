@@ -4,10 +4,11 @@ import 'package:flutterex/get_x_router.dart';
 import 'package:flutterex/langs/languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,21 +16,27 @@ void main() async {
   // await Firebase.initializeApp();
   // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 
+  getDeviceTheme();
+
   runApp(MyApp());
 }
 
+Future<void> getDeviceTheme() async {
+  final isDeviceLight =
+      SchedulerBinding.instance.window.platformBrightness == Brightness.light;
+  QcLog.e(
+      'Device Theme : $isDeviceLight  , ${isDeviceLight ? 'theme_light'.tr : 'theme_dark'.tr}');
+
+  Get.changeThemeMode(isDeviceLight ? ThemeMode.light : ThemeMode.dark);
+
+  Fluttertoast.showToast(
+      msg: Get.isDarkMode ? 'theme_light'.tr : 'theme_dark'.tr,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1);
+}
+
 class MyApp extends StatelessWidget {
-  final _prefs = SharedPreferences.getInstance();
-
-  Future<void> samplePref() async {
-    final SharedPreferences prefs = await _prefs;
-
-    var blockAppList = prefs.getString('SETTING_CHILD_MANAGEMENT_BLOCKS') ??
-        'DEFAULT_BLOCK_PACKAGES';
-    prefs.setString(
-        'SETTING_CHILD_MANAGEMENT_BLOCKS', 'SETTING_CHILD_MANAGEMENT_BLOCKS');
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

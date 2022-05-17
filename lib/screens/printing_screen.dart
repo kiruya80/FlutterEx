@@ -70,6 +70,7 @@ class _PrintingScreenState extends State<PrintingScreen> {
           child: Column(
             children: <Widget>[
               Container(
+                color: Theme.of(context).colorScheme.background,
                 // height: 80,
                 margin: const EdgeInsets.only(
                     left: 20, right: 20, top: 10, bottom: 10),
@@ -90,13 +91,13 @@ class _PrintingScreenState extends State<PrintingScreen> {
                           child: TextFormField(
                             onSaved: (value) {
                               // controller.saveTextValidate(); 필요
-                              Print.e("onSaved : $value");
+                              QcLog.e("onSaved : $value");
                               if (value != null && value.isNotEmpty) {
                                 controller.webviewUrl.value = value;
                               }
                             },
                             validator: (value) {
-                              Print.e("validator : $value");
+                              QcLog.e("validator : $value");
                               if (value != null && value.isEmpty) {
                                 return 'url을 입력해주세요';
                               }
@@ -130,9 +131,9 @@ class _PrintingScreenState extends State<PrintingScreen> {
                                   _webviewController.loadUrl(controller
                                       .makeUrl(textEdController.text));
 
-                                  Print.e(
+                                  QcLog.e(
                                       "webviewUrl  ${controller.webviewUrl.value}");
-                                  Print.e("url  ${controller.url.value}");
+                                  QcLog.e("url  ${controller.url.value}");
                                   // validation 이 성공하면 true 가 리턴돼요!
                                   // controller.saveTextValidate();
 
@@ -166,7 +167,7 @@ class _PrintingScreenState extends State<PrintingScreen> {
                             onPressed: () async {
                               String? currentUrl =
                                   await _webviewController.currentUrl();
-                              Print.e(
+                              QcLog.e(
                                   "current url : $currentUrl , ${controller.webviewUrl.value}");
 
                               _webviewController
@@ -190,7 +191,7 @@ class _PrintingScreenState extends State<PrintingScreen> {
                   javascriptMode: JavascriptMode.unrestricted,
                   allowsInlineMediaPlayback: true,
                   onWebViewCreated: (controller) async {
-                    Print.e("onWebViewCreated ");
+                    QcLog.e("onWebViewCreated ");
                     _webviewController = controller;
                   },
                   onPageFinished: (url) async {
@@ -200,7 +201,7 @@ class _PrintingScreenState extends State<PrintingScreen> {
                       await _webviewController.runJavascriptReturningResult(
                           'document.documentElement.scrollHeight;'),
                     );
-                    Print.e("_contentHeight : $_contentHeight");
+                    QcLog.e("_contentHeight : $_contentHeight");
                   },
                 ),
               ),

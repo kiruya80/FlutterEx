@@ -33,11 +33,11 @@ class _FontListItemFormState extends State<FontListItemForm> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: Color(0xFF4D4D4D),
-            width: 1,
-          ),
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          // border: Border.all(
+          // color: Theme.of(context).colorScheme.background,
+          //   width: 3,
+          // ),
           borderRadius: BorderRadius.circular(5)),
       margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
       child: Row(
@@ -50,6 +50,7 @@ class _FontListItemFormState extends State<FontListItemForm> {
                 child: QcText.common(
                   item.styleName,
                   textStyle: item.textStyle,
+                  fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
                   multiLine: true,
                 )),
           )

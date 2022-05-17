@@ -54,7 +54,7 @@ class HttpApiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Print.e("HttpApiScreen =============");
+    QcLog.e("HttpApiScreen =============");
     HttpApiController controller = Get.find<HttpApiController>();
 
     return Obx(() {
@@ -73,7 +73,7 @@ class HttpApiScreen extends StatelessWidget {
           // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
           // maintainBottomViewPadding: false,
           child: Container(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.background,
               width: Get.width,
               height: Get.height,
               margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
@@ -136,7 +136,7 @@ class HttpApiScreen extends StatelessWidget {
                                     var result = await ApiList().getOnePost();
 
                                     String jsonTutorial = jsonEncode(result);
-                                    Print.e('jsonTutorial : $jsonTutorial');
+                                    QcLog.e('jsonTutorial : $jsonTutorial');
 
                                     // JsonEncoder encoder =
                                     //     new JsonEncoder.withIndent('  ');
@@ -218,7 +218,7 @@ class HttpApiScreen extends StatelessWidget {
                                     // https://jsonplaceholder.typicode.com/posts/1
                                     var result = await ApiList().getComments(
                                         queryParams: {'postId': '1'});
-                                    Print.e('result ==== $result');
+                                    QcLog.e('result ==== $result');
                                     controller.api_get_comments_1.value =
                                         result.toString();
                                   },
@@ -254,7 +254,7 @@ class HttpApiScreen extends StatelessWidget {
                                   onPressed: () async {
                                     // https://jsonplaceholder.typicode.com/posts/1
                                     var result = await ApiList().postSample();
-                                    Print.e('result ==== $result');
+                                    QcLog.e('result ==== $result');
                                     controller.api_post_posts.value =
                                         result.toString();
                                   },
@@ -290,7 +290,7 @@ class HttpApiScreen extends StatelessWidget {
                                   onPressed: () async {
                                     // https://jsonplaceholder.typicode.com/posts/1
                                     var result = await ApiList().putample();
-                                    Print.e('result ==== $result');
+                                    QcLog.e('result ==== $result');
                                     controller.api_put_posts.value =
                                         result.toString();
                                   },
@@ -325,7 +325,7 @@ class HttpApiScreen extends StatelessWidget {
                                   onPressed: () async {
                                     // https://jsonplaceholder.typicode.com/posts/1
                                     var result = await ApiList().patchSample();
-                                    Print.e('result ==== $result');
+                                    QcLog.e('result ==== $result');
                                     controller.api_patch_posts.value =
                                         result.toString();
                                   },
@@ -361,7 +361,7 @@ class HttpApiScreen extends StatelessWidget {
                                   onPressed: () async {
                                     // https://jsonplaceholder.typicode.com/posts/1
                                     var result = await ApiList().deleteSample();
-                                    Print.e('result ==== $result');
+                                    QcLog.e('result ==== $result');
                                     controller.api_delete_posts.value =
                                         result.toString();
                                   },

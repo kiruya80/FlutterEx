@@ -25,7 +25,7 @@ var logger = Logger(
       ),
 );
 
-class Print {
+class QcLog {
   static DateFormat? dateFormat;
 
   // kDebugMode

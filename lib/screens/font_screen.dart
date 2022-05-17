@@ -13,7 +13,6 @@ class FontScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Print.e("FontScreen =============");
     FontController controller = Get.find<FontController>();
 
     return Scaffold(
@@ -32,7 +31,7 @@ class FontScreen extends StatelessWidget {
         // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
         // maintainBottomViewPadding: false,
         child: Container(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.background,
             width: Get.width,
             height: Get.height,
             child: FutureBuilder<List<FontItem>>(

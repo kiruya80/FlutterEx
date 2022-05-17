@@ -66,19 +66,27 @@ class _HomeListItemFormState extends State<HomeListItemForm> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          TextButton(onPressed: () {}, child: Text('test')),
           Expanded(
             // flex: 4,
-            child: OutlinedButton(
+            child: TextButton(
                 onPressed: () async {
-                  Print.e("item.routeName == ${item.routeName}");
+                  QcLog.e("item.routeName == ${item.routeName}");
                   Get.toNamed(item.routeName, arguments: {'name': item.name});
                 },
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size.fromHeight(80),
-                  primary: Colors.teal,
-                  backgroundColor: Colors.white,
+                style: TextButton.styleFrom(
+                  minimumSize: Size.fromHeight(60),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  // primary: Colors.teal,
+                  // backgroundColor: Colors.white,
                 ),
-                child: QcText.subtitle1(item.name)),
+                child: QcText.headline6(
+                  item.name,
+                  fontColor: Theme.of(context).colorScheme.onPrimary,
+                )),
+            // child: Text(
+            //   item.name,
+            // )),
           )
         ],
       ),

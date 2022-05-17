@@ -25,7 +25,7 @@ class HttpLoggerInterceptor implements InterceptorContract {
         Request Body  : ${data.body}
         Request time  : ${getTime()}
         --------------------------------------''';
-      Print.w(msg);
+      QcLog.w(msg);
     }
     return data;
   }
@@ -40,7 +40,7 @@ class HttpLoggerInterceptor implements InterceptorContract {
         Request time  : ${getTime()}
         --------------------------------------''';
 
-      Print.w(msg);
+      QcLog.w(msg);
     }
 
     return data;

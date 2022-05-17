@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
 /// NAME         SIZE  WEIGHT  SPACING
@@ -19,7 +20,7 @@ import 'package:get/get.dart';
 class QcText extends Text {
   QcText(String text,
       {Key? key,
-      TextStyle? textStyle = const TextStyle(),
+      TextStyle? textStyle,
       Color? fontColor,
       double? fontSize,
       FontWeight? fontWeight,
@@ -34,17 +35,18 @@ class QcText extends Text {
             // maxLines: multiline == true ? maxLine : 1,
             maxLines: maxLine != null || multiline == true ? maxLine : 1,
             style: TextStyle(
+                color: fontColor,
                 fontSize: fontSize ?? textStyle?.fontSize,
                 fontWeight: fontWeight ?? textStyle?.fontWeight,
-                fontFamily:
-                    fontFamily ?? textStyle?.fontFamily ?? "NanumSquare",
-                color: fontColor ?? textStyle?.color,
+                letterSpacing: textStyle?.letterSpacing,
+                leadingDistribution: textStyle?.leadingDistribution,
+                fontFamily: fontFamily ?? "NanumSquare",
                 decoration: decoration),
             textAlign: textAlign);
 
   factory QcText.common(String text,
           {Key? key,
-          TextStyle? textStyle = const TextStyle(),
+          TextStyle? textStyle,
           Color? fontColor,
           double? fontSize,
           FontWeight? fontWeight,

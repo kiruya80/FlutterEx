@@ -11,7 +11,6 @@ class MultiLangController extends GetxController {
 
     final args = Get.arguments;
     final name = args['name'];
-    Print.e('name : $name');
     title.value = name;
 
     // title.value = 'multi_title'.tr;

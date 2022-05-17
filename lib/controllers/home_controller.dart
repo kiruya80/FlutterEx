@@ -1,5 +1,7 @@
 import 'dart:ffi';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/screens/http_api_screen.dart';
@@ -8,9 +10,15 @@ import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
 import 'package:flutterex/screens/widget_type_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
+  var _isDeviceLight = true.obs;
+
+  get isDeviceLight => _isDeviceLight;
   var title = "".obs;
   List<String> languages = [];
   List<String> languages1 = <String>[].obs;
@@ -88,5 +96,15 @@ class HomeController extends GetxController {
         icon: ''));
 
     return homeItems;
+  }
+
+  final _prefs = SharedPreferences.getInstance();
+
+  Future<void> samplePref() async {
+    final SharedPreferences prefs = await _prefs;
+
+    var blockAppList = prefs.getBool('APP_THEME') ?? false;
+    prefs.setString(
+        'SETTING_CHILD_MANAGEMENT_BLOCKS', 'SETTING_CHILD_MANAGEMENT_BLOCKS');
   }
 }

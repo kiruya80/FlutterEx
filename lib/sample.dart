@@ -67,12 +67,13 @@ class GoToPrintAppState extends State<GoToPrintApp> {
     _path = directory.path;
   }
 
-  var cntUrl =0;
+  var cntUrl = 0;
   // initialUrl: 'https://www.wjthinkbig.com/',
   // initialUrl: 'https://www.daum.net/',
   // initialUrl: 'https://smartall-mid-web-test.wjthinkbig.com/',
   // initialUrl: 'https://flutter-ko.dev/9',
-  var urllist = ['https://m.naver.com/',
+  var urllist = [
+    'https://m.naver.com/',
     'https://www.daum.net/',
     'https://www.wjthinkbig.com/',
     'https://smartall-mid-web-test.wjthinkbig.com/',
@@ -92,77 +93,71 @@ class GoToPrintAppState extends State<GoToPrintApp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-        Container(
-        width: double.infinity,
-          height: 80,
-          child:
-            GestureDetector(
-              onTap: () {
-                Print.e("onTap === ");
-                // writeCounter('파일 저장하기');
-                cntUrl++;
-                if (cntUrl == 4) {
-                  cntUrl = 0;
-                }
-                _controller.loadUrl(urllist[cntUrl]);
-              },
-              child:
-              Text(
-                'url변경',
+            Container(
+              width: double.infinity,
+              height: 80,
+              child: GestureDetector(
+                onTap: () {
+                  QcLog.e("onTap === ");
+                  // writeCounter('파일 저장하기');
+                  cntUrl++;
+                  if (cntUrl == 4) {
+                    cntUrl = 0;
+                  }
+                  _controller.loadUrl(urllist[cntUrl]);
+                },
+                child: Text(
+                  'url변경',
+                ),
               ),
             ),
-        ),
-      Container(
-        width: double.infinity,
-        height: 550,
-        child:
-        WebView(
-          initialUrl: 'https://m.naver.com/',
-          javascriptMode: JavascriptMode.unrestricted,
-          allowsInlineMediaPlayback: false,
-          onWebViewCreated: (controller) {
-            _controller = controller;
-            // print(_controller.currentUrl());
-          },
-          onProgress: (int progress) {
-            // Print.d('WebView is loading (progress : $progress%)');
-          },
-          onPageStarted: (String url) {
-            Print.e('Page started loading: $url');
-          },
-          javascriptChannels: {
-            JavascriptChannel(
-                name: 'flutter_webview',
-                onMessageReceived: (message) {
-                  // final data = jsonDecode(message.message);
-                }
-            )
-          },
-
-          navigationDelegate: (request) => NavigationDecision.navigate,
-          backgroundColor: const Color(0x00000000),
-          onPageFinished: (String url) {
-            // Timer(Duration(seconds: 3), () {
-            //   Print.e("onPageFinished Duration 3 ============== $url ");
-            //   urlStr = url;
-            //   _printPdf();
-            //   // readJS();
-            // });
-            urlStr = url;
-            Future.delayed(const Duration(milliseconds: 3000), () {
-              setState(() {
-                Print.e("onPageFinished Duration 3 ============== $url ");
-                // _printPdf();
-                // readDomFromJS();
-              });
-            });
-          },
-
-          onWebResourceError: (error) {
-            Print.e('onWebResourceError: $error');
-          },
-        )
-      )
+            Container(
+                width: double.infinity,
+                height: 550,
+                child: WebView(
+                  initialUrl: 'https://m.naver.com/',
+                  javascriptMode: JavascriptMode.unrestricted,
+                  allowsInlineMediaPlayback: false,
+                  onWebViewCreated: (controller) {
+                    _controller = controller;
+                    // QcLog(_controller.currentUrl());
+                  },
+                  onProgress: (int progress) {
+                    // QcLog.d('WebView is loading (progress : $progress%)');
+                  },
+                  onPageStarted: (String url) {
+                    QcLog.e('Page started loading: $url');
+                  },
+                  javascriptChannels: {
+                    JavascriptChannel(
+                        name: 'flutter_webview',
+                        onMessageReceived: (message) {
+                          // final data = jsonDecode(message.message);
+                        })
+                  },
+                  navigationDelegate: (request) => NavigationDecision.navigate,
+                  backgroundColor: const Color(0x00000000),
+                  onPageFinished: (String url) {
+                    // Timer(Duration(seconds: 3), () {
+                    //   QcLog.e("onPageFinished Duration 3 ============== $url ");
+                    //   urlStr = url;
+                    //   _printPdf();
+                    //   // readJS();
+                    // });
+                    urlStr = url;
+                    Future.delayed(const Duration(milliseconds: 3000), () {
+                      setState(() {
+                        QcLog.e(
+                            "onPageFinished Duration 3 ============== $url ");
+                        // _printPdf();
+                        // readDomFromJS();
+                      });
+                    });
+                  },
+                  onWebResourceError: (error) {
+                    QcLog.e('onWebResourceError: $error');
+                  },
+                ))
           ],
         ),
       ),
@@ -253,13 +248,12 @@ class GoToPrintAppState extends State<GoToPrintApp> {
     //     "encodeURIComponent(document.documentElement.outerHTML)");
     String html = await _controller.runJavascriptReturningResult(
         "encodeURIComponent(document.documentElement.outerHTML)");
-    Print.e("html ============== $html");
+    QcLog.e("html ============== $html");
     var data = Uri.decodeComponent(html);
-    Print.e("data ============== $data");
+    QcLog.e("data ============== $data");
     // encodeURIComponent(document.documentElement.outerHTML)"
 
     // final decodeData = utf8.decode(html.); // 한글 깨짐 인코딩
-
 
     /**
      * 프린터 내용 가로 세로 기준
@@ -297,16 +291,16 @@ class GoToPrintAppState extends State<GoToPrintApp> {
         // dynamicLayout : false,
         // usePrinterSettings : true,
         onLayout: (PdfPageFormat format) async => await Printing.convertHtml(
-          // baseUrl: urlStr,
-          baseUrl: urllist[cntUrl],
-          format: PdfPageFormat.a4.landscape,
-          // format: PdfPageFormat.a4.copyWith(
-          //         height: 21.0 * cm,
-          //         width:  29.7 * cm,
-          //         marginBottom: 0,
-          //         marginLeft: 0,
-          //         marginRight: 0,
-          //         marginTop: 0),
+              // baseUrl: urlStr,
+              baseUrl: urllist[cntUrl],
+              format: PdfPageFormat.a4.landscape,
+              // format: PdfPageFormat.a4.copyWith(
+              //         height: 21.0 * cm,
+              //         width:  29.7 * cm,
+              //         marginBottom: 0,
+              //         marginLeft: 0,
+              //         marginRight: 0,
+              //         marginTop: 0),
               html: data,
             ));
   }
@@ -338,12 +332,12 @@ class GoToPrintAppState extends State<GoToPrintApp> {
    */
   Future<void> _printPdf() async {
     // setState(() async {
-      // 하단 설정없이 프린터로 보내기 Printing.layoutPdf
-      // final bytes = await _generatePdf(PdfPageFormat.a4, 'test');
-      // await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => bytes);
+    // 하단 설정없이 프린터로 보내기 Printing.layoutPdf
+    // final bytes = await _generatePdf(PdfPageFormat.a4, 'test');
+    // await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => bytes);
 
-      // html 문서 인쇄
-      /**
+    // html 문서 인쇄
+    /**
        * https://smartall-mid-web-test.wjthinkbig.com/
        * https://www.wjthinkbig.com/
        *
@@ -352,45 +346,44 @@ class GoToPrintAppState extends State<GoToPrintApp> {
        * https://www.daum.net/
        *
        */
-      // var urlStr = 'https://smartall-mid-web-test.wjthinkbig.com/';
-      urlStr = (await _controller.currentUrl())!;
-      Print.e("currentUrl === $urlStr" );
-      // final response = await http.get(Uri.parse(urlStr), headers: {'Access-Control-Allow-Origin': '*'});
+    // var urlStr = 'https://smartall-mid-web-test.wjthinkbig.com/';
+    urlStr = (await _controller.currentUrl())!;
+    QcLog.e("currentUrl === $urlStr");
+    // final response = await http.get(Uri.parse(urlStr), headers: {'Access-Control-Allow-Origin': '*'});
 
-      // final response = await http.get(Uri.parse(urlStr), headers: {'Access-Control-Allow-Origin': '*'});
-      final response = await http.get(Uri.parse(urlStr));
-      if (response.statusCode == 200) {
-        final decodeData = utf8.decode(response.bodyBytes); // 한글 깨짐 인코딩
-        Print.e("decodeData ====== " + decodeData);
-        // await Printing.layoutPdf(onLayout: (PdfPageFormat format) => data.bodyBytes);
-        // await Printing.layoutPdf(onLayout: (PdfPageFormat format) => data.bodyBytes);
+    // final response = await http.get(Uri.parse(urlStr), headers: {'Access-Control-Allow-Origin': '*'});
+    final response = await http.get(Uri.parse(urlStr));
+    if (response.statusCode == 200) {
+      final decodeData = utf8.decode(response.bodyBytes); // 한글 깨짐 인코딩
+      QcLog.e("decodeData ====== " + decodeData);
+      // await Printing.layoutPdf(onLayout: (PdfPageFormat format) => data.bodyBytes);
+      // await Printing.layoutPdf(onLayout: (PdfPageFormat format) => data.bodyBytes);
 
-        await Printing.layoutPdf(
-            onLayout: (PdfPageFormat format) async =>
-                await Printing.convertHtml(
-                  // format: format.copyWith(marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0),
-                  format: PdfPageFormat.a4.copyWith(
-                      height: PdfPageFormat.a4.height,
-                      width: PdfPageFormat.a4.width,
-                      marginBottom: 0,
-                      marginLeft: 0,
-                      marginRight: 0,
-                      marginTop: 0),
-                  // html: response.body,
-                  html: decodeData,
-                ));
-      } else {
-        Print.e("http.get failed");
-      }
+      await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async => await Printing.convertHtml(
+                // format: format.copyWith(marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0),
+                format: PdfPageFormat.a4.copyWith(
+                    height: PdfPageFormat.a4.height,
+                    width: PdfPageFormat.a4.width,
+                    marginBottom: 0,
+                    marginLeft: 0,
+                    marginRight: 0,
+                    marginTop: 0),
+                // html: response.body,
+                html: decodeData,
+              ));
+    } else {
+      QcLog.e("http.get failed");
+    }
 
-      // final response = await http.read(Uri.parse(urlStr), headers: {'Access-Control-Allow-Origin': '*'});
-      // Print.e("response : $response");
-      //
-      // await Printing.layoutPdf(
-      //     onLayout: (PdfPageFormat format) async => await Printing.convertHtml(
-      //       format: format,
-      //       html: response,
-      //     ));
+    // final response = await http.read(Uri.parse(urlStr), headers: {'Access-Control-Allow-Origin': '*'});
+    // Print.e("response : $response");
+    //
+    // await Printing.layoutPdf(
+    //     onLayout: (PdfPageFormat format) async => await Printing.convertHtml(
+    //       format: format,
+    //       html: response,
+    //     ));
     // });
   }
 
@@ -449,17 +442,17 @@ class GoToPrintAppState extends State<GoToPrintApp> {
   }
 
   Future<String> readCounter() async {
-    Print.e("readCounter == ");
+    QcLog.e("readCounter == ");
     try {
       final file = await _localFile;
 
       // 파일 읽기.
       String contents = await file.readAsString();
-      Print.e("contents == " + contents);
+      QcLog.e("contents == " + contents);
 
       return contents;
     } catch (e) {
-      Print.e("read error : $e");
+      QcLog.e("read error : $e");
       return "";
     }
   }
@@ -481,36 +474,36 @@ class GoToPrintAppState extends State<GoToPrintApp> {
 
     // /data/user/0/com.example.flutterex/cache
     var dir1 = await getTemporaryDirectory();
-    Print.e("dir1 == " + dir1.toString());
+    QcLog.e("dir1 == " + dir1.toString());
 
     // /data/user/0/com.example.flutterex/app_flutter
     var dir2 = await getApplicationDocumentsDirectory();
-    Print.e("dir2 == " + dir2.toString());
+    QcLog.e("dir2 == " + dir2.toString());
 
     // /data/user/0/com.example.flutterex/files
     var dir3 = await getApplicationSupportDirectory();
-    Print.e("dir3 == " + dir3.toString());
+    QcLog.e("dir3 == " + dir3.toString());
 
     if (!Platform.isAndroid) {
       var dir4 = await getLibraryDirectory();
-      Print.e("dir4 == " + dir4.toString());
+      QcLog.e("dir4 == " + dir4.toString());
     }
 
     // /storage/emulated/0/Android/data/com.example.flutterex/file
     var dir5 = await getExternalStorageDirectory();
-    Print.e("dir5 == " + dir5.toString());
+    QcLog.e("dir5 == " + dir5.toString());
 
     // /storage/emulated/0/Android/data/com.example.flutterex/files/Download
     var dir6 =
         await getExternalStorageDirectories(type: StorageDirectory.downloads);
-    Print.e("dir6 == " + dir6.toString());
+    QcLog.e("dir6 == " + dir6.toString());
 
     // /storage/emulated/0/Android/data/com.example.flutterex/cache
     var dir7 = await getExternalCacheDirectories();
-    Print.e("dir7 == " + dir7.toString());
+    QcLog.e("dir7 == " + dir7.toString());
 
     var dir8 = await getDownloadsDirectory();
-    Print.e("dir8 == " + dir8.toString());
+    QcLog.e("dir8 == " + dir8.toString());
   }
 }
 

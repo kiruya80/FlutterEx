@@ -20,7 +20,7 @@ class QcHttpClient {
   }
 
   QcHttpClient.init() {
-    Print.d("QcHttpClient Init");
+    QcLog.d("QcHttpClient Init");
   }
 
   Map<String, String> header = {};
@@ -43,12 +43,12 @@ class QcHttpClient {
     Map<String, dynamic>? queryParams = const {},
     // Map<String, dynamic>? params,
   }) async {
-    Print.i(" WHAT>>> : $path");
+    QcLog.i(" WHAT>>> : $path");
     dynamic responseJson;
     try {
       // final uri = Uri.https(getDomain(), path, queryParams);
       final uri = Uri.https(getDomain(), path);
-      Print.i("request uri >>> : " + uri.toString());
+      QcLog.i("request uri >>> : " + uri.toString());
       final response = await http
           .get(uri, headers: header, params: queryParams)
           .timeout(const Duration(seconds: 10));
@@ -156,7 +156,7 @@ class QcHttpClient {
   }
 
   dynamic _returnResponse(Response response) {
-    Print.i(" RESPONSE responseJson >>> : ");
+    QcLog.i(" RESPONSE responseJson >>> : ");
     switch (response.statusCode) {
       case 200:
       case 201:
@@ -187,8 +187,8 @@ class QcHttpClient {
   }
 
   void prettyPrintJson(String input) {
-    Print.e('prettyPrintJson ============================= ');
-    Print.w(input);
+    QcLog.e('prettyPrintJson ============================= ');
+    QcLog.w(input);
     String result = '';
     const JsonDecoder decoder = JsonDecoder();
     const JsonEncoder encoder = JsonEncoder.withIndent('  ');
@@ -198,8 +198,8 @@ class QcHttpClient {
       result += element + '\n';
       print(element);
     });
-    Print.e('result ============================= ');
-    Print.w(result);
+    QcLog.e('result ============================= ');
+    QcLog.w(result);
   }
 
   dynamic _returnSuccessException(

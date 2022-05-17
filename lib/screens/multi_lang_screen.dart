@@ -11,7 +11,7 @@ class MultiLangScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Print.e("FontScreen =============");
+    QcLog.e("FontScreen =============");
     MultiLangController controller = Get.find<MultiLangController>();
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +28,7 @@ class MultiLangScreen extends StatelessWidget {
         // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
         // maintainBottomViewPadding: false,
         child: Container(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.background,
             width: Get.width,
             height: Get.height,
             child: SingleChildScrollView(
