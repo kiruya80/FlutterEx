@@ -17,8 +17,7 @@ class FontScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:
-            QcText.headline6(controller.title.value, fontColor: Colors.white),
+        title: QcText.headline6(controller.title.value),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

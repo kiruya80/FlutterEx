@@ -22,7 +22,6 @@ class PermissionScreen extends StatelessWidget {
         appBar: AppBar(
           title: QcText.headline6(
             controller.title.value,
-            fontColor: Colors.white,
           ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),

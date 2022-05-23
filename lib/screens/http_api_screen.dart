@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/http_api_controller.dart';
-import 'package:flutterex/datas/model/post_model.dart';
 import 'package:flutterex/datas/model/response_model.dart';
 import 'package:flutterex/network/api/api_list.dart';
 import 'package:flutterex/utils/print_log.dart';
@@ -60,8 +59,7 @@ class HttpApiScreen extends StatelessWidget {
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
-          title:
-              QcText.headline6(controller.title.value, fontColor: Colors.white),
+          title: QcText.headline6(controller.title.value),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -82,13 +80,13 @@ class HttpApiScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_get_posts.value,
-                            // multiLine: false,
-                            maxLine: 20,
+                            maxLines: 20,
                           )),
                           SizedBox(
                             width: 20,
@@ -97,18 +95,55 @@ class HttpApiScreen extends StatelessWidget {
                               width: 300.0,
                               child: OutlinedButton(
                                   onPressed: () async {
-                                    ResponseModel result =
-                                        await ApiList().getPostList();
+                                    try {
+                                      ResponseModel result =
+                                          await ApiList().getPostList();
+                                      controller.api_get_posts.value =
+                                          prettyPrintJson(result.bodyStr);
+                                    } catch (e) {
+                                      QcLog.e("getPostList error : $e");
+                                      // Get.defaultDialog(title: 'Error', middleText: '$e');
 
-                                    controller.api_get_posts.value =
-                                        prettyPrintJson(result.bodyStr);
+                                      Get.dialog(
+                                        AlertDialog(
+                                          title: QcText.headline6('Error',
+                                              fontColor:
+                                                  Theme.of(context).errorColor),
+                                          content: Container(
+                                            width: 400,
+                                            height: 100,
+                                            child: QcText.bodyText1(
+                                              '$e',
+                                              fontColor:
+                                                  Theme.of(context).errorColor,
+                                              // maxLines: 1,
+                                              // maxLine: 10,
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              child: Text("닫기"),
+                                              onPressed: () => Get.back(),
+                                            ),
+                                            // null,
+                                          ],
+                                        ),
+                                      );
+                                    }
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
-                                  child: QcText.subtitle1('api_get_posts'.tr))),
+                                  child: QcText.subtitle1(
+                                    'api_get_posts'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                     SizedBox(
                       height: 20,
@@ -118,12 +153,12 @@ class HttpApiScreen extends StatelessWidget {
                       color: Colors.black,
                     ),
                     Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_get_posts_1.value,
-                            multiLine: true,
                           )),
                           SizedBox(
                             width: 20,
@@ -151,11 +186,17 @@ class HttpApiScreen extends StatelessWidget {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
-                                  child:
-                                      QcText.subtitle1('api_get_posts_1'.tr))),
+                                  child: QcText.subtitle1(
+                                    'api_get_posts_1'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                     SizedBox(
                       height: 20,
@@ -170,8 +211,7 @@ class HttpApiScreen extends StatelessWidget {
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_get_comments.value,
-                            // multiLine: false,
-                            maxLine: 20,
+                            maxLines: 20,
                           )),
                           SizedBox(
                             width: 20,
@@ -187,11 +227,17 @@ class HttpApiScreen extends StatelessWidget {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
-                                  child:
-                                      QcText.subtitle1('api_get_comments'.tr))),
+                                  child: QcText.subtitle1(
+                                    'api_get_comments'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                     SizedBox(
                       height: 20,
@@ -206,7 +252,6 @@ class HttpApiScreen extends StatelessWidget {
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_get_comments_1.value,
-                            multiLine: true,
                           )),
                           SizedBox(
                             width: 20,
@@ -224,11 +269,17 @@ class HttpApiScreen extends StatelessWidget {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
                                   child: QcText.subtitle1(
-                                      'api_get_comments_1'.tr))),
+                                    'api_get_comments_1'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                     SizedBox(
                       height: 20,
@@ -243,7 +294,6 @@ class HttpApiScreen extends StatelessWidget {
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_post_posts.value,
-                            multiLine: true,
                           )),
                           SizedBox(
                             width: 20,
@@ -260,11 +310,17 @@ class HttpApiScreen extends StatelessWidget {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
-                                  child:
-                                      QcText.subtitle1('api_post_posts'.tr))),
+                                  child: QcText.subtitle1(
+                                    'api_post_posts'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                     SizedBox(
                       height: 20,
@@ -279,7 +335,6 @@ class HttpApiScreen extends StatelessWidget {
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_put_posts.value,
-                            multiLine: true,
                           )),
                           SizedBox(
                             width: 20,
@@ -296,10 +351,17 @@ class HttpApiScreen extends StatelessWidget {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
-                                  child: QcText.subtitle1('api_put_posts'.tr))),
+                                  child: QcText.subtitle1(
+                                    'api_put_posts'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                     SizedBox(
                       height: 20,
@@ -314,7 +376,6 @@ class HttpApiScreen extends StatelessWidget {
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_patch_posts.value,
-                            multiLine: true,
                           )),
                           SizedBox(
                             width: 20,
@@ -331,11 +392,17 @@ class HttpApiScreen extends StatelessWidget {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
-                                  child:
-                                      QcText.subtitle1('api_patch_posts'.tr))),
+                                  child: QcText.subtitle1(
+                                    'api_patch_posts'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                     SizedBox(
                       height: 20,
@@ -350,7 +417,6 @@ class HttpApiScreen extends StatelessWidget {
                           Expanded(
                               child: QcText.subtitle1(
                             controller.api_delete_posts.value,
-                            multiLine: true,
                           )),
                           SizedBox(
                             width: 20,
@@ -367,11 +433,17 @@ class HttpApiScreen extends StatelessWidget {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     minimumSize: Size.fromHeight(80),
-                                    primary: Colors.teal,
-                                    backgroundColor: Colors.white,
+                                    // primary: Colors.teal,
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
                                   ),
-                                  child:
-                                      QcText.subtitle1('api_delete_posts'.tr))),
+                                  child: QcText.subtitle1(
+                                    'api_delete_posts'.tr,
+                                    fontColor: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ))),
                         ]),
                   ],
                 ),

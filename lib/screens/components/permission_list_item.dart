@@ -152,17 +152,23 @@ class _PermissionListItemFormState extends State<PermissionListItemForm> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size.fromHeight(80),
-                    primary: Colors.teal,
-                    backgroundColor: Colors.white,
+                    // primary: Colors.teal,
+                    backgroundColor: item.status.toLowerCase() ==
+                            PermissionStatus.granted.name
+                        ? Theme.of(context).colorScheme.background
+                        : Theme.of(context).colorScheme.errorContainer,
                   ),
-                  child:
-                      item.status.toLowerCase() == PermissionStatus.granted.name
-                          ? QcText.subtitle1(
-                              '권한 승인 완료',
-                              fontColor: Colors.blueAccent,
-                            )
-                          : QcText.subtitle1('권한 승인 요청 필요함',
-                              fontColor: Colors.deepOrange)),
+                  child: item.status.toLowerCase() ==
+                          PermissionStatus.granted.name
+                      ? QcText.subtitle1(
+                          '권한 승인 완료',
+                          fontColor: Theme.of(context).colorScheme.onBackground,
+                        )
+                      : QcText.subtitle1(
+                          '권한 승인 요청 필요함',
+                          fontColor:
+                              Theme.of(context).colorScheme.onErrorContainer,
+                        )),
             )
           ],
         ),

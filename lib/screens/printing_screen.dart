@@ -5,6 +5,7 @@ import 'package:flutterex/controllers/printing_controller.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/utils/printing_utils.dart';
+import 'package:flutterex/widget/textformfield_widget.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:get/get.dart';
@@ -47,8 +48,7 @@ class _PrintingScreenState extends State<PrintingScreen> {
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
-          title:
-              QcText.headline6(controller.title.value, fontColor: Colors.white),
+          title: QcText.headline6(controller.title.value),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -70,8 +70,8 @@ class _PrintingScreenState extends State<PrintingScreen> {
           child: Column(
             children: <Widget>[
               Container(
-                color: Theme.of(context).colorScheme.background,
-                // height: 80,
+                // color: Theme.of(context).colorScheme.background,
+                // height: 200,
                 margin: const EdgeInsets.only(
                     left: 20, right: 20, top: 10, bottom: 10),
                 child: Form(
@@ -88,7 +88,8 @@ class _PrintingScreenState extends State<PrintingScreen> {
                         ),
                         Expanded(
                           // flex: 1,
-                          child: TextFormField(
+                          // SingleChildScrollView
+                          child: QcTextFormField.bodyText1(
                             onSaved: (value) {
                               // controller.saveTextValidate(); 필요
                               QcLog.e("onSaved : $value");
@@ -99,24 +100,15 @@ class _PrintingScreenState extends State<PrintingScreen> {
                             validator: (value) {
                               QcLog.e("validator : $value");
                               if (value != null && value.isEmpty) {
-                                return 'url을 입력해주세요';
+                                return 'validator url을 입력해주세요';
                               }
                               return null;
                             },
-                            decoration: InputDecoration(
-                              // 텍스트필드의 외각선
-                              border: InputBorder.none,
-                              errorStyle: Get.textTheme.caption!.copyWith(
-                                color: const Color(0xFFF7901E),
-                              ),
-                              filled: true,
-                              hintText: 'url을 입력해주세요',
-                              labelText: 'URL',
-                            ),
-                            style: Get.textTheme.bodyText1,
+                            hintText: 'url을 입력해주세요',
+                            labelText: 'URL',
                             keyboardType: TextInputType.url,
                             controller: textEdController,
-                            // focusNode: myFocusNode,
+                            maxLines: 5,
                           ),
                         ),
                         SizedBox(

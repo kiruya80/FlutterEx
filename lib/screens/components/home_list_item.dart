@@ -66,7 +66,7 @@ class _HomeListItemFormState extends State<HomeListItemForm> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          TextButton(onPressed: () {}, child: Text('test')),
+          Expanded(child: TextButton(onPressed: () {}, child: Text(item.name))),
           Expanded(
             // flex: 4,
             child: TextButton(

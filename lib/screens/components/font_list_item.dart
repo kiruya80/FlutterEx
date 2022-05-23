@@ -50,8 +50,7 @@ class _FontListItemFormState extends State<FontListItemForm> {
                 child: QcText.common(
                   item.styleName,
                   textStyle: item.textStyle,
-                  fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                  multiLine: true,
+                  // fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 )),
           )
         ],

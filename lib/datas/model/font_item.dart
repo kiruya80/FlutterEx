@@ -46,7 +46,6 @@ class FontItem {
 // double? fontSize,
 //     String? fontFamily,
 // TextAlign? textAlign,
-//     bool? multiLine,
 // int? maxLine,
 //     TextDecoration? decoration}) =>
 // MCText(text,
@@ -56,6 +55,5 @@ class FontItem {
 // fontWeight: FontWeight.w400,
 // fontFamily: "NanumSquare",
 // textAlign: textAlign,
-// multiline: multiLine,
 // maxLine: maxLine,
 // decoration: decoration);

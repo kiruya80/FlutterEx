@@ -15,8 +15,7 @@ class MultiLangScreen extends StatelessWidget {
     MultiLangController controller = Get.find<MultiLangController>();
     return Scaffold(
       appBar: AppBar(
-        title:
-            QcText.headline6(controller.title.value, fontColor: Colors.white),
+        title: QcText.headline6(controller.title.value),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -57,8 +56,10 @@ class MultiLangScreen extends StatelessWidget {
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size.fromHeight(80),
-                        primary: Colors.teal,
-                        backgroundColor: Colors.white,
+                        // primary:
+                        //     Theme.of(context).colorScheme.secondaryContainer,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
                       ),
                       child: QcText.subtitle1('greeting'.tr)),
                   SizedBox(
@@ -72,27 +73,120 @@ class MultiLangScreen extends StatelessWidget {
                    * CrossAxisAlignment 아이템 하나의 방향
                    *
                    */
+                  QcText.headline6(
+                    'Row (가로로 아이템이 쌓임)\nColum (세로로 아이템이 쌓임)',
+                  ),
+                  QcText.bodyText1(
+                    'MainAxisAlignment 아이템이 쌓이는 방향\nCrossAxisAlignment 아이템 하나의 방향',
+                  ),
                   Container(
                     width: Get.width,
                     height: 200,
-                    color: Colors.amberAccent,
-                    child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.start,
                         // crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           FlutterLogo(),
-                          Text('Hello, Flutter Beginner!'),
+                          QcText.headline6(
+                              'Row - mainAxisAlignment: MainAxisAlignment.end'),
                           Icon(Icons.sentiment_very_satisfied),
                         ]),
                   ),
                   Container(
                     width: Get.width,
                     height: 200,
-                    color: Colors.blueAccent,
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          QcText.headline6(
+                              'Row - mainAxisAlignment: MainAxisAlignment.end'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
+                  ),
+                  Container(
+                    width: Get.width,
+                    height: 200,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          QcText.headline6(
+                              'Row - mainAxisAlignment: MainAxisAlignment.end'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
+                  ),
+
+                  Container(
+                    width: Get.width,
+                    height: 200,
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          QcText.headline6(
+                              'Column - mainAxisAlignment: MainAxisAlignment.end'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
+                  ),
+                  Container(
+                    width: Get.width,
+                    height: 200,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          QcText.headline6(
+                              'Column - mainAxisAlignment: MainAxisAlignment.end'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
+                  ),
+                  Container(
+                    width: Get.width,
+                    height: 200,
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
                     child: Column(mainAxisAlignment: MainAxisAlignment.end,
                         // crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           FlutterLogo(),
-                          Text('Hello, Flutter Beginner!'),
+                          QcText.headline6(
+                              'Column - mainAxisAlignment: MainAxisAlignment.end'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
+                  ),
+
+                  Container(
+                    width: Get.width,
+                    height: 200,
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          QcText.headline6(
+                              'Column - mainAxisAlignment: MainAxisAlignment.end'),
+                          Icon(Icons.sentiment_very_satisfied),
+                        ]),
+                  ),
+
+                  Container(
+                    width: Get.width,
+                    height: 200,
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          FlutterLogo(),
+                          QcText.headline6(
+                              'Column - mainAxisAlignment: MainAxisAlignment.end'),
                           Icon(Icons.sentiment_very_satisfied),
                         ]),
                   ),

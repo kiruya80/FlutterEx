@@ -18,6 +18,8 @@ import 'package:get/get.dart';
 /// caption      12.0  regular  0.4
 /// overline     10.0  regular  1.5
 class QcText extends Text {
+  static const MAX_LINES = 200;
+
   QcText(String text,
       {Key? key,
       TextStyle? textStyle,
@@ -25,15 +27,13 @@ class QcText extends Text {
       double? fontSize,
       FontWeight? fontWeight,
       String? fontFamily,
-      TextAlign? textAlign = TextAlign.left,
-      bool? multiline,
-      int? maxLine = 100,
+      TextAlign? textAlign,
+      int? maxLines,
       TextDecoration? decoration})
       : super(text,
             key: key,
             overflow: TextOverflow.ellipsis,
-            // maxLines: multiline == true ? maxLine : 1,
-            maxLines: maxLine != null || multiline == true ? maxLine : 1,
+            maxLines: maxLines ?? MAX_LINES,
             style: TextStyle(
                 color: fontColor,
                 fontSize: fontSize ?? textStyle?.fontSize,
@@ -42,7 +42,7 @@ class QcText extends Text {
                 leadingDistribution: textStyle?.leadingDistribution,
                 fontFamily: fontFamily ?? "NanumSquare",
                 decoration: decoration),
-            textAlign: textAlign);
+            textAlign: textAlign ?? TextAlign.left);
 
   factory QcText.common(String text,
           {Key? key,
@@ -52,8 +52,7 @@ class QcText extends Text {
           FontWeight? fontWeight,
           String? fontFamily,
           TextAlign? textAlign,
-          bool? multiLine,
-          int? maxLine,
+          int? maxLines,
           TextDecoration? decoration}) =>
       QcText(text,
           key: key,
@@ -63,8 +62,7 @@ class QcText extends Text {
           fontWeight: fontWeight,
           fontFamily: fontFamily,
           textAlign: textAlign,
-          multiline: multiLine,
-          maxLine: maxLine,
+          maxLines: maxLines,
           decoration: decoration);
 
   factory QcText.headline1(String text,
@@ -74,8 +72,7 @@ class QcText extends Text {
           FontWeight? fontWeight,
           String? fontFamily,
           TextAlign? textAlign,
-          bool? multiLine,
-          int? maxLine,
+          int? maxLines,
           TextDecoration? decoration}) =>
       QcText(text,
           key: key,
@@ -85,8 +82,7 @@ class QcText extends Text {
           fontWeight: fontWeight,
           fontFamily: fontFamily,
           textAlign: textAlign,
-          multiline: multiLine,
-          maxLine: maxLine,
+          maxLines: maxLines,
           decoration: decoration);
 
   factory QcText.headline3(String text,
@@ -96,8 +92,7 @@ class QcText extends Text {
           FontWeight? fontWeight,
           String? fontFamily,
           TextAlign? textAlign,
-          bool? multiLine,
-          int? maxLine,
+          int? maxLines,
           TextDecoration? decoration}) =>
       QcText(text,
           key: key,
@@ -107,8 +102,7 @@ class QcText extends Text {
           fontWeight: fontWeight,
           fontFamily: fontFamily,
           textAlign: textAlign,
-          multiline: multiLine,
-          maxLine: maxLine,
+          maxLines: maxLines,
           decoration: decoration);
 
   /**
@@ -121,8 +115,7 @@ class QcText extends Text {
           FontWeight? fontWeight,
           String? fontFamily,
           TextAlign? textAlign,
-          bool? multiLine,
-          int? maxLine,
+          int? maxLines,
           TextDecoration? decoration}) =>
       QcText(text,
           key: key,
@@ -132,8 +125,7 @@ class QcText extends Text {
           fontWeight: fontWeight,
           fontFamily: fontFamily,
           textAlign: textAlign,
-          multiline: multiLine,
-          maxLine: maxLine,
+          maxLines: maxLines,
           decoration: decoration);
 
   factory QcText.subtitle1(String text,
@@ -143,8 +135,7 @@ class QcText extends Text {
           FontWeight? fontWeight,
           String? fontFamily,
           TextAlign? textAlign,
-          bool? multiLine,
-          int? maxLine,
+          int? maxLines,
           TextDecoration? decoration}) =>
       QcText(text,
           key: key,
@@ -154,8 +145,7 @@ class QcText extends Text {
           fontWeight: fontWeight,
           fontFamily: fontFamily,
           textAlign: textAlign,
-          multiline: multiLine,
-          maxLine: maxLine,
+          maxLines: maxLines,
           decoration: decoration);
 
   factory QcText.bodyText1(String text,
@@ -165,8 +155,7 @@ class QcText extends Text {
           FontWeight? fontWeight,
           String? fontFamily,
           TextAlign? textAlign,
-          bool? multiLine,
-          int? maxLine,
+          int? maxLines,
           TextDecoration? decoration}) =>
       QcText(text,
           key: key,
@@ -176,8 +165,7 @@ class QcText extends Text {
           fontWeight: fontWeight,
           fontFamily: fontFamily,
           textAlign: textAlign,
-          multiline: multiLine,
-          maxLine: maxLine,
+          maxLines: maxLines,
           decoration: decoration);
 
   factory QcText.caption(String text,
@@ -187,8 +175,7 @@ class QcText extends Text {
           FontWeight? fontWeight,
           String? fontFamily,
           TextAlign? textAlign,
-          bool? multiLine,
-          int? maxLine,
+          int? maxLines,
           TextDecoration? decoration}) =>
       QcText(text,
           key: key,
@@ -198,7 +185,6 @@ class QcText extends Text {
           fontWeight: fontWeight,
           fontFamily: fontFamily,
           textAlign: textAlign,
-          multiline: multiLine,
-          maxLine: maxLine,
+          maxLines: maxLines,
           decoration: decoration);
 }
