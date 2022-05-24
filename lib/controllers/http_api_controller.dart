@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/api_item.dart';
+import 'package:flutterex/datas/model/post_model.dart';
 import 'package:flutterex/datas/model/response_model.dart';
 import 'package:flutterex/network/api/api_list.dart';
 import 'package:flutterex/utils/print_log.dart';
@@ -13,15 +14,6 @@ class HttpApiController extends GetxController {
   var title = "HttpApiController".obs;
   List<ApiItem> apiItems = [];
 
-  // var api_get_posts = ''.obs;
-  // var api_get_posts_1 = ''.obs;
-  // var api_get_comments = ''.obs;
-  // var api_get_comments_1 = ''.obs;
-  // var api_post_posts = ''.obs;
-  // var api_put_posts = ''.obs;
-  // var api_patch_posts = ''.obs;
-  // var api_delete_posts = ''.obs;
-
   @override
   void onInit() {
     super.onInit();
@@ -30,49 +22,49 @@ class HttpApiController extends GetxController {
   Future<List<ApiItem>> makeApiData() async {
     apiItems = [];
     apiItems.add(new ApiItem(
-        api: 'Get Post List',
+        api: '[GET] Post List',
         apiStr: 'getPostList',
         errorStr: ''.obs,
         result: ''.obs,
         resultPretty: ''.obs));
     apiItems.add(new ApiItem(
-        api: 'getOnePost',
+        api: '[GET] One Post',
         apiStr: 'getOnePost',
         errorStr: ''.obs,
         result: ''.obs,
         resultPretty: ''.obs));
     apiItems.add(new ApiItem(
-        api: 'getPostComments',
+        api: '[GET] Post Comments',
         apiStr: 'getPostComments',
         errorStr: ''.obs,
         result: ''.obs,
         resultPretty: ''.obs));
     apiItems.add(new ApiItem(
-        api: 'getComments',
+        api: '[GET] Comments',
         apiStr: 'getComments',
         errorStr: ''.obs,
         result: ''.obs,
         resultPretty: ''.obs));
     apiItems.add(new ApiItem(
-        api: 'postSample',
+        api: '[POST] Sample',
         apiStr: 'postSample',
         errorStr: ''.obs,
         result: ''.obs,
         resultPretty: ''.obs));
     apiItems.add(new ApiItem(
-        api: 'putample',
+        api: '[PUT] ample',
         apiStr: 'putample',
         errorStr: ''.obs,
         result: ''.obs,
         resultPretty: ''.obs));
     apiItems.add(new ApiItem(
-        api: 'patchSample',
+        api: '[PATCH] Sample',
         apiStr: 'patchSample',
         errorStr: ''.obs,
         result: ''.obs,
         resultPretty: ''.obs));
     apiItems.add(new ApiItem(
-        api: 'deleteSample',
+        api: '[DELETE] Sample',
         apiStr: 'deleteSample',
         errorStr: ''.obs,
         result: ''.obs,
@@ -103,11 +95,15 @@ class HttpApiController extends GetxController {
           break;
 
         case 'postSample':
-          result = await ApiList().postSample();
+          result = await ApiList().postSample(PostSample(
+            title: 'foo',
+            body: 'bar',
+            userId: 1,
+          ));
           break;
 
-        case 'putample':
-          result = await ApiList().putample();
+        case 'putSample':
+          result = await ApiList().putSample();
           break;
 
         case 'patchSample':

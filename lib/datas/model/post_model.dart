@@ -42,7 +42,12 @@ class PostSample {
     );
   }
 
-  // @override
+  @override
+  String toString() {
+    return 'PostSample{userId: $userId, id: $id, title: $title, body: $body}';
+  }
+
+// @override
   // String toString() {
   //   // final object = json.decode(result);
   //   // final prettyString = JsonEncoder.withIndent('  ').convert(object);

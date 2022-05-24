@@ -85,10 +85,24 @@ class ApiListAccount {
     }
   }
 
-  Future<ResponseModel<PostSample>> postSample() async {
+  Future<ResponseModel<PostSample>> postSample(PostSample postSample) async {
+    QcLog.e('postSample ====  ${postSample.toString()}');
+    var data = {
+      "title": 'foo',
+      "body": 'bar',
+      "userId": 1,
+    };
+
+    String encoded = postParamConvert(data);
+    // String encoded;
+    // encoded = data as String;
+    // encoded = postSample.toJson();
+    QcLog.e('encoded ====  $encoded');
+
     try {
       var response = await QcHttpClient.instance.post(
-        "posts/1",
+        "posts",
+        body: encoded,
       );
       return ResponseModel(jsonEncode(response), PostSample.fromJson(response));
     } catch (e) {
@@ -96,7 +110,14 @@ class ApiListAccount {
     }
   }
 
-  Future<ResponseModel<PostSample>> putample() async {
+  static String postParamConvert(Object data) {
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    String encoded = stringToBase64.encode(json.encode(data).toString());
+
+    return encoded;
+  }
+
+  Future<ResponseModel<PostSample>> putSample() async {
     try {
       var response = await QcHttpClient.instance.get(
         "posts/1",

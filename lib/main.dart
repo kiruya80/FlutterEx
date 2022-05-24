@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterex/constants/ThemeService.dart';
 import 'package:flutterex/constants/constant.dart';
 import 'package:flutterex/get_x_router.dart';
 import 'package:flutterex/langs/languages.dart';
@@ -37,6 +38,7 @@ Future<void> getDeviceTheme() async {
 }
 
 class MyApp extends StatelessWidget {
+  var title = "HttpApiController".obs;
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
     // seedColorScheme.secondary
     return GestureDetector(
         onTap: () {
+          QcLog.e('title ${title.value}');
           FocusScopeNode currentFocus = FocusScope.of(context);
 
           if (!currentFocus.hasPrimaryFocus) {
@@ -75,23 +78,23 @@ class MyApp extends StatelessWidget {
           darkTheme: ThemeData(
             useMaterial3: true,
             // primaryColor: Colors.purple[800],
-            // colorScheme: Constants.darkColorScheme,
-            colorSchemeSeed: Constants.SEED_COLOR,
+            // colorScheme: QcTheme.darkColorScheme,
+            colorSchemeSeed: QcTheme.SEED_COLOR,
             brightness: Brightness.dark, // 테마 고정 ?
             // colorScheme:
             // typography:
           ),
           theme: ThemeData(
             useMaterial3: true,
-            colorSchemeSeed: Constants.SEED_COLOR,
+            colorSchemeSeed: QcTheme.SEED_COLOR,
             // colorSchemeSeed: Color.fromRGBO(r, g, b, opacity),
             brightness: Brightness.light, // 테마 고정 ?
-            // colorScheme: Constants.lightColorScheme,
+            // colorScheme: QcTheme.lightColorScheme,
             // primaryColor: Colors.purple[800],
 
             // colorScheme: Get.isDarkMode
-            //     ? Constants.darkColorScheme
-            //     : Constants.lightColorScheme,
+            //     ? QcTheme.darkColorScheme
+            //     : QcTheme.lightColorScheme,
 
             // colorScheme:
             // typography:
