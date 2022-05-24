@@ -31,30 +31,73 @@ class _FontListItemFormState extends State<FontListItemForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          // border: Border.all(
-          // color: Theme.of(context).colorScheme.background,
-          //   width: 3,
-          // ),
-          borderRadius: BorderRadius.circular(5)),
-      margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            // flex: 4,
-            child: Container(
-                margin: const EdgeInsets.all(5),
-                child: QcText.common(
-                  item.styleName,
-                  textStyle: item.textStyle,
-                  // fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                )),
-          )
-        ],
-      ),
+    // return Container(
+    //   decoration: BoxDecoration(
+    //       color: Theme.of(context).colorScheme.secondaryContainer,
+    //       // border: Border.all(
+    //       // color: Theme.of(context).colorScheme.background,
+    //       //   width: 3,
+    //       // ),
+    //       borderRadius: BorderRadius.circular(5)),
+    //   margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+    //   child: Row(
+    //     crossAxisAlignment: CrossAxisAlignment.center,
+    //     children: <Widget>[
+    //       Expanded(
+    //           // flex: 4,
+    //           child:
+    //               // Container(
+    //               //     margin: const EdgeInsets.all(5),
+    //               //     child: QcText.common(
+    //               //       item.styleName,
+    //               //       textStyle: item.textStyle,
+    //               //       // fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
+    //               //     )
+    //               // ),
+    //               Card(
+    //         child: SizedBox(
+    //           child: Container(
+    //               margin: const EdgeInsets.all(5),
+    //               child: QcText.common(
+    //                 item.styleName,
+    //                 textStyle: item.textStyle,
+    //                 // fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
+    //               )),
+    //         ),
+    //       )
+    //       )
+    //     ],
+    //   ),
+    // );
+
+    return Card(
+      elevation: 0,
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      child: Container(
+          width: Get.width,
+          margin: const EdgeInsets.all(10),
+          child: QcText.common(
+            item.styleName,
+            textStyle: item.textStyle,
+            // fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
+          )),
     );
+
+    // return Card(
+    //   shape: RoundedRectangleBorder(
+    //     side: BorderSide(
+    //       color: Theme.of(context).colorScheme.outline,
+    //     ),
+    //     borderRadius: const BorderRadius.all(Radius.circular(12)),
+    //   ),
+    //   child: Container(
+    //       width: Get.width,
+    //       margin: const EdgeInsets.all(10),
+    //       child: QcText.common(
+    //         item.styleName,
+    //         textStyle: item.textStyle,
+    //         // fontColor: Theme.of(context).colorScheme.onSecondaryContainer,
+    //       )),
+    // );
   }
 }

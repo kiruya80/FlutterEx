@@ -41,6 +41,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
 
+    // var seedColorScheme = ColorScheme.fromSeed(seedColor: Colors.green);
+    // seedColorScheme.secondary
     return GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -69,10 +71,23 @@ class MyApp extends StatelessWidget {
           getPages: GetXRouterContainer().allPageRouter,
           initialRoute: HomeScreen.routeName,
 
-          theme: ThemeData(
+          darkTheme: ThemeData(
             useMaterial3: true,
             // primaryColor: Colors.purple[800],
-            colorScheme: Constants.lightColorScheme,
+            // colorScheme: Constants.darkColorScheme,
+            colorSchemeSeed: Colors.amber,
+            brightness: Brightness.dark, // 테마 고정 ?
+            // colorScheme:
+            // typography:
+          ),
+          theme: ThemeData(
+            useMaterial3: true,
+            colorSchemeSeed: Colors.amber,
+            // colorSchemeSeed: Color.fromRGBO(r, g, b, opacity),
+            brightness: Brightness.light, // 테마 고정 ?
+            // colorScheme: Constants.lightColorScheme,
+            // primaryColor: Colors.purple[800],
+
             // colorScheme: Get.isDarkMode
             //     ? Constants.darkColorScheme
             //     : Constants.lightColorScheme,
@@ -80,14 +95,7 @@ class MyApp extends StatelessWidget {
             // colorScheme:
             // typography:
           ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            // primaryColor: Colors.purple[800],
-            colorScheme: Constants.darkColorScheme,
 
-            // colorScheme:
-            // typography:
-          ),
           // theme: ThemeData(
           //   // Define the default brightness and colors.
           //   brightness: Brightness.dark,
