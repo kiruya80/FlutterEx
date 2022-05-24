@@ -7,7 +7,9 @@ class Constants {
       "encodeURIComponent(document.documentElement.outerHTML)";
   static const WEB_SCROLL_HEIGHT = "document.documentElement.scrollHeight;";
 
-  static const seed = Color(0xFF6750A4);
+  static const SEED_COLOR = Colors.green;
+  // static const SEED_COLOR = Color(0xFF6750A4);
+  // static const SEED_COLOR = Color.fromRGBO(103, 80, 164, 0);
 
   ///
   /// https://material-foundation.github.io/material-theme-builder/#/dynamic

@@ -1,16 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class QcDialog {
-  static showProgress(
-      {double size = 160.0, bool barrierDismissible = false}) async {
+  static showProgress({bool barrierDismissible = false}) async {
     dissmissProgress();
 
     Get.dialog(
-      // MidCircularProgress(size: size),
-      CircularProgressIndicator(),
+      Loadding(),
       barrierDismissible: barrierDismissible,
       useSafeArea: true,
     );
@@ -20,5 +16,14 @@ class QcDialog {
     if (Get.isOverlaysOpen == true) {
       Get.back();
     }
+  }
+}
+
+class Loadding extends StatelessWidget {
+  Loadding({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Center(child: CircularProgressIndicator()));
   }
 }

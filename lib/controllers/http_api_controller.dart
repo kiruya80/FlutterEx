@@ -144,6 +144,7 @@ class HttpApiController extends GetxController {
   }
 
   void showError(BuildContext context, String e) {
+    QcDialog.dissmissProgress();
     Get.dialog(
       AlertDialog(
         title:

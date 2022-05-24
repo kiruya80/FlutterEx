@@ -40,8 +40,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
+    var seedColor = Colors.green;
 
-    // var seedColorScheme = ColorScheme.fromSeed(seedColor: Colors.green);
+    // var seedColorScheme = ColorScheme.fromSeed(seedColor: SEED_COLOR);
     // seedColorScheme.secondary
     return GestureDetector(
         onTap: () {
@@ -75,14 +76,14 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             // primaryColor: Colors.purple[800],
             // colorScheme: Constants.darkColorScheme,
-            colorSchemeSeed: Colors.amber,
+            colorSchemeSeed: Constants.SEED_COLOR,
             brightness: Brightness.dark, // 테마 고정 ?
             // colorScheme:
             // typography:
           ),
           theme: ThemeData(
             useMaterial3: true,
-            colorSchemeSeed: Colors.amber,
+            colorSchemeSeed: Constants.SEED_COLOR,
             // colorSchemeSeed: Color.fromRGBO(r, g, b, opacity),
             brightness: Brightness.light, // 테마 고정 ?
             // colorScheme: Constants.lightColorScheme,
