@@ -16,6 +16,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QcLog.e("HomeScreen =============");
+    FocusScope.of(context).unfocus();
     HomeController controller = Get.find<HomeController>();
 
     controller.title.value = 'title_main'.tr;

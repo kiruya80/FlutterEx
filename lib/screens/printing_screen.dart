@@ -20,27 +20,30 @@ class PrintingScreen extends StatefulWidget {
 }
 
 class _PrintingScreenState extends State<PrintingScreen> {
-  late FocusNode myFocusNode;
+  FocusNode myFocusNode = new FocusNode();
   late WebViewController _webviewController;
   final textEdController = TextEditingController();
   PrintingController controller = Get.find<PrintingController>();
-  final formKey = GlobalKey<FormState>();
-
-  // FocusScopeNode currentFocus = FocusScope.of(context);
 
   @override
   void initState() {
     super.initState();
-
-    myFocusNode = FocusNode();
+    myFocusNode.addListener(_focusNodeListener);
   }
 
   @override
   void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    myFocusNode.dispose();
+    myFocusNode.removeListener(_focusNodeListener);
 
     super.dispose();
+  }
+
+  Future<Null> _focusNodeListener() async {
+    if (myFocusNode.hasFocus) {
+      QcLog.e('TextField got the focus');
+    } else {
+      QcLog.e('TextField lost the focus');
+    }
   }
 
   @override
@@ -109,68 +112,98 @@ class _PrintingScreenState extends State<PrintingScreen> {
                             keyboardType: TextInputType.url,
                             controller: textEdController,
                             maxLines: 5,
+                            focusNode: myFocusNode,
+                            // readOnly: true,
                           ),
                         ),
                         SizedBox(
                           width: 20,
                         ),
-                        ElevatedButton(
-                            onPressed: () async {
-                              if (controller.isTextValidate()!) {
-                                String moveUrl =
-                                    controller.makeUrl(textEdController.text);
-                                if (moveUrl.isNotEmpty && moveUrl.isURL) {
-                                  _webviewController.loadUrl(controller
-                                      .makeUrl(textEdController.text));
+                        Container(
+                          child: Column(
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    if (controller.isTextValidate()!) {
+                                      String moveUrl = controller
+                                          .makeUrl(textEdController.text);
+                                      if (moveUrl.isNotEmpty && moveUrl.isURL) {
+                                        _webviewController.loadUrl(controller
+                                            .makeUrl(textEdController.text));
 
-                                  QcLog.e(
-                                      "webviewUrl  ${controller.webviewUrl.value}");
-                                  QcLog.e("url  ${controller.url.value}");
-                                  // validation 이 성공하면 true 가 리턴돼요!
-                                  // controller.saveTextValidate();
+                                        QcLog.e(
+                                            "webviewUrl  ${controller.webviewUrl.value}");
+                                        QcLog.e("url  ${controller.url.value}");
+                                        // validation 이 성공하면 true 가 리턴돼요!
+                                        // controller.saveTextValidate();
 
-                                  FocusScope.of(context).unfocus();
-                                  new TextEditingController().clear();
-                                  textEdController.text = '';
+                                        FocusScope.of(context).unfocus();
+                                        new TextEditingController().clear();
+                                        textEdController.text = '';
 
-                                  Get.snackbar(
-                                    '웹페이지 이동!',
-                                    moveUrl + ' 이동합니다',
-                                    backgroundColor: Colors.black,
-                                    colorText: Colors.white,
-                                    snackPosition: SnackPosition.BOTTOM,
-                                  );
-                                } else {
-                                  Get.snackbar(
-                                    '알림',
-                                    'URL 형식으로 입력해주세요',
-                                    backgroundColor: Colors.black,
-                                    colorText: Colors.white,
-                                    snackPosition: SnackPosition.BOTTOM,
-                                  );
-                                }
-                              }
-                            },
-                            child: Text('이동')),
+                                        Get.snackbar(
+                                          '웹페이지 이동!',
+                                          moveUrl + ' 이동합니다',
+                                          backgroundColor: Colors.black,
+                                          colorText: Colors.white,
+                                          snackPosition: SnackPosition.BOTTOM,
+                                        );
+                                      } else {
+                                        Get.snackbar(
+                                          '알림',
+                                          'URL 형식으로 입력해주세요',
+                                          backgroundColor: Colors.black,
+                                          colorText: Colors.white,
+                                          snackPosition: SnackPosition.BOTTOM,
+                                        );
+                                      }
+                                    }
+                                  },
+                                  child: Text('이동')),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    String? currentUrl =
+                                        await _webviewController.currentUrl();
+                                    QcLog.e(
+                                        "current url : $currentUrl , ${controller.webviewUrl.value}");
+
+                                    _webviewController
+                                        .runJavascriptReturningResult(
+                                            Constants.OUTER_HTML)
+                                        .then((value) {
+                                      PrintingUtils.readDomFromJS(
+                                          value, currentUrl!, true);
+                                    });
+                                  },
+                                  child: Icon(Icons.print)),
+                            ],
+                          ),
+                        ),
+
                         SizedBox(
                           width: 20,
                         ),
-                        ElevatedButton(
-                            onPressed: () async {
-                              String? currentUrl =
-                                  await _webviewController.currentUrl();
-                              QcLog.e(
-                                  "current url : $currentUrl , ${controller.webviewUrl.value}");
 
-                              _webviewController
-                                  .runJavascriptReturningResult(
-                                      Constants.OUTER_HTML)
-                                  .then((value) {
-                                PrintingUtils.readDomFromJS(
-                                    value, currentUrl!, true);
-                              });
-                            },
-                            child: Icon(Icons.print)),
+                        Container(
+                            child: Column(children: [
+                          ElevatedButton(
+                              onPressed: () async {
+                                controller.isTextValidate();
+                              },
+                              child: Text('TextField validate')),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                              onPressed: () async {
+                                controller.formKey.currentState?.reset();
+                              },
+                              child: Text('TextField reset')),
+                        ]))
+
                         // IconButton(onPressed: null, icon: Icon(Icons.print))
                       ],
                     )),
@@ -200,20 +233,6 @@ class _PrintingScreenState extends State<PrintingScreen> {
             ],
           ),
         )),
-
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () async {
-        //     String? currentUrl = await _webviewController.currentUrl();
-        //     Print.e("current url : $currentUrl");
-        //
-        //     _webviewController
-        //         .runJavascriptReturningResult(Constants.OUTER_HTML)
-        //         .then((value) {
-        //       PrintingUtils.readDomFromJS(value, currentUrl!, true);
-        //     });
-        //   },
-        //   child: Icon(Icons.add),
-        // ),
       );
     });
   }

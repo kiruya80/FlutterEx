@@ -39,6 +39,8 @@ Future<void> getDeviceTheme() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).unfocus();
+
     return GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);

@@ -2,20 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-/// NAME         SIZE  WEIGHT  SPACING
-/// headline1    96.0  light   -1.5
-/// headline2    60.0  light   -0.5
-/// headline3    48.0  regular  0.0
-/// headline4    34.0  regular  0.25
-/// headline5    24.0  regular  0.0
-/// headline6    20.0  medium   0.15
-/// subtitle1    16.0  regular  0.15
-/// subtitle2    14.0  medium   0.1
-/// body1        16.0  regular  0.5   (bodyText1)
-/// body2        14.0  regular  0.25  (bodyText2)
-/// button       14.0  medium   1.25
-/// caption      12.0  regular  0.4
-/// overline     10.0  regular  1.5
 class QcTextFormField extends TextFormField {
   static const MAX_LINES = 10;
 
@@ -25,8 +11,9 @@ class QcTextFormField extends TextFormField {
     String? hintText,
     bool autofocus = false,
     bool expands = false,
-    bool readOnly = false,
+    bool readOnly = false, // 키보드 감추기
     bool enabled = true,
+    FocusNode? focusNode,
     TextStyle? textStyle,
     String? fontFamily,
     TextInputType? keyboardType,
@@ -45,12 +32,6 @@ class QcTextFormField extends TextFormField {
     TextEditingController? controller,
   }) : super(
             key: key,
-            // style: textStyle != null
-            //     ? textStyle
-            //     : Get.textTheme.bodyText2?.copyWith(
-            //         fontSize: fontSize,
-            //         color: fontColor,
-            //       ),
             style: TextStyle(
               color: fontColor,
               fontSize: fontSize ?? textStyle?.fontSize,
@@ -66,10 +47,10 @@ class QcTextFormField extends TextFormField {
             textInputAction: textInputAction,
             decoration: InputDecoration(
               // 텍스트필드의 외각선
+              //   hintMaxLines: hintMaxLines,
               filled: true,
               hintText: hintText,
               labelText: labelText,
-              //   hintMaxLines: hintMaxLines,
               // focusedBorder: OutlineInputBorder(
               //   borderRadius:
               //       BorderRadius.all(Radius.circular(10.0)),
@@ -93,6 +74,7 @@ class QcTextFormField extends TextFormField {
             maxLength: maxLength,
             expands: expands,
             enabled: enabled,
+            focusNode: focusNode,
             autofocus: autofocus);
 
   static getMaxLines(
@@ -118,6 +100,7 @@ class QcTextFormField extends TextFormField {
     bool expands = false,
     bool readOnly = false,
     bool enabled = true,
+    FocusNode? focusNode,
     TextStyle? textStyle = const TextStyle(),
     TextInputType? keyboardType,
     InputDecoration? decoration,
@@ -142,6 +125,7 @@ class QcTextFormField extends TextFormField {
           expands: expands,
           readOnly: readOnly,
           enabled: enabled,
+          focusNode: focusNode,
           textStyle: textStyle,
           keyboardType: keyboardType,
           decoration: decoration,
@@ -166,6 +150,7 @@ class QcTextFormField extends TextFormField {
     bool expands = false,
     bool readOnly = false,
     bool enabled = true,
+    FocusNode? focusNode,
     TextInputType? keyboardType,
     InputDecoration? decoration,
     TextInputAction? textInputAction,
@@ -189,6 +174,7 @@ class QcTextFormField extends TextFormField {
           expands: expands,
           readOnly: readOnly,
           enabled: enabled,
+          focusNode: focusNode,
           textStyle: Get.theme.textTheme.headline6,
           keyboardType: keyboardType,
           decoration: decoration,
@@ -211,6 +197,8 @@ class QcTextFormField extends TextFormField {
     String? hintText,
     bool autofocus = false,
     bool expands = false,
+    // bool readOnly = false,
+    FocusNode? focusNode,
     TextInputType? keyboardType,
     InputDecoration? decoration,
     TextInputAction? textInputAction,
@@ -232,6 +220,8 @@ class QcTextFormField extends TextFormField {
           hintText: hintText,
           autofocus: autofocus,
           expands: expands,
+          // readOnly: readOnly,
+          focusNode: focusNode,
           textStyle: Get.theme.textTheme.bodyText1,
           keyboardType: keyboardType,
           decoration: decoration,

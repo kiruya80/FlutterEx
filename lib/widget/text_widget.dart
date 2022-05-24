@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
 /// NAME         SIZE  WEIGHT  SPACING
