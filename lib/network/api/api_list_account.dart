@@ -9,6 +9,13 @@ import 'package:flutterex/network/http_client.dart';
 import 'package:flutterex/utils/print_log.dart';
 
 class ApiListAccount {
+  static String postParamConvert(Object data) {
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    String encoded = stringToBase64.encode(json.encode(data).toString());
+
+    return encoded;
+  }
+
   Future<ResponseModel<List<PostSample>>> getPostList({
     Map<String, dynamic>? params,
   }) async {
@@ -87,34 +94,35 @@ class ApiListAccount {
 
   Future<ResponseModel<PostSample>> postSample(PostSample postSample) async {
     QcLog.e('postSample ====  ${postSample.toString()}');
-    var data = {
+    var body = {
       "title": 'foo',
       "body": 'bar',
-      "userId": 1,
+      "userId": '1',
     };
 
-    String encoded = postParamConvert(data);
-    // String encoded;
-    // encoded = data as String;
-    // encoded = postSample.toJson();
-    QcLog.e('encoded ====  $encoded');
+    // String encoded = postParamConvert(body);
+    // QcLog.e('encoded ====  $encoded');
+
+    // final body = <String, dynamic>{
+    //   "title": 'foo',
+    //   "body": 'bar',
+    //   "userId": '1'
+    // };
+
+    // final bytes = utf8.encode(json.encode(params.toString()));
+    // QcLog.e("bytes === " + bytes.toString());
+    // final body = base64Encode(bytes).codeUnits;
+    // QcLog.e("body === " + body.toString());
 
     try {
-      var response = await QcHttpClient.instance.post(
-        "posts",
-        body: encoded,
-      );
+      var response = await QcHttpClient.instance.post("posts",
+          // body: '{"title": "Foo","body": "Bar", "userId": 99}',
+          // queryParams: null,
+          body: body);
       return ResponseModel(jsonEncode(response), PostSample.fromJson(response));
     } catch (e) {
       rethrow;
     }
-  }
-
-  static String postParamConvert(Object data) {
-    Codec<String, String> stringToBase64 = utf8.fuse(base64);
-    String encoded = stringToBase64.encode(json.encode(data).toString());
-
-    return encoded;
   }
 
   Future<ResponseModel<PostSample>> putSample() async {

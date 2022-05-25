@@ -8,6 +8,8 @@ class Languages extends Translations {
           'title_main': 'Flutter Sample',
           'title_font': '폰트',
           'title_widget': '위젯',
+          'title_image': '이미지',
+          'title_loading_widget': '로딩 위젯',
           'title_multi_lang': '다국어',
           'title_permission': '권한',
           'title_web_print': '웹 프린트',

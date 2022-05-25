@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+@JsonSerializable()
 class ApiItem {
   String apiStr;
   String api;

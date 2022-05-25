@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/api_item.dart';
 import 'package:flutterex/datas/model/post_model.dart';
@@ -9,6 +10,7 @@ import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class HttpApiController extends GetxController {
   var title = "HttpApiController".obs;
@@ -17,6 +19,8 @@ class HttpApiController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    sampleDio();
   }
 
   Future<List<ApiItem>> makeApiData() async {
@@ -73,6 +77,38 @@ class HttpApiController extends GetxController {
     return apiItems;
   }
 
+  Dio dio = Dio();
+  void sampleDio() {
+    dio.options.baseUrl = 'https://www.jsonplaceholder.typicode.com';
+    dio.options.connectTimeout = 5000; //5s
+    dio.options.receiveTimeout = 3000;
+
+    dio.interceptors.add(PrettyDioLogger());
+// customization
+    dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90));
+  }
+
+  // https://jsonplaceholder.typicode.com/posts
+  void getHttp() async {
+    try {
+      var response = await dio.get('/posts');
+      // var response =
+      //     await dio.get('https://jsonplaceholder.typicode.com/posts');
+      // print(response);
+      // QcLog.e('response == $response');
+      QcLog.e('response == ${response.data}');
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void makeApi(BuildContext context, ApiItem item) async {
     QcDialog.showProgress();
     try {
@@ -98,7 +134,7 @@ class HttpApiController extends GetxController {
           result = await ApiList().postSample(PostSample(
             title: 'foo',
             body: 'bar',
-            userId: 1,
+            userId: '1',
           ));
           break;
 
@@ -111,7 +147,8 @@ class HttpApiController extends GetxController {
           break;
 
         case 'deleteSample':
-          result = await ApiList().deleteSample();
+          // result = await ApiList().deleteSample();
+          getHttp();
           break;
       }
       QcDialog.dissmissProgress();
@@ -119,7 +156,6 @@ class HttpApiController extends GetxController {
     } catch (e) {
       QcDialog.dissmissProgress();
       QcLog.e("getPostList error : $e");
-      // Get.defaultDialog(title: 'Error', middleText: '$e');
       showError(context, e.toString());
     }
   }

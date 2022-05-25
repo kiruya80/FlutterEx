@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/widget/text_widget.dart';
-import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
@@ -16,12 +15,13 @@ class HomeListItemForm extends StatefulWidget {
   _HomeListItemFormState createState() => _HomeListItemFormState(item);
 }
 
-class _HomeListItemFormState extends State<HomeListItemForm> {
+class _HomeListItemFormState extends State<HomeListItemForm>
+    with TickerProviderStateMixin {
   final homeController = Get.find<HomeController>();
 
   // Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   HomeItem item;
-
+  late AnimationController _controller;
   _HomeListItemFormState(this.item);
 
   @override
@@ -31,6 +31,8 @@ class _HomeListItemFormState extends State<HomeListItemForm> {
 
   @override
   Widget build(BuildContext context) {
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     // return Container(
     //   decoration: BoxDecoration(
     //       color: Colors.white,
@@ -66,9 +68,8 @@ class _HomeListItemFormState extends State<HomeListItemForm> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Expanded(child: TextButton(onPressed: () {}, child: Text(item.name))),
           Expanded(
-            // flex: 4,
+            flex: 4,
             child: TextButton(
                 onPressed: () async {
                   QcLog.e("item.routeName == ${item.routeName}");

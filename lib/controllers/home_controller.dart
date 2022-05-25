@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/screens/http_api_screen.dart';
+import 'package:flutterex/screens/image_screen.dart';
+import 'package:flutterex/screens/loading_widget_screen.dart';
 import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
@@ -75,12 +77,18 @@ class HomeController extends GetxController {
     homeItems.add(new HomeItem(
         name: 'title_font'.tr, routeName: FontScreen.routeName, icon: ''));
     homeItems.add(new HomeItem(
+        name: 'title_multi_lang'.tr,
+        routeName: MultiLangScreen.routeName,
+        icon: ''));
+    homeItems.add(new HomeItem(
         name: 'title_widget'.tr,
         routeName: WidgetTypeScreen.routeName,
         icon: ''));
     homeItems.add(new HomeItem(
-        name: 'title_multi_lang'.tr,
-        routeName: MultiLangScreen.routeName,
+        name: 'title_image'.tr, routeName: ImageScreen.routeName, icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'title_loading_widget'.tr,
+        routeName: LoadingWidgetScreen.routeName,
         icon: ''));
     homeItems.add(new HomeItem(
         name: 'title_permission'.tr,

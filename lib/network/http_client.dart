@@ -61,7 +61,8 @@ class QcHttpClient {
 
   Future<dynamic> post(
     String path, {
-    dynamic queryParams = const {},
+    // dynamic queryParams = const {},
+    dynamic queryParams,
     Object? body,
     Encoding? encoding,
   }) async {
