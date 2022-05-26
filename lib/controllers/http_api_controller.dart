@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/api_item.dart';
 import 'package:flutterex/datas/model/post_model.dart';
-import 'package:flutterex/datas/model/response_model.dart';
 import 'package:flutterex/network/api/api_list.dart';
+import 'package:flutterex/network/api/api_list_dio.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
@@ -19,97 +19,69 @@ class HttpApiController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    sampleDio();
   }
 
   Future<List<ApiItem>> makeApiData() async {
     apiItems = [];
     apiItems.add(new ApiItem(
-        api: '[GET] Post List',
-        apiStr: 'getPostList',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[GET] Post List',
+      apiStr: 'getPostList',
+    ));
     apiItems.add(new ApiItem(
-        api: '[GET] One Post',
-        apiStr: 'getOnePost',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[GET] One Post',
+      apiStr: 'getOnePost',
+    ));
     apiItems.add(new ApiItem(
-        api: '[GET] Post Comments',
-        apiStr: 'getPostComments',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[GET] Post Comments',
+      apiStr: 'getPostComments',
+    ));
     apiItems.add(new ApiItem(
-        api: '[GET] Comments',
-        apiStr: 'getComments',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[GET] Comments',
+      apiStr: 'getComments',
+    ));
     apiItems.add(new ApiItem(
-        api: '[POST] Sample',
-        apiStr: 'postSample',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[POST] Sample',
+      apiStr: 'postSample',
+    ));
     apiItems.add(new ApiItem(
-        api: '[PUT] ample',
-        apiStr: 'putample',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[PUT] Sample',
+      apiStr: 'putSample',
+    ));
     apiItems.add(new ApiItem(
-        api: '[PATCH] Sample',
-        apiStr: 'patchSample',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[PATCH] Sample',
+      apiStr: 'patchSample',
+    ));
     apiItems.add(new ApiItem(
-        api: '[DELETE] Sample',
-        apiStr: 'deleteSample',
-        errorStr: ''.obs,
-        result: ''.obs,
-        resultPretty: ''.obs));
+      apiLibType: 'Http',
+      api: '[DELETE] Sample',
+      apiStr: 'deleteSample',
+    ));
+    apiItems.add(new ApiItem(
+      apiLibType: 'DIO',
+      api: '[DIO] Sample',
+      apiStr: 'dioSample',
+    ));
 
     return apiItems;
   }
 
-  Dio dio = Dio();
-  void sampleDio() {
-    dio.options.baseUrl = 'https://www.jsonplaceholder.typicode.com';
-    dio.options.connectTimeout = 5000; //5s
-    dio.options.receiveTimeout = 3000;
-
-    dio.interceptors.add(PrettyDioLogger());
-// customization
-    dio.interceptors.add(PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: true,
-        responseHeader: false,
-        error: true,
-        compact: true,
-        maxWidth: 90));
-  }
-
-  // https://jsonplaceholder.typicode.com/posts
-  void getHttp() async {
-    try {
-      var response = await dio.get('/posts');
-      // var response =
-      //     await dio.get('https://jsonplaceholder.typicode.com/posts');
-      // print(response);
-      // QcLog.e('response == $response');
-      QcLog.e('response == ${response.data}');
-    } catch (e) {
-      print(e);
+  void makeApi(BuildContext context, ApiItem item) async {
+    if (item.apiLibType == 'DIO') {
+      makeApiToDio(context, item);
+    } else {
+      makeApiToHttp(context, item);
     }
   }
 
-  void makeApi(BuildContext context, ApiItem item) async {
+
+  void makeApiToHttp(BuildContext context, ApiItem item) async {
     QcDialog.showProgress();
     try {
       var result;
@@ -132,23 +104,31 @@ class HttpApiController extends GetxController {
 
         case 'postSample':
           result = await ApiList().postSample(PostSample(
-            title: 'foo',
-            body: 'bar',
-            userId: '1',
+            title: 'foo11',
+            body: 'bar22',
+            userId: 33,
           ));
           break;
 
         case 'putSample':
-          result = await ApiList().putSample();
+          result = await ApiList().putSample(PostSample(
+            title: 'foo12121212',
+            body: 'bar3434343434',
+            userId: 33,
+          ));
           break;
 
         case 'patchSample':
-          result = await ApiList().patchSample();
+          result = await ApiList().patchSample({
+            "title": 'foooooooooooooooo',
+          });
           break;
 
         case 'deleteSample':
-          // result = await ApiList().deleteSample();
-          getHttp();
+          result = await ApiList().deleteSample('1');
+          break;
+
+        default:
           break;
       }
       QcDialog.dissmissProgress();
@@ -159,6 +139,43 @@ class HttpApiController extends GetxController {
       showError(context, e.toString());
     }
   }
+
+  void makeApiToDio(BuildContext context, ApiItem item) async {
+    QcDialog.showProgress();
+    try {
+      var result;
+      switch (item.apiStr) {
+        case 'dioSample':
+          result = await ApiListDio().getPostList();
+          // getHttpDio();
+          break;
+
+        default:
+          break;
+      }
+      QcDialog.dissmissProgress();
+      item.resultPretty.value = prettyPrintJson(result.bodyStr);
+    } catch (e) {
+      QcDialog.dissmissProgress();
+      QcLog.e("getPostList error : $e");
+      showError(context, e.toString());
+    }
+  }
+
+  // https://jsonplaceholder.typicode.com/posts
+  // void getHttpDio() async {
+  //   try {
+  //     var response =
+  //         await dio.get('https://jsonplaceholder.typicode.com/posts/1');
+  //     // var response =
+  //     //     await dio.get('https://jsonplaceholder.typicode.com/posts');
+  //     // print(response);
+  //     // QcLog.e('response == $response');
+  //     QcLog.e('response == ${response.data}');
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   String prettyPrintJson(String input) {
     // String jsonTutorial = jsonEncode(object);
@@ -193,7 +210,7 @@ class HttpApiController extends GetxController {
         ),
         actions: [
           TextButton(
-            child: Text("닫기"),
+            child: QcText.bodyText1("닫기"),
             onPressed: () => Get.back(),
           ),
           // null,

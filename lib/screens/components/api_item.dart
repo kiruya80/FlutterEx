@@ -9,21 +9,21 @@ import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
-class ApiListCommonItemForm extends StatefulWidget {
+class ApiListItemForm extends StatefulWidget {
   final ApiItem item;
 
   // final VoidCallback? callback;
   final Function(ApiItem)? callback;
 
-  const ApiListCommonItemForm({Key? key, required this.item, this.callback})
+  const ApiListItemForm({Key? key, required this.item, this.callback})
       : super(key: key);
 
   @override
-  _FApiListCommonItemFormState createState() =>
-      _FApiListCommonItemFormState(item, callback);
+  _ApiListItemFormFormState createState() =>
+      _ApiListItemFormFormState(item, callback);
 }
 
-class _FApiListCommonItemFormState extends State<ApiListCommonItemForm> {
+class _ApiListItemFormFormState extends State<ApiListItemForm> {
   final homeController = Get.find<HomeController>();
 
   ApiItem item;
@@ -31,7 +31,7 @@ class _FApiListCommonItemFormState extends State<ApiListCommonItemForm> {
   // VoidCallback? callback;
   Function(ApiItem)? callback;
 
-  _FApiListCommonItemFormState(this.item, this.callback);
+  _ApiListItemFormFormState(this.item, this.callback);
 
   @override
   void initState() {
@@ -61,7 +61,14 @@ class _FApiListCommonItemFormState extends State<ApiListCommonItemForm> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        QcText.headline3(item.apiLibType),
+                        SizedBox(
+                          height: 10,
+                        ),
                         QcText.headline6(item.api),
+                        SizedBox(
+                          height: 10,
+                        ),
                         TextButton(
                             onPressed: () async {
                               QcLog.e("item.routeName == ");

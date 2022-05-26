@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class QcDialog {
   static showProgress({bool barrierDismissible = false}) async {
@@ -24,6 +25,18 @@ class Loadding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Center(child: CircularProgressIndicator()));
+    return Container(
+        child: Center(child: CircularProgressIndicator()
+            //     LoadingFilling.square(
+            //   duration: Duration(milliseconds: 2400),
+            //   borderColor: Theme.of(context).colorScheme.secondary,
+            //   fillingColor: Theme.of(context).colorScheme.primary,
+            // ),
+
+            //     LoadingBouncingLine.circle(
+            //   duration: Duration(milliseconds: 1400),
+            //   backgroundColor: Theme.of(context).colorScheme.primary,
+            // ),
+            ));
   }
 }

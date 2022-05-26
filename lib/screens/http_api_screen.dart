@@ -1,15 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/http_api_controller.dart';
 import 'package:flutterex/datas/model/api_item.dart';
-import 'package:flutterex/datas/model/response_model.dart';
-import 'package:flutterex/network/api/api_list.dart';
-import 'package:flutterex/screens/components/api_list_common_item.dart';
+import 'package:flutterex/screens/components/api_item.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 /// 샘플 url
 /// https://jsonplaceholder.typicode.com/
@@ -18,40 +15,6 @@ class HttpApiScreen extends StatelessWidget {
   static const routeName = '/httpApi';
 
   const HttpApiScreen({Key? key}) : super(key: key);
-
-  // String prettyPrintJson(String input) {
-  //   // String jsonTutorial = jsonEncode(object);
-  //   String result = '';
-  //   const JsonDecoder decoder = JsonDecoder();
-  //   const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-  //   final dynamic object = decoder.convert(input);
-  //   final dynamic prettyString = encoder.convert(object);
-  //
-  //   prettyString.split('\n').forEach((dynamic element) {
-  //     result += element + '\n';
-  //
-  //     Print.e('element ============================= ');
-  //     Print.w(element);
-  //     print(element);
-  //   });
-  //
-  //   return result;
-  // }
-  //
-  // String prettyPrintJson(String input) {
-  //   // String jsonTutorial = jsonEncode(object);
-  //   String result = '';
-  //   const JsonDecoder decoder = JsonDecoder();
-  //   const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-  //   final dynamic object = decoder.convert(input);
-  //   final dynamic prettyString = encoder.convert(object);
-  //
-  //   prettyString.split('\n').forEach((dynamic element) {
-  //     result += element + '\n';
-  //   });
-  //
-  //   return result;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +46,17 @@ class HttpApiScreen extends StatelessWidget {
                   //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                   if (snapshot.hasData == false) {
                     return Container(
-                        child: Center(child: CircularProgressIndicator()));
+                        child: Center(
+                      child:
+                          // CircularProgressIndicator()
+                          LoadingFilling.square(
+                        borderSize: 10,
+                        borderColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
+                        fillingColor:
+                            Theme.of(context).colorScheme.primaryContainer,
+                      ),
+                    ));
                   } else if (snapshot.hasError) {
                     return Container(
                         child: Padding(
@@ -106,8 +79,8 @@ class HttpApiScreen extends StatelessWidget {
                           ApiItem item = items[position];
 
                           return Column(
-                            children: <ApiListCommonItemForm>[
-                              ApiListCommonItemForm(
+                            children: <ApiListItemForm>[
+                              ApiListItemForm(
                                 item: item,
                                 callback: (_item) async {
                                   QcLog.e('callback =============== $_item');

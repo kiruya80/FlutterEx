@@ -1,35 +1,46 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutterex/network/app_exception.dart';
-import 'package:flutterex/network/http_interceptor.dart';
 import 'package:flutterex/utils/print_log.dart';
-import 'package:http/http.dart';
-import 'package:http_interceptor/http/http.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-class QcHttpClient {
+class QcDioClient {
   // sample : https://jsonplaceholder.typicode.com/
   static const API_BASE_DOMAIN = "jsonplaceholder.typicode.com";
   static const API_DOMAIN = "jsonplaceholder.typicode.com";
 
-  static final QcHttpClient instance = QcHttpClient.init();
+  static final QcDioClient instance = QcDioClient.init();
+  final Dio dio = Dio();
 
-  factory QcHttpClient() {
+  factory QcDioClient() {
     return instance;
   }
 
-  QcHttpClient.init() {
-    QcLog.d("QcHttpClient Init");
-  }
+  QcDioClient.init() {
+    QcLog.d("QcDioClient Init");
+    // dio.options.baseUrl = 'https://jsonplaceholder.typicode.com';
+    dio.options.connectTimeout = 5000; //5s
+    dio.options.receiveTimeout = 3000;
 
+    dio.interceptors.add(PrettyDioLogger());
+// customization
+    dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90));
+  }
   Map<String, String> header = {};
 
   void addHeader(key, value) {
     header[key] = value;
   }
-
-  final http = InterceptedHttp.build(interceptors: [HttpLoggerInterceptor()]);
 
   /**
    * 운영 검증 버전 도메인 구분
@@ -50,95 +61,14 @@ class QcHttpClient {
       // final uri = Uri.https(getDomain(), path, queryParams);
       final uri = Uri.https(getDomain(), path);
       QcLog.i("request uri >>> : " + uri.toString());
-      final response = await http
-          .get(uri, headers: header, params: queryParams)
+      final response = await dio
+          .get(uri.toString(), queryParameters: queryParams)
           .timeout(const Duration(seconds: 10));
+
+      QcLog.i(" response: $response");
+
       responseJson = _returnResponse(response);
     } on Exception catch (e) {
-      throw exceptionTypeCheck(e);
-    }
-    return responseJson;
-  }
-
-  Future<dynamic> post(
-    String path, {
-    dynamic queryParams,
-    Object? body,
-    Encoding? encoding,
-  }) async {
-    QcLog.e('post ====  $body');
-    dynamic responseJson;
-    try {
-      final uri = Uri.https(getDomain(), path, queryParams);
-      final response = await http
-          .post(uri, headers: header, body: body, encoding: encoding)
-          .timeout(const Duration(seconds: 10));
-      responseJson = _returnResponse(response);
-    } on Exception catch (e) {
-      QcLog.e('exceptionTypeCheck ====  $e');
-      throw exceptionTypeCheck(e);
-    }
-    return responseJson;
-  }
-
-  Future<dynamic> put(
-    String path, {
-    // dynamic queryParams = const {},
-    // dynamic body = const {},
-    dynamic queryParams,
-    Object? body,
-    Encoding? encoding,
-  }) async {
-    dynamic responseJson;
-    try {
-      final uri = Uri.https(getDomain(), path, queryParams);
-      final response = await http
-          .put(uri, headers: header, body: body, encoding: encoding)
-          .timeout(const Duration(seconds: 10));
-      responseJson = _returnResponse(response);
-    } on Exception catch (e) {
-      throw exceptionTypeCheck(e);
-    }
-    return responseJson;
-  }
-
-  Future<dynamic> patch(
-    String path, {
-    // dynamic queryParams = const {},
-    // dynamic body = const {},
-    dynamic queryParams,
-    Object? body,
-    Encoding? encoding,
-  }) async {
-    dynamic responseJson;
-    try {
-      final uri = Uri.https(getDomain(), path, queryParams);
-      final response = await http
-          .patch(uri, headers: header, body: body, encoding: encoding)
-          .timeout(const Duration(seconds: 10));
-      responseJson = _returnResponse(response);
-    } on Exception catch (e) {
-      throw exceptionTypeCheck(e);
-    }
-
-    return responseJson;
-  }
-
-  Future<dynamic> delete(
-    String path, {
-    dynamic queryParams,
-    Object? body,
-    Encoding? encoding,
-  }) async {
-    dynamic responseJson;
-    try {
-      final uri = Uri.https(getDomain(), path, queryParams);
-      final response = await http
-          .delete(uri, headers: header, body: body, encoding: encoding)
-          .timeout(const Duration(seconds: 10));
-      responseJson = _returnResponse(response);
-    } on Exception catch (e) {
-      QcLog.e('Exception =============== $e');
       throw exceptionTypeCheck(e);
     }
     return responseJson;
@@ -166,11 +96,13 @@ class QcHttpClient {
 
   dynamic _returnResponse(Response response) {
     QcLog.i(" RESPONSE responseJson >>> : ");
+    // QcLog.i(" RESPONSE responseJson >>> : " + response.data.body.toString());
+    QcLog.i(" RESPONSE responseJson >>> : " + response.data);
     switch (response.statusCode) {
       case 200:
       case 201:
-        var responseJson = json.decode(response.body.toString());
-        if (kDebugMode) prettyPrintJson(response.body.toString());
+        var responseJson = json.decode(response.data);
+        if (kDebugMode) prettyPrintJson(response.data);
         // var responseStatus = responseJson['RESP_RESULT']['RESP_STATUS'] ?? 200;
         // if (responseStatus is String) {
         //   responseStatus = int.parse(responseStatus);
@@ -184,7 +116,7 @@ class QcHttpClient {
         return responseJson;
       case 401:
       case 403:
-        throw AuthFailException(response.body.toString(), "Auth");
+        throw AuthFailException(response.data, "Auth");
       case 500:
       case 502:
       // throw PMException(response.body.toString(), "CheckPM");
