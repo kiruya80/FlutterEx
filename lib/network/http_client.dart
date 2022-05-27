@@ -165,12 +165,12 @@ class QcHttpClient {
   }
 
   dynamic _returnResponse(Response response) {
-    QcLog.i(" RESPONSE responseJson >>> : ");
+    QcLog.i(" RESPONSE responseJson >>> : ${response.statusCode}");
     switch (response.statusCode) {
       case 200:
       case 201:
-        var responseJson = json.decode(response.body.toString());
-        if (kDebugMode) prettyPrintJson(response.body.toString());
+        var responseJson = json.decode(response.body);
+        if (kDebugMode) prettyPrintJson(response.body);
         // var responseStatus = responseJson['RESP_RESULT']['RESP_STATUS'] ?? 200;
         // if (responseStatus is String) {
         //   responseStatus = int.parse(responseStatus);

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class WidgetTypeController extends GetxController {
   var title = ''.obs;
+  var dropdownValue = ''.obs;
 
   @override
   void onInit() {
@@ -12,7 +13,5 @@ class WidgetTypeController extends GetxController {
     final name = args['name'];
     QcLog.e('name : $name');
     title.value = name;
-
-    // title.value = 'multi_title'.tr;
   }
 }

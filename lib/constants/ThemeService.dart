@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class QcTheme {
-  static const SEED_COLOR = Colors.green;
-  // static const SEED_COLOR = Color(0xFF6750A4);
+  // static const SEED_COLOR = Colors.green;
+  static const SEED_COLOR = Color(0xFF6750A4);
   // static const SEED_COLOR = Color.fromRGBO(103, 80, 164, 0);
 
   ///

@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/api_item.dart';
 import 'package:flutterex/datas/model/post_model.dart';
-import 'package:flutterex/network/api/api_http_list.dart';
+import 'package:flutterex/network/api/api_dio_list.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
-class HttpApiController extends GetxController {
-  var title = "HttpApiController".obs;
+class DioApiController extends GetxController {
+  var title = "DioApiController".obs;
   List<ApiItem> apiItems = [];
 
   @override
@@ -25,49 +25,44 @@ class HttpApiController extends GetxController {
   Future<List<ApiItem>> makeApiData() async {
     apiItems = [];
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[GET] Post List',
       apiStr: 'getPostList',
     ));
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[GET] One Post',
       apiStr: 'getOnePost',
     ));
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[GET] Post Comments',
       apiStr: 'getPostComments',
     ));
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[GET] Comments',
       apiStr: 'getComments',
     ));
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[POST] Sample',
       apiStr: 'postSample',
     ));
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[PUT] Sample',
       apiStr: 'putSample',
     ));
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[PATCH] Sample',
       apiStr: 'patchSample',
     ));
     apiItems.add(new ApiItem(
-      apiLibType: 'Http',
+      apiLibType: 'DIO',
       api: '[DELETE] Sample',
       apiStr: 'deleteSample',
-    ));
-    apiItems.add(new ApiItem(
-      apiLibType: 'DIO',
-      api: '[DIO] Sample',
-      apiStr: 'dioSample',
     ));
 
     return apiItems;
@@ -79,24 +74,23 @@ class HttpApiController extends GetxController {
       var result;
       switch (item.apiStr) {
         case 'getPostList':
-          result = await ApiHttpList().getPostList();
+          result = await ApiDioList().getPostList();
           break;
 
         case 'getOnePost':
-          result = await ApiHttpList().getOnePost();
+          result = await ApiDioList().getOnePost();
           break;
 
         case 'getPostComments':
-          result = await ApiHttpList().getPostComments();
+          result = await ApiDioList().getPostComments();
           break;
 
         case 'getComments':
-          result =
-              await ApiHttpList().getComments(queryParams: {'postId': '1'});
+          result = await ApiDioList().getComments(queryParams: {'postId': '1'});
           break;
 
         case 'postSample':
-          result = await ApiHttpList().postSample(PostSample(
+          result = await ApiDioList().postSample(PostSample(
             title: 'foo11',
             body: 'bar22',
             userId: 33,
@@ -104,7 +98,7 @@ class HttpApiController extends GetxController {
           break;
 
         case 'putSample':
-          result = await ApiHttpList().putSample(PostSample(
+          result = await ApiDioList().putSample(PostSample(
             title: 'foo12121212',
             body: 'bar3434343434',
             userId: 33,
@@ -112,13 +106,13 @@ class HttpApiController extends GetxController {
           break;
 
         case 'patchSample':
-          result = await ApiHttpList().patchSample({
+          result = await ApiDioList().patchSample({
             "title": 'foooooooooooooooo',
           });
           break;
 
         case 'deleteSample':
-          result = await ApiHttpList().deleteSample('1');
+          result = await ApiDioList().deleteSample('1');
           break;
 
         default:
@@ -132,6 +126,27 @@ class HttpApiController extends GetxController {
       showError(context, e.toString());
     }
   }
+  //
+  // void makeApiToDio(BuildContext context, ApiItem item) async {
+  //   QcDialog.showProgress();
+  //   try {
+  //     var result;
+  //     switch (item.apiStr) {
+  //       case 'dioSample':
+  //         result = await ApiListDio().getPostList();
+  //         break;
+  //
+  //       default:
+  //         break;
+  //     }
+  //     QcDialog.dissmissProgress();
+  //     item.resultPretty.value = prettyPrintJson(result.bodyStr);
+  //   } catch (e) {
+  //     QcDialog.dissmissProgress();
+  //     QcLog.e("getPostList error : $e");
+  //     showError(context, e.toString());
+  //   }
+  // }
 
   // https://jsonplaceholder.typicode.com/posts
   // void getHttpDio() async {

@@ -1,3 +1,4 @@
+import 'package:flutterex/bindings/dio_api_binding.dart';
 import 'package:flutterex/bindings/font_binding.dart';
 import 'package:flutterex/bindings/home_binding.dart';
 import 'package:flutterex/bindings/http_api_binding.dart';
@@ -7,6 +8,7 @@ import 'package:flutterex/bindings/multi_lang_binding.dart';
 import 'package:flutterex/bindings/permission_binding.dart';
 import 'package:flutterex/bindings/printing_binding.dart';
 import 'package:flutterex/bindings/widget_type_binding.dart';
+import 'package:flutterex/screens/dio_api_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/screens/home_screen.dart';
 import 'package:flutterex/screens/http_api_screen.dart';
@@ -61,5 +63,9 @@ class GetXRouterContainer {
         name: HttpApiScreen.routeName,
         page: () => HttpApiScreen(),
         binding: HttpApiBinding()),
+    GetPage(
+        name: DioApiScreen.routeName,
+        page: () => DioApiScreen(),
+        binding: DioApiBinding()),
   ];
 }

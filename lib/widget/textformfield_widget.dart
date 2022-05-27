@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
 class QcTextFormField extends TextFormField {
@@ -11,14 +12,17 @@ class QcTextFormField extends TextFormField {
     String? hintText,
     bool autofocus = false,
     bool expands = false,
-    bool readOnly = false, // 키보드 감추기
-    bool enabled = true,
+    bool readOnly = false, // true - 클릭 가능하고 편집 불가능 , 키보드 감추기??
+    bool enabled = true, // false - 클릭 및 편집 여부
     FocusNode? focusNode,
     TextStyle? textStyle,
     String? fontFamily,
     TextInputType? keyboardType,
-    InputDecoration? decoration = const InputDecoration(),
+    // InputDecoration? decoration = const InputDecoration(),
+    InputDecoration? decoration,
     TextInputAction? textInputAction,
+    Icon? icon,
+    Icon? prefixIcon,
     double? fontSize,
     int? hintMaxLines,
     Color? fontColor,
@@ -46,27 +50,35 @@ class QcTextFormField extends TextFormField {
             initialValue: initialValue,
             textInputAction: textInputAction,
             decoration: InputDecoration(
-              // 텍스트필드의 외각선
-              //   hintMaxLines: hintMaxLines,
-              filled: true,
-              hintText: hintText,
-              labelText: labelText,
-              // focusedBorder: OutlineInputBorder(
-              //   borderRadius:
-              //       BorderRadius.all(Radius.circular(10.0)),
-              // ),
-              // unfocused
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-              // focused
-              // border: InputBorder.none,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                // borderSide: BorderSide(
-                //     width: 1, color: Colors.redAccent),
-              ),
-            ),
+                // 텍스트필드의 외각선
+                //   hintMaxLines: hintMaxLines,
+                filled: true,
+                hintText: hintText,
+                labelText: labelText,
+                // focusedBorder: OutlineInputBorder(
+                //   borderRadius:
+                //       BorderRadius.all(Radius.circular(10.0)),
+                // ),
+                // unfocused
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                ),
+                // focused
+                // border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  // borderSide: BorderSide(
+                  //     width: 1, color: Colors.redAccent),
+                ),
+                icon: icon,
+                prefixIcon: prefixIcon,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    QcLog.e('suffixIcon clear ');
+                    controller?.clear();
+                  },
+                  icon: Icon(Icons.cancel_outlined),
+                )),
             maxLines: expands == true
                 ? null
                 : getMaxLines(maxLines ?? 1, minLines ?? 1),
@@ -106,6 +118,8 @@ class QcTextFormField extends TextFormField {
     InputDecoration? decoration,
     TextInputAction? textInputAction,
     double? fontSize,
+    Icon? icon,
+    Icon? prefixIcon,
     int? hintMaxLines,
     Color? fontColor,
     String? initialValue,
@@ -131,6 +145,8 @@ class QcTextFormField extends TextFormField {
           decoration: decoration,
           textInputAction: textInputAction,
           fontSize: fontSize,
+          icon: icon,
+          prefixIcon: prefixIcon,
           hintMaxLines: hintMaxLines,
           fontColor: fontColor,
           initialValue: initialValue,
@@ -155,6 +171,8 @@ class QcTextFormField extends TextFormField {
     InputDecoration? decoration,
     TextInputAction? textInputAction,
     double? fontSize,
+    Icon? icon,
+    Icon? prefixIcon,
     int? hintMaxLines,
     Color? fontColor,
     String? initialValue,
@@ -180,6 +198,8 @@ class QcTextFormField extends TextFormField {
           decoration: decoration,
           textInputAction: textInputAction,
           fontSize: fontSize,
+          icon: icon,
+          prefixIcon: prefixIcon,
           hintMaxLines: hintMaxLines,
           fontColor: fontColor,
           initialValue: initialValue,
@@ -203,6 +223,8 @@ class QcTextFormField extends TextFormField {
     InputDecoration? decoration,
     TextInputAction? textInputAction,
     double? fontSize,
+    Icon? icon,
+    Icon? prefixIcon,
     int? hintMaxLines,
     Color? fontColor,
     String? initialValue,
@@ -227,6 +249,8 @@ class QcTextFormField extends TextFormField {
           decoration: decoration,
           textInputAction: textInputAction,
           fontSize: fontSize,
+          icon: icon,
+          prefixIcon: prefixIcon,
           hintMaxLines: hintMaxLines,
           fontColor: fontColor,
           initialValue: initialValue,

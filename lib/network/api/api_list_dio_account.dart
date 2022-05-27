@@ -5,10 +5,11 @@ import 'dart:core';
 import 'package:flutterex/datas/model/comment_model.dart';
 import 'package:flutterex/datas/model/post_model.dart';
 import 'package:flutterex/datas/model/response_model.dart';
+import 'package:flutterex/network/dio_client.dart';
 import 'package:flutterex/network/http_client.dart';
 import 'package:flutterex/utils/print_log.dart';
 
-class ApiListAccount {
+class ApiListDioAccount {
   static String postParamConvert(Object data) {
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
     String encoded = stringToBase64.encode(json.encode(data).toString());
@@ -16,15 +17,15 @@ class ApiListAccount {
     return encoded;
   }
 
+  // <ResponseModel<List<PostSample>>>
   Future<ResponseModel<List<PostSample>>> getPostList({
     Map<String, dynamic>? params,
   }) async {
     try {
       var response =
-          await QcHttpClient.instance.get("posts", queryParams: params);
-      // return PostSample.fromMap(response['RESP_RESULT']);
+          await QcDioClient.instance.get("posts", queryParams: params);
+
       var list = (response as List).map((_) {
-        // return PostSample.fromMap(_);
         return PostSample.fromJson(_);
       }).toList();
       return ResponseModel(jsonEncode(response), list);
@@ -38,10 +39,8 @@ class ApiListAccount {
   }) async {
     try {
       var response =
-          await QcHttpClient.instance.get("posts", queryParams: params);
-      // return PostSample.fromMap(response['RESP_RESULT']);
+          await QcDioClient.instance.get("posts", queryParams: params);
       var list = (response as List).map((_) {
-        // return PostSample.fromMap(_);
         return PostSample.fromJson(_);
       }).toList();
       return ResponseModel(jsonEncode(response), list);
@@ -52,7 +51,7 @@ class ApiListAccount {
 
   Future<ResponseModel<PostSample>> getOnePost() async {
     try {
-      var response = await QcHttpClient.instance.get(
+      var response = await QcDioClient.instance.get(
         "posts/1",
       );
       QcLog.e('response === $response');
@@ -68,7 +67,7 @@ class ApiListAccount {
     Map<String, dynamic>? queryParams,
   }) async {
     try {
-      var response = await QcHttpClient.instance
+      var response = await QcDioClient.instance
           .get("posts/1/comments", queryParams: queryParams);
       var list = (response as List).map((_) {
         return CommentSample.fromMap(_);
@@ -84,7 +83,7 @@ class ApiListAccount {
   }) async {
     try {
       var response =
-          await QcHttpClient.instance.get("comments", queryParams: queryParams);
+          await QcDioClient.instance.get("comments", queryParams: queryParams);
       var list = (response as List).map((_) {
         return CommentSample.fromMap(_);
       }).toList();
@@ -120,7 +119,7 @@ class ApiListAccount {
       var body = postSample.toJsonStr();
       QcLog.e('body ====  $body');
 
-      var response = await QcHttpClient.instance.post("posts",
+      var response = await QcDioClient.instance.post("posts",
           // body: '{"title": "Foo","body": "Bar", "userId": 99}',
           queryParams: null,
           body: body);
@@ -135,7 +134,7 @@ class ApiListAccount {
       var body = postSample.toJsonStr();
       QcLog.e('body ====  $body');
 
-      var response = await QcHttpClient.instance.put(
+      var response = await QcDioClient.instance.put(
         "posts/1",
       );
       return ResponseModel(jsonEncode(response), PostSample.fromJson(response));
@@ -146,7 +145,7 @@ class ApiListAccount {
 
   Future<ResponseModel<PostSample>> patchSample(var body) async {
     try {
-      var response = await QcHttpClient.instance.patch("posts/1", body: body);
+      var response = await QcDioClient.instance.patch("posts/1", body: body);
       return ResponseModel(jsonEncode(response), PostSample.fromJson(response));
     } catch (e) {
       rethrow;
@@ -156,7 +155,7 @@ class ApiListAccount {
   Future<ResponseModel<PostSample>> deleteSample(String postId) async {
     QcLog.e('deleteSample =============== $postId');
     try {
-      var response = await QcHttpClient.instance.delete(
+      var response = await QcDioClient.instance.delete(
         "posts/$postId",
         // "posts/1",
       );

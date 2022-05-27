@@ -5,11 +5,10 @@ import 'dart:core';
 import 'package:flutterex/datas/model/comment_model.dart';
 import 'package:flutterex/datas/model/post_model.dart';
 import 'package:flutterex/datas/model/response_model.dart';
-import 'package:flutterex/network/dio_client.dart';
 import 'package:flutterex/network/http_client.dart';
 import 'package:flutterex/utils/print_log.dart';
 
-class ApiListDio {
+class ApiListHttpAccount {
   static String postParamConvert(Object data) {
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
     String encoded = stringToBase64.encode(json.encode(data).toString());
@@ -22,9 +21,8 @@ class ApiListDio {
   }) async {
     try {
       var response =
-          await QcDioClient.instance.get("posts", queryParams: params);
-      QcLog.e('response === $response');
-
+          await QcHttpClient.instance.get("posts", queryParams: params);
+      // return PostSample.fromMap(response['RESP_RESULT']);
       var list = (response as List).map((_) {
         // return PostSample.fromMap(_);
         return PostSample.fromJson(_);

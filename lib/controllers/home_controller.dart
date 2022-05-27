@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/home_item.dart';
+import 'package:flutterex/screens/dio_api_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/screens/http_api_screen.dart';
 import 'package:flutterex/screens/image_screen.dart';
@@ -99,9 +100,11 @@ class HomeController extends GetxController {
         routeName: PrintingScreen.routeName,
         icon: ''));
     homeItems.add(new HomeItem(
-        name: 'HttpApiScreen'.tr,
+        name: 'title_http_api'.tr,
         routeName: HttpApiScreen.routeName,
         icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'title_dio_api'.tr, routeName: DioApiScreen.routeName, icon: ''));
 
     return homeItems;
   }

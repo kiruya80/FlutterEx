@@ -24,6 +24,7 @@ class QcDioClient {
     // dio.options.baseUrl = 'https://jsonplaceholder.typicode.com';
     dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
+    dio.options.headers = header;
 
     dio.interceptors.add(PrettyDioLogger());
 // customization
@@ -36,6 +37,7 @@ class QcDioClient {
         compact: true,
         maxWidth: 90));
   }
+
   Map<String, String> header = {};
 
   void addHeader(key, value) {
@@ -49,26 +51,158 @@ class QcDioClient {
     return kDebugMode ? API_BASE_DOMAIN : API_DOMAIN;
   }
 
+  // String path, {
+  // Map<String, dynamic>? queryParameters,
+  //     Options? options,
+  // CancelToken? cancelToken,
+  //     ProgressCallback? onReceiveProgress,
   Future<dynamic> get(
     String path, {
-    // Map<String, dynamic>? queryParams = const {},
     Map<String, dynamic>? queryParams,
-    // Map<String, dynamic>? params,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onReceiveProgress,
   }) async {
     QcLog.i(" WHAT>>> : $path");
     dynamic responseJson;
     try {
-      // final uri = Uri.https(getDomain(), path, queryParams);
       final uri = Uri.https(getDomain(), path);
       QcLog.i("request uri >>> : " + uri.toString());
-      final response = await dio
+      Response response = await dio
           .get(uri.toString(), queryParameters: queryParams)
           .timeout(const Duration(seconds: 10));
-
-      QcLog.i(" response: $response");
-
       responseJson = _returnResponse(response);
     } on Exception catch (e) {
+      throw exceptionTypeCheck(e);
+    }
+    return responseJson;
+  }
+
+  // String path, {
+  // data,
+  // Map<String, dynamic>? queryParameters,
+  //     Options? options,
+  // CancelToken? cancelToken,
+  //     ProgressCallback? onSendProgress,
+  // ProgressCallback? onReceiveProgress,
+  Future<dynamic> post(
+    String path, {
+    Object? body,
+    dynamic queryParams,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    QcLog.e('post ====  $body');
+    dynamic responseJson;
+    try {
+      final uri = Uri.https(getDomain(), path, queryParams);
+      final response = await dio
+          .post(uri.toString(),
+              data: body,
+              options: options,
+              cancelToken: cancelToken,
+              onSendProgress: onSendProgress,
+              onReceiveProgress: onReceiveProgress)
+          .timeout(const Duration(seconds: 10));
+      responseJson = _returnResponse(response);
+    } on Exception catch (e) {
+      QcLog.e('exceptionTypeCheck ====  $e');
+      throw exceptionTypeCheck(e);
+    }
+    return responseJson;
+  }
+
+  // String path, {
+  // data,
+  // Map<String, dynamic>? queryParameters,
+  //     Options? options,
+  // CancelToken? cancelToken,
+  //     ProgressCallback? onSendProgress,
+  // ProgressCallback? onReceiveProgress,
+  Future<dynamic> put(
+    String path, {
+    Object? body,
+    dynamic queryParams,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    dynamic responseJson;
+    try {
+      final uri = Uri.https(getDomain(), path, queryParams);
+      final response = await dio
+          .put(uri.toString(),
+              data: body,
+              options: options,
+              cancelToken: cancelToken,
+              onSendProgress: onSendProgress,
+              onReceiveProgress: onReceiveProgress)
+          .timeout(const Duration(seconds: 10));
+      responseJson = _returnResponse(response);
+    } on Exception catch (e) {
+      throw exceptionTypeCheck(e);
+    }
+    return responseJson;
+  }
+
+  // String path, {
+  // data,
+  // Map<String, dynamic>? queryParameters,
+  //     Options? options,
+  // CancelToken? cancelToken,
+  //     ProgressCallback? onSendProgress,
+  // ProgressCallback? onReceiveProgress,
+  Future<dynamic> patch(
+    String path, {
+    Object? body,
+    dynamic queryParams,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    dynamic responseJson;
+    try {
+      final uri = Uri.https(getDomain(), path, queryParams);
+      final response = await dio
+          .patch(uri.toString(),
+              data: body,
+              options: options,
+              cancelToken: cancelToken,
+              onSendProgress: onSendProgress,
+              onReceiveProgress: onReceiveProgress)
+          .timeout(const Duration(seconds: 10));
+      responseJson = _returnResponse(response);
+    } on Exception catch (e) {
+      throw exceptionTypeCheck(e);
+    }
+
+    return responseJson;
+  }
+
+  // String path, {
+  // data,
+  // Map<String, dynamic>? queryParameters,
+  //     Options? options,
+  // CancelToken? cancelToken,
+  Future<dynamic> delete(String path,
+      {Object? body,
+      dynamic queryParams,
+      Options? options,
+      CancelToken? cancelToken}) async {
+    dynamic responseJson;
+    try {
+      final uri = Uri.https(getDomain(), path, queryParams);
+      final response = await dio
+          .delete(uri.toString(),
+              data: body, options: options, cancelToken: cancelToken)
+          .timeout(const Duration(seconds: 10));
+      responseJson = _returnResponse(response);
+    } on Exception catch (e) {
+      QcLog.e('Exception =============== $e');
       throw exceptionTypeCheck(e);
     }
     return responseJson;
@@ -94,29 +228,18 @@ class QcDioClient {
     }
   }
 
-  dynamic _returnResponse(Response response) {
-    QcLog.i(" RESPONSE responseJson >>> : ");
-    // QcLog.i(" RESPONSE responseJson >>> : " + response.data.body.toString());
-    QcLog.i(" RESPONSE responseJson >>> : " + response.data);
+  _returnResponse(Response response) {
+    QcLog.i(" RESPONSE responseJson >>> : ${response.statusCode}");
     switch (response.statusCode) {
       case 200:
       case 201:
-        var responseJson = json.decode(response.data);
-        if (kDebugMode) prettyPrintJson(response.data);
-        // var responseStatus = responseJson['RESP_RESULT']['RESP_STATUS'] ?? 200;
-        // if (responseStatus is String) {
-        //   responseStatus = int.parse(responseStatus);
-        // }
-        // if (responseStatus > 299) {
-        //   return _returnSuccessException(
-        //       responseJson['RESP_RESULT']['RESP_STATUS'],
-        //       responseJson['RESP_RESULT']['MESSAGE'],
-        //       responseJson['RESP_RESULT']['SERVICE_MSG']);
-        // }
+        QcLog.i(" _returnResponse 200 >>> : ");
+        var responseJson = response.data;
+        if (kDebugMode) prettyPrintJson(jsonEncode(responseJson));
         return responseJson;
       case 401:
       case 403:
-        throw AuthFailException(response.data, "Auth");
+        throw AuthFailException(response.statusMessage, "Auth");
       case 500:
       case 502:
       // throw PMException(response.body.toString(), "CheckPM");

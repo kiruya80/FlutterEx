@@ -113,7 +113,7 @@ class _PrintingScreenState extends State<PrintingScreen> {
                             controller: textEdController,
                             maxLines: 5,
                             focusNode: myFocusNode,
-                            // readOnly: true,
+                            prefixIcon: Icon(Icons.web_outlined),
                           ),
                         ),
                         SizedBox(
