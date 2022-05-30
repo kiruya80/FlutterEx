@@ -21,7 +21,7 @@ class _HomeListItemFormState extends State<HomeListItemForm>
 
   // Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   HomeItem item;
-  late AnimationController _controller;
+  // late AnimationController _controller;
   _HomeListItemFormState(this.item);
 
   @override
@@ -31,8 +31,7 @@ class _HomeListItemFormState extends State<HomeListItemForm>
 
   @override
   Widget build(BuildContext context) {
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    // _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     // return Container(
     //   decoration: BoxDecoration(
     //       color: Colors.white,
@@ -64,12 +63,12 @@ class _HomeListItemFormState extends State<HomeListItemForm>
     // );
 
     return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+      // margin: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            flex: 4,
+            // flex: 4,
             child: TextButton(
                 onPressed: () async {
                   QcLog.e("item.routeName == ${item.routeName}");
