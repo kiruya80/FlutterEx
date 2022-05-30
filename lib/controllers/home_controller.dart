@@ -11,6 +11,7 @@ import 'package:flutterex/screens/loading_widget_screen.dart';
 import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
+import 'package:flutterex/screens/push_screen.dart';
 import 'package:flutterex/screens/widget_type_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutter/scheduler.dart';
@@ -105,6 +106,8 @@ class HomeController extends GetxController {
         icon: ''));
     homeItems.add(new HomeItem(
         name: 'title_dio_api'.tr, routeName: DioApiScreen.routeName, icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'title_push'.tr, routeName: PushScreen.routeName, icon: ''));
 
     return homeItems;
   }

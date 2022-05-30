@@ -7,6 +7,7 @@ import 'package:flutterex/bindings/loading_widget_binding.dart';
 import 'package:flutterex/bindings/multi_lang_binding.dart';
 import 'package:flutterex/bindings/permission_binding.dart';
 import 'package:flutterex/bindings/printing_binding.dart';
+import 'package:flutterex/bindings/push_binding.dart';
 import 'package:flutterex/bindings/widget_type_binding.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
@@ -17,6 +18,7 @@ import 'package:flutterex/screens/loading_widget_screen.dart';
 import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
+import 'package:flutterex/screens/push_screen.dart';
 import 'package:get/get.dart';
 
 import 'screens/widget_type_screen.dart';
@@ -67,5 +69,9 @@ class GetXRouterContainer {
         name: DioApiScreen.routeName,
         page: () => DioApiScreen(),
         binding: DioApiBinding()),
+    GetPage(
+        name: PushScreen.routeName,
+        page: () => PushScreen(),
+        binding: PushBinding()),
   ];
 }

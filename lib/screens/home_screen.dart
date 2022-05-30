@@ -21,6 +21,8 @@ class HomeScreen extends StatelessWidget {
 
     controller.title.value = 'title_main'.tr;
     final screenWidth = MediaQuery.of(context).size.width / 3;
+    var orientation = MediaQuery.of(context).orientation;
+
     // return Obx(() {
     // return KeyboardWidget(
     return Scaffold(
@@ -76,9 +78,10 @@ class HomeScreen extends StatelessWidget {
                   return Flexible(
                     child: GridView.builder(
                         // SliverGridDelegateWithMaxCrossAxisExtent 반응형으로
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: orientation == Orientation.portrait
+                              ? 2
+                              : 3, //1 개의 행에 보여줄 item 개수
                           mainAxisExtent: 256,
                           mainAxisSpacing: 10, //그리드 사이의 수직 간격
                           crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
