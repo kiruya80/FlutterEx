@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
     HomeController controller = Get.find<HomeController>();
 
     controller.title.value = 'title_main'.tr;
-    final screenWidth = MediaQuery.of(context).size.width / 3;
+    final screenWidth = MediaQuery.of(context).size.width;
     var orientation = MediaQuery.of(context).orientation;
 
     // return Obx(() {
@@ -75,9 +75,15 @@ class HomeScreen extends StatelessWidget {
                   //   },
                   // ),
 
-                  return Flexible(
+                  return Container(
                     child: GridView.builder(
-                        // SliverGridDelegateWithMaxCrossAxisExtent 반응형으로
+                        /**
+                       * SliverGridDelegateWithMaxCrossAxisExtent 반응형으로 너비로
+                       * ㄴ maxCrossAxisExtent child에게 부여할 최대 width 지정
+                       *
+                       * SliverGridDelegateWithFixedCrossAxisCount 숫자로
+                       * ㄴ crossAxisCount crossAxis 방향으로 몇개의 grid를 배치할 것인지 결정
+                       */
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: orientation == Orientation.portrait
                               ? 2
@@ -87,6 +93,13 @@ class HomeScreen extends StatelessWidget {
                           crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
                           childAspectRatio: 5 / 1, //item 의 가로 1, 세로 2 의 비율
                         ),
+                        // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        //   maxCrossAxisExtent: screenWidth / 4,
+                        //   mainAxisExtent: 256,
+                        //   mainAxisSpacing: 10, //그리드 사이의 수직 간격
+                        //   crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
+                        //   childAspectRatio: 5 / 1, //item 의 가로 1, 세로 2 의 비율
+                        // ),
                         itemCount: items.length,
                         itemBuilder: (context, position) {
                           HomeItem item = items[position];
@@ -98,42 +111,39 @@ class HomeScreen extends StatelessWidget {
                   );
 
                   // return Flexible(
+                  //   fit: FlexFit.tight,
                   //   child: GridView.builder(
-                  //     // SliverGridDelegateWithMaxCrossAxisExtent 반응형으로
-                  //     gridDelegate:
-                  //     const SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: 3, //1 개의 행에 보여줄 item 개수
-                  //       mainAxisExtent: 256,
-                  //       mainAxisSpacing: 10, //그리드 사이의 수직 간격
-                  //       crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
-                  //       // childAspectRatio: 1 / 1, //item 의 가로 1, 세로 2 의 비율
-                  //     ),
-                  //     itemCount: items.length,
-                  //     itemBuilder: (context, index) => Card(
-                  //       margin: const EdgeInsets.all(8),
-                  //       // elevation: 5,
-                  //       color: Theme.of(context).colorScheme.surfaceVariant,
-                  //       // color: Theme.of(context).colorScheme.surfaceVariant,
-                  //       child: GridTile(
-                  //         header: GridTileBar(
-                  //           backgroundColor: Colors.black26,
-                  //           title: const Text('header'),
-                  //           subtitle: Text('Item ${items[index].name}'),
-                  //         ),
-                  //         footer: GridTileBar(
-                  //           backgroundColor: Colors.black38,
-                  //           title: const Text('footer'),
-                  //           subtitle: Text('Item ${items[index].name}'),
-                  //         ),
-                  //         child: Center(
-                  //           child: Text(
-                  //             items[index].name,
-                  //             style: const TextStyle(fontSize: 16),
-                  //           ),
-                  //         ),
+                  //       /**
+                  //      * SliverGridDelegateWithMaxCrossAxisExtent 반응형으로 너비로
+                  //      * ㄴ maxCrossAxisExtent child에게 부여할 최대 width 지정
+                  //      *
+                  //      * SliverGridDelegateWithFixedCrossAxisCount 숫자로
+                  //      * ㄴ crossAxisCount crossAxis 방향으로 몇개의 grid를 배치할 것인지 결정
+                  //      */
+                  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //         crossAxisCount: orientation == Orientation.portrait
+                  //             ? 2
+                  //             : 3, //1 개의 행에 보여줄 item 개수
+                  //         mainAxisExtent: 256,
+                  //         mainAxisSpacing: 10, //그리드 사이의 수직 간격
+                  //         crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
+                  //         childAspectRatio: 5 / 1, //item 의 가로 1, 세로 2 의 비율
                   //       ),
-                  //     ),
-                  //   ),
+                  //       // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  //       //   maxCrossAxisExtent: screenWidth / 4,
+                  //       //   mainAxisExtent: 256,
+                  //       //   mainAxisSpacing: 10, //그리드 사이의 수직 간격
+                  //       //   crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
+                  //       //   childAspectRatio: 5 / 1, //item 의 가로 1, 세로 2 의 비율
+                  //       // ),
+                  //       itemCount: items.length,
+                  //       itemBuilder: (context, position) {
+                  //         HomeItem item = items[position];
+                  //         // ClipRRect
+                  //         // return Card (child: HomeListItemCardForm(item: item));
+                  //
+                  //         return HomeListItemCardForm(item: item);
+                  //       }),
                   // );
                 }
               },

@@ -1,6 +1,11 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/constants/ThemeService.dart';
 import 'package:flutterex/constants/constant.dart';
+import 'package:flutterex/firebase/firebase_options.dart';
 import 'package:flutterex/get_x_router.dart';
 import 'package:flutterex/langs/languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
@@ -11,15 +16,24 @@ import 'package:get/get.dart';
 
 import 'package:flutter/foundation.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  // await GetStorage.init();
-  // await Firebase.initializeApp();
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+Future<void> main() async {
+  // runZonedGuarded : 버튼등 onPressed 에서 발생하는 오류 체크 위해
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    getDeviceTheme();
 
-  getDeviceTheme();
+    FirebaseApp app = await Firebase.initializeApp();
+    QcLog.e('FirebaseApp : $app');
+    // await Firebase.initializeApp(
+    //   options: DefaultFirebaseOptions.currentPlatform,
+    // );
+    // flutter 내에서 발생하는 모든 error을 수집
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-  runApp(MyApp());
+    runApp(MyApp());
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }
 
 Future<void> getDeviceTheme() async {

@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/dio_api_controller.dart';
+import 'package:flutterex/controllers/fire_storage_controller.dart';
 import 'package:flutterex/controllers/http_api_controller.dart';
-import 'package:flutterex/controllers/push_controller.dart';
+import 'package:flutterex/controllers/fire_msg_controller.dart';
 import 'package:flutterex/datas/model/api_item.dart';
 import 'package:flutterex/screens/components/api_item.dart';
 import 'package:flutterex/utils/print_log.dart';
@@ -17,15 +18,15 @@ import 'package:loading_animations/loading_animations.dart';
 /// https://babbab2.tistory.com/58?category=831129
 ///
 ///
-class PushScreen extends StatelessWidget {
-  static const routeName = '/push';
+class FireStorageScreen extends StatelessWidget {
+  static const routeName = '/fire/storage';
 
-  const PushScreen({Key? key}) : super(key: key);
+  const FireStorageScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     QcLog.e("PushScreen =============");
-    PushController controller = Get.find<PushController>();
+    FireStorageController controller = Get.find<FireStorageController>();
 
     return Obx(() {
       return Scaffold(

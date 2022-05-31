@@ -19,11 +19,10 @@ class ApiListItemForm extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ApiListItemFormFormState createState() =>
-      _ApiListItemFormFormState(item, callback);
+  _ApiListItemFormState createState() => _ApiListItemFormState(item, callback);
 }
 
-class _ApiListItemFormFormState extends State<ApiListItemForm> {
+class _ApiListItemFormState extends State<ApiListItemForm> {
   final homeController = Get.find<HomeController>();
 
   ApiItem item;
@@ -31,7 +30,7 @@ class _ApiListItemFormFormState extends State<ApiListItemForm> {
   // VoidCallback? callback;
   Function(ApiItem)? callback;
 
-  _ApiListItemFormFormState(this.item, this.callback);
+  _ApiListItemFormState(this.item, this.callback);
 
   @override
   void initState() {

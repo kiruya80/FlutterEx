@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "656621123867",
+    "project_id": "flutterex-b6096",
+    "storage_bucket": "flutterex-b6096.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656621123867:android:f3e06d37d2a7ed1826fbbe",
+        "android_client_info": {
+          "package_name": "com.example.flutterex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhzYW8l0hDbeOrTXA4M6LGOILW2d6W3Gs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

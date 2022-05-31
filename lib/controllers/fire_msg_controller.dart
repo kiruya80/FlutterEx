@@ -9,8 +9,8 @@ import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
-class PushController extends GetxController {
-  var title = "PushController".obs;
+class FireMsgController extends GetxController {
+  var title = "FireMsgController".obs;
 
   @override
   void onInit() {
