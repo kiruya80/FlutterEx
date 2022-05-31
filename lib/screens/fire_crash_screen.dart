@@ -73,13 +73,14 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
         body: SafeArea(
           // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
           // maintainBottomViewPadding: false,
-          child: Container(
-              color: Theme.of(context).colorScheme.background,
-              width: Get.width,
-              height: Get.height,
+          child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Column(
                 children: [
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size.fromHeight(50),
+                      ),
                       onPressed: () async {
                         QcLog.e("Exception");
                         throw Exception();
@@ -88,10 +89,17 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
                         'Exception 발생',
                         // fontColor: Theme.of(context).colorScheme.onPrimary,
                       )),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                    ),
                     onPressed: () {
                       FirebaseCrashlytics.instance
                           .setCustomKey('example', 'Custom key is flutterfire');
+
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
                             'Custom Key "example: flutterfire" has been set \n'
@@ -101,7 +109,13 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
                     },
                     child: QcText.headline6('Key'),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                    ),
                     onPressed: () {
                       FirebaseCrashlytics.instance.log('This is a log example');
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -113,7 +127,13 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
                     },
                     child: QcText.headline6('Log'),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                    ),
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
@@ -127,7 +147,13 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
                     },
                     child: QcText.headline6('Throw Error'),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                    ),
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
@@ -147,7 +173,13 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
                     },
                     child: QcText.headline6('Async out of bounds'),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                    ),
                     onPressed: () async {
                       try {
                         ScaffoldMessenger.of(context)
@@ -166,7 +198,13 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
                     },
                     child: QcText.headline6('Record Fatal Error'),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                    ),
                     onPressed: () async {
                       try {
                         ScaffoldMessenger.of(context)
@@ -184,7 +222,13 @@ class _FireCrashScreenState extends State<FireCrashScreen> {
                     },
                     child: QcText.headline6('Record Non-Fatal Error'),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size.fromHeight(50),
+                    ),
                     onPressed: () async {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('App will crash is 5 seconds \n'

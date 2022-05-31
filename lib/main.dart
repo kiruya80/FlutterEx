@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -53,10 +54,33 @@ Future<void> getDeviceTheme() async {
 
 class MyApp extends StatelessWidget {
   var title = "HttpApiController".obs;
+
+  /**
+   * GetX를 사용하는 경우에는 Get.to() 에는 RouteSetting.name을 설정할 수 없기 때문에 Get.toNamed()를 사용해야 한다.
+   *  NamedRoute를 사용할 수 없는 경우에는
+   *  analytics.setCurrentScreen(screenName: screenName)를 직접 호출해줘도 되겠다.
+   *  기본적으로 불리는 screen_view 이벤트와 겹쳐서 screen_view count에 영향을 줄 수도 있으니 잘 확인하고 사용하자.
+   *
+   *  https://uaremine.tistory.com/21
+   *
+   *    디버그 모드 시작
+   *    adb shell setprop debug.firebase.analytics.app com.example.flutterex
+   *
+   *    디버그 모드 중지
+   *    adb shell setprop debug.firebase.analytics.app .none.
+   */
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
+  Future logAppOpen() async {
+    await analytics.logAppOpen();
+  }
+
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
     var seedColor = Colors.green;
+    logAppOpen();
 
     // var seedColorScheme = ColorScheme.fromSeed(seedColor: SEED_COLOR);
     // seedColorScheme.secondary
@@ -78,6 +102,7 @@ class MyApp extends StatelessWidget {
 
           // localizationsDelegates: context.localizationDelegates,
           // supportedLocales: context.supportedLocales,
+          navigatorObservers: <NavigatorObserver>[observer],
 
           translations: Languages(),
           locale: Get.deviceLocale,

@@ -1,4 +1,5 @@
 import 'package:flutterex/bindings/dio_api_binding.dart';
+import 'package:flutterex/bindings/fire_analytics_binding.dart';
 import 'package:flutterex/bindings/fire_crash_binding.dart';
 import 'package:flutterex/bindings/fire_storage_binding.dart';
 import 'package:flutterex/bindings/font_binding.dart';
@@ -12,6 +13,7 @@ import 'package:flutterex/bindings/printing_binding.dart';
 import 'package:flutterex/bindings/fire_msg_binding.dart';
 import 'package:flutterex/bindings/widget_type_binding.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
+import 'package:flutterex/screens/fire_analytics_screen.dart';
 import 'package:flutterex/screens/fire_crash_screen.dart';
 import 'package:flutterex/screens/fire_storage_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
@@ -77,6 +79,10 @@ class GetXRouterContainer {
         name: FireCrashScreen.routeName,
         page: () => FireCrashScreen(),
         binding: FireCrashBinding()),
+    GetPage(
+        name: FireAnalyticsScreen.routeName,
+        page: () => FireAnalyticsScreen(),
+        binding: FireAnalyticsBinding()),
     GetPage(
         name: FireStorageScreen.routeName,
         page: () => FireStorageScreen(),

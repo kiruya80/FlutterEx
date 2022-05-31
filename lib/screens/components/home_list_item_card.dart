@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
@@ -20,6 +21,11 @@ class _HomeListItemCardFormState extends State<HomeListItemCardForm>
     with TickerProviderStateMixin {
   final homeController = Get.find<HomeController>();
 
+  // static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  // static FirebaseAnalyticsObserver observer =
+  //     FirebaseAnalyticsObserver(analytics: analytics);
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   HomeItem item;
 
   _HomeListItemCardFormState(this.item);
@@ -38,9 +44,21 @@ class _HomeListItemCardFormState extends State<HomeListItemCardForm>
         clipBehavior: Clip.antiAlias,
         color: Theme.of(context).colorScheme.surfaceVariant,
         child: InkWell(
-          onTap: () {
+          onTap: () async {
             QcLog.e("item.routeName == ${item.routeName}");
             Get.toNamed(item.routeName, arguments: {'name': item.name});
+            // if (item.routeName == '/font' || item.routeName == '/multiLang') {
+            //   await FirebaseAnalytics.instance
+            //       .setCurrentScreen(screenName: item.routeName);
+            //
+            //   await FirebaseAnalytics.instance.logEvent(
+            //     name: 'screen_view',
+            //     parameters: {
+            //       'firebase_screen': item.routeName,
+            //       // 'firebase_screen_class': screenClass,
+            //     },
+            //   );
+            // }
           },
           child: GridTile(
             header: GridTileBar(

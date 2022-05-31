@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
+import 'package:flutterex/screens/fire_analytics_screen.dart';
 import 'package:flutterex/screens/fire_crash_screen.dart';
 import 'package:flutterex/screens/fire_storage_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
@@ -111,6 +112,10 @@ class HomeController extends GetxController {
     homeItems.add(new HomeItem(
         name: 'title_firebase_crashlytics'.tr,
         routeName: FireCrashScreen.routeName,
+        icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'title_firebase_analytics'.tr,
+        routeName: FireAnalyticsScreen.routeName,
         icon: ''));
     homeItems.add(new HomeItem(
         name: 'title_firebase_storage'.tr,

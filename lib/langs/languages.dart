@@ -17,6 +17,7 @@ class Languages extends Translations {
           'title_dio_api': 'Api Dio 샘플',
           'title_sqllite_db': 'Sqlite db 샘플',
           'title_firebase_crashlytics': 'Crashlytics 샘플',
+          'title_firebase_analytics': 'Analytics 샘플',
           'title_firebase_storage': 'Storage 샘플',
           'title_firebase_messaging': 'Push 샘플',
           'theme_light': 'Light 테마',
