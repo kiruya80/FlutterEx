@@ -5,11 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/constants/ThemeService.dart';
-import 'package:flutterex/constants/constant.dart';
-import 'package:flutterex/firebase/firebase_options.dart';
 import 'package:flutterex/get_x_router.dart';
 import 'package:flutterex/langs/languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
+import 'package:flutterex/utils/QcFirebaseAnalyticsObserver.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/scheduler.dart';
@@ -70,8 +69,10 @@ class MyApp extends StatelessWidget {
    *    adb shell setprop debug.firebase.analytics.app .none.
    */
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  // static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static QcFirebaseAnalyticsObserver observer =
+      QcFirebaseAnalyticsObserver(analytics: analytics);
+
   Future logAppOpen() async {
     await analytics.logAppOpen();
   }
@@ -102,7 +103,10 @@ class MyApp extends StatelessWidget {
 
           // localizationsDelegates: context.localizationDelegates,
           // supportedLocales: context.supportedLocales,
-          navigatorObservers: <NavigatorObserver>[observer],
+          navigatorObservers: <NavigatorObserver>[
+            observer,
+          ],
+          // navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
 
           translations: Languages(),
           locale: Get.deviceLocale,
@@ -112,6 +116,13 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: kDebugMode,
           title: "Flutter Sample",
           getPages: GetXRouterContainer().allPageRouter,
+          // unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoutePage()),
+
+          // routingCallback: (routing) {
+          //   if(routing.current == '/second'){
+          //     openAds();
+          //   }
+          // }
           initialRoute: HomeScreen.routeName,
 
           darkTheme: ThemeData(

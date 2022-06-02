@@ -15,6 +15,10 @@ class FontScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     FontController controller = Get.find<FontController>();
 
+    QcLog.e(
+        'Get.rawRoute?.settings == ${Get.rawRoute?.settings} , ${Get.rawRoute?.settings.name.toString()}');
+    QcLog.e(
+        'Get.routing?.settings == ${Get.routing.route} , ${Get.routing.route?.settings.name.toString()}');
     return Scaffold(
       appBar: AppBar(
         title: QcText.headline6(controller.title.value),

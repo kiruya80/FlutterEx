@@ -9,7 +9,7 @@ class FontController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    print(Get.arguments);
     final args = Get.arguments;
     final name = args['name'];
     QcLog.e('name : $name');

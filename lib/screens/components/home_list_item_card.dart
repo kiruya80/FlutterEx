@@ -3,6 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
+import 'package:flutterex/screens/fire_analytics_screen.dart';
+import 'package:flutterex/screens/fire_crash_screen.dart';
+import 'package:flutterex/screens/fire_storage_screen.dart';
+import 'package:flutterex/screens/font_screen.dart';
+import 'package:flutterex/screens/multi_lang_screen.dart';
+import 'package:flutterex/screens/widget_type_screen.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,18 +52,30 @@ class _HomeListItemCardFormState extends State<HomeListItemCardForm>
         child: InkWell(
           onTap: () async {
             QcLog.e("item.routeName == ${item.routeName}");
+            // QcLog.e(
+            //     'Get.rawRoute?.settings == ${Get.rawRoute?.settings} , ${Get.rawRoute?.settings.name.toString()}');
+            // QcLog.e(
+            //     'Get.routing?.settings == ${Get.routing.route} , ${Get.routing.route?.settings.name.toString()}');
+
             Get.toNamed(item.routeName, arguments: {'name': item.name});
-            // if (item.routeName == '/font' || item.routeName == '/multiLang') {
+
+            // if (item.routeName == FontScreen.routeName ||
+            //     item.routeName == MultiLangScreen.routeName ||
+            //     item.routeName == WidgetTypeScreen.routeName) {
+            //   await FirebaseAnalytics.instance
+            //       .logScreenView(screenName: item.routeName);
+            //   // await FirebaseAnalytics.instance.logEvent(
+            //   //   name: 'screen_view',
+            //   //   parameters: {
+            //   //     'firebase_screen': item.routeName,
+            //   //     // 'firebase_screen_class': screenClass,
+            //   //   },
+            //   // );
+            // } else if (item.routeName == FireCrashScreen.routeName ||
+            //     item.routeName == FireAnalyticsScreen.routeName ||
+            //     item.routeName == FireStorageScreen.routeName) {
             //   await FirebaseAnalytics.instance
             //       .setCurrentScreen(screenName: item.routeName);
-            //
-            //   await FirebaseAnalytics.instance.logEvent(
-            //     name: 'screen_view',
-            //     parameters: {
-            //       'firebase_screen': item.routeName,
-            //       // 'firebase_screen_class': screenClass,
-            //     },
-            //   );
             // }
           },
           child: GridTile(
