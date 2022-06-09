@@ -4,9 +4,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/utils/print_log.dart';
-import 'package:get/get.dart';
 
 /// Signature for a function that extracts a screen name from [RouteSettings].
 ///
@@ -60,6 +58,9 @@ bool defaultRouteFilter(Route<dynamic>? route) => route is PageRoute;
 /// You can also track screen views within your [ModalRoute] by implementing
 /// [RouteAware<ModalRoute<dynamic>>] and subscribing it to [FirebaseAnalyticsObserver]. See the
 /// [RouteObserver<ModalRoute<dynamic>>] docs for an example.
+///
+/// 화면 이동 옵져버 FirebaseAnalytics 화면 클래스 이름 전송
+///
 class QcFirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
   /// Creates a [NavigatorObserver] that sends events to [FirebaseAnalytics].
   ///
@@ -85,23 +86,19 @@ class QcFirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
 
   Future<void> _sendScreenView(Route<dynamic> route) async {
     QcLog.e('_sendScreenView === ${route.settings}');
-    QcLog.e('_sendScreenView === ${route.settings.name}');
-    QcLog.e('_sendScreenView === ${route.settings.arguments}');
-
     var className = 'Flutter';
 
-    try {
-      var args = route.settings.arguments;
-      QcLog.e('args : $args');
-      HomeItem homeItem = args as HomeItem;
-      QcLog.e('name : ${homeItem.name}');
-      className = homeItem.name;
-    } on Exception catch (e) {
-      QcLog.e('Exception === $e');
-    }
+    // try {
+    //   var args = route.settings.arguments;
+    //   QcLog.e('args : $args');
+    // } on Exception catch (e) {
+    //   QcLog.e('Exception === $e');
+    // }
     final String? screenName = nameExtractor(route.settings);
     QcLog.e('screenName === ${screenName}');
     if (screenName != null) {
+      QcLog.e(
+          'analytics === screenName : ${screenName} , className : ${className}');
       await analytics
           .setCurrentScreen(
               screenName: screenName, screenClassOverride: className)
@@ -125,7 +122,6 @@ class QcFirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
-    QcLog.e('didPush === ${route.settings}');
     if (routeFilter(route)) {
       _sendScreenView(route);
     }
@@ -134,7 +130,6 @@ class QcFirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    QcLog.e('didReplace === ${newRoute}');
     if (newRoute != null && routeFilter(newRoute)) {
       _sendScreenView(newRoute);
     }
@@ -143,7 +138,6 @@ class QcFirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
-    QcLog.e('didPop === ${route}');
     if (previousRoute != null &&
         routeFilter(previousRoute) &&
         routeFilter(route)) {

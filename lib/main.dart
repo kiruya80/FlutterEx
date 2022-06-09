@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/constants/ThemeService.dart';
+import 'package:flutterex/controllers/app_controller.dart';
 import 'package:flutterex/get_x_router.dart';
 import 'package:flutterex/langs/languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
-import 'package:flutterex/utils/QcFirebaseAnalyticsObserver.dart';
+import 'package:flutterex/service/qc_firebase_analytics_observer.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/scheduler.dart';
@@ -24,6 +26,7 @@ Future<void> main() async {
 
     FirebaseApp app = await Firebase.initializeApp();
     QcLog.e('FirebaseApp : $app');
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     // await Firebase.initializeApp(
     //   options: DefaultFirebaseOptions.currentPlatform,
     // );
@@ -34,6 +37,14 @@ Future<void> main() async {
   }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> getDeviceTheme() async {
@@ -52,6 +63,7 @@ Future<void> getDeviceTheme() async {
 }
 
 class MyApp extends StatelessWidget {
+  final AppController appController = Get.put(AppController());
   var title = "HttpApiController".obs;
 
   /**
@@ -82,6 +94,7 @@ class MyApp extends StatelessWidget {
     FocusScope.of(context).unfocus();
     var seedColor = Colors.green;
     logAppOpen();
+    appController.initialize();
 
     // var seedColorScheme = ColorScheme.fromSeed(seedColor: SEED_COLOR);
     // seedColorScheme.secondary

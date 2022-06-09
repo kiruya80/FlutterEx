@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterex/controllers/app_controller.dart';
 import 'package:flutterex/controllers/dio_api_controller.dart';
 import 'package:flutterex/controllers/http_api_controller.dart';
 import 'package:flutterex/controllers/fire_msg_controller.dart';
 import 'package:flutterex/datas/model/api_item.dart';
 import 'package:flutterex/screens/components/api_item.dart';
+import 'package:flutterex/service/qc_notification_utils.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
@@ -26,6 +28,7 @@ class FireMsgScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     QcLog.e("PushScreen =============");
     FireMsgController controller = Get.find<FireMsgController>();
+    AppController appController = Get.find<AppController>();
 
     return Obx(() {
       return Scaffold(
@@ -41,11 +44,35 @@ class FireMsgScreen extends StatelessWidget {
         body: SafeArea(
           // maintainBottomViewPadding 키보드가 올라온 경우 밀어낼지 덮을지 결정
           // maintainBottomViewPadding: false,
-          child: Container(
-              color: Theme.of(context).colorScheme.background,
-              width: Get.width,
-              height: Get.height,
-              child: QcText.headline6('push')),
+          child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  QcText.headline6(controller.fcmMsg.value),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  QcText.headline6(appController.fcmToken.value),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size.fromHeight(50),
+                      ),
+                      onPressed: () async {
+                        QcLog.e("FCM msg clear");
+                        QcNotificationUtils.instance.cancelAllNotifications();
+                      },
+                      child: QcText.headline6(
+                        'FCM msg clear',
+                        // fontColor: Theme.of(context).colorScheme.onPrimary,
+                      )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              )),
         ),
       );
     });
