@@ -17,22 +17,24 @@ class FireMsgController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    try {
-      final args = Get.arguments;
-      QcLog.e('args : |$args|');
-      if (args != null && "" != args) {
-        // var jsonArgs = json.encode(args);
-        // QcLog.e('jsonArgs : $jsonArgs');
+    final args = Get.arguments;
+    QcLog.e('args : |$args|');
 
-        var jsonData = json.decode(args);
-        QcLog.e('jsonData : $jsonData');
+    final name = args['name'];
+    QcLog.e('name : $name');
 
-        FcmData fcmData = FcmData.fromJson(args);
+    final remoteMsg = args['remoteMsg'];
+    if (remoteMsg != null && "" != remoteMsg) {
+      // var jsonData = json.decode(args);
+      // QcLog.e('jsonData : $jsonData');
+
+      try {
+        FcmData fcmData = FcmData.fromJson(remoteMsg);
         QcLog.e('fcmData : $fcmData');
         fcmMsg.value = fcmData.toString();
+      } catch (e) {
+        rethrow;
       }
-    } catch (e) {
-      rethrow;
     }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -67,11 +68,44 @@ class AppController extends GetxController with WidgetsBindingObserver {
 
   final Rxn<RemoteMessage> message = Rxn<RemoteMessage>();
   var fcmToken = ''.obs;
+  late AndroidNotificationChannel channel;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   Future<bool> initialize() async {
     QcLog.e('initialize =====');
     // Firebase 초기화부터 해야 Firebase Messaging 을 사용할 수 있다.
     // await Firebase.initializeApp();
+
+    // Android용 새 Notification Channel
+    // foreground에서의 푸시 알림 표시를 위한 알림 중요도 설정
+    // const AndroidNotificationChannel androidNotificationChannel =
+    //     AndroidNotificationChannel(
+    //   'high_importance_channel', // 임의의 id
+    //   'High Importance Notifications', // 설정에 보일 채널명
+    //   description:
+    //       'This channel is used for important notifications.', // 설정에 보일 채널 설명
+    //   importance: Importance.max,
+    // );
+
+    if (!kIsWeb) {
+      channel = const AndroidNotificationChannel(
+        'high_importance_channel', // id
+        'High Importance Notifications', // title
+        description:
+            'This channel is used for important notifications.', // description
+        importance: Importance.high,
+      );
+    }
+
+    // Notification Channel을 디바이스에 생성
+    // foreground에서의 푸시 알림 표시를 위한 local notifications 설정
+    // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =  FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
 
     if (Platform.isAndroid) {
       // Android 에서는 별도의 확인 없이 리턴되지만, requestPermission()을 호출하지 않으면 수신되지 않는다.
@@ -126,27 +160,6 @@ class AppController extends GetxController with WidgetsBindingObserver {
       // Error getting token.
     });
 
-    // Android용 새 Notification Channel
-    // foreground에서의 푸시 알림 표시를 위한 알림 중요도 설정
-    const AndroidNotificationChannel androidNotificationChannel =
-        AndroidNotificationChannel(
-      'high_importance_channel', // 임의의 id
-      'High Importance Notifications', // 설정에 보일 채널명
-      description:
-          'This channel is used for important notifications.', // 설정에 보일 채널 설명
-      importance: Importance.max,
-    );
-
-    // Notification Channel을 디바이스에 생성
-    // foreground에서의 푸시 알림 표시를 위한 local notifications 설정
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(androidNotificationChannel);
-
     // FlutterLocalNotificationsPlugin 초기화. 이 부분은 notification icon 부분에서 다시 다룬다.
     await flutterLocalNotificationsPlugin.initialize(
         InitializationSettings(
@@ -155,7 +168,10 @@ class AppController extends GetxController with WidgetsBindingObserver {
         onSelectNotification: (String? payload) async {
       // Foreground 에서 수신했을 때 생성되는 heads up notification 클릭했을 때의 동작
       QcLog.e('FCM msg Foreground ======= $payload');
-      Get.toNamed(FireMsgScreen.routeName, arguments: payload);
+      Get.toNamed(FireMsgScreen.routeName, arguments: {
+        'name': 'title_firebase_messaging'.tr,
+        'remoteMsg': payload
+      });
     });
 
     ///
@@ -229,10 +245,11 @@ class AppController extends GetxController with WidgetsBindingObserver {
       message.value = rm;
       RemoteNotification? notification = rm.notification;
       AndroidNotification? android = rm.notification?.android;
+
       BigPictureStyleInformation? bigPictureStyleInformation = null;
       AndroidNotificationDetails androidPlatformChannelSpecifics;
 
-      if (notification != null && android != null) {
+      if (notification != null && android != null && !kIsWeb) {
         QcLog.e(
             'onMessage show NotificationDetails ===== ${notification.toMap()}');
         if (notification.android?.imageUrl != null) {
@@ -257,24 +274,19 @@ class AppController extends GetxController with WidgetsBindingObserver {
         }
 
         androidPlatformChannelSpecifics = AndroidNotificationDetails(
-            'high_importance_channel', // 임의의 id
-            'High Importance Notifications', // 설정에 보일 채널명
-            channelDescription:
-                'This channel is used for important notifications.', // 설정에 보일 채널 설명
+            channel.id, channel.name,
+            channelDescription: channel.description,
+            // 'high_importance_channel', // 임의의 id
+            // 'High Importance Notifications', // 설정에 보일 채널명
+            // channelDescription:
+            //     'This channel is used for important notifications.', // 설정에 보일 채널 설명
             styleInformation: bigPictureStyleInformation);
 
         flutterLocalNotificationsPlugin.show(
-          0,
+          notification.hashCode, // 0 ?
           notification.title,
           notification.body,
           NotificationDetails(
-              // android: AndroidNotificationDetails(
-              //     'high_importance_channel', // 임의의 id
-              //     'High Importance Notifications', // 설정에 보일 채널명
-              //     channelDescription:
-              //         'This channel is used for important notifications.', // 설정에 보일 채널 설명
-              //     // other properties...
-              //     ),
               android: androidPlatformChannelSpecifics,
               iOS: IOSNotificationDetails(subtitle: 'sub title !!!')),
           // 여기서는 간단하게 data 영역의 임의의 필드(ex. argument)를 사용한다.
@@ -289,19 +301,27 @@ class AppController extends GetxController with WidgetsBindingObserver {
       QcLog.e('onMessageOpenedApp ===== ${rm.data['argument']}');
       // Get.toNamed(FireMsgScreen.routeName,  arguments: {'msg': rm.data['argument']});
       // Get.toNamed(FireMsgScreen.routeName, arguments: {rm.data['argument']});
-      Get.toNamed(FireMsgScreen.routeName, arguments: {rm.data});
+      Get.toNamed(FireMsgScreen.routeName, arguments: {
+        'name': 'title_firebase_messaging'.tr,
+        'remoteMsg': rm.data
+      });
     });
 
     /// Terminated 앱종료 상태에서 도착한 메시지에 대한 처리
     /// 앱 백백으로 내린 경우에 푸쉬 클릭시 호출
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      QcLog.e('initialMessage === ${initialMessage.data['argument']}');
-      // Get.toNamed(FireMsgScreen.routeName, arguments: {'msg': initialMessage.data['argument']});
-      // Get.toNamed(FireMsgScreen.routeName, arguments: {initialMessage.data['argument']});
-      Get.toNamed(FireMsgScreen.routeName, arguments: {initialMessage.data});
-    }
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        QcLog.e('initialMessage === ${message.data['argument']}');
+        // Get.toNamed(FireMsgScreen.routeName, arguments: {'msg': initialMessage.data['argument']});
+        // Get.toNamed(FireMsgScreen.routeName, arguments: {initialMessage.data['argument']});
+        Get.toNamed(FireMsgScreen.routeName, arguments: {
+          'name': 'title_firebase_messaging'.tr,
+          'remoteMsg': message.data
+        });
+      }
+    });
 
     return true;
   }

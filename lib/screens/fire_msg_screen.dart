@@ -48,11 +48,11 @@ class FireMsgScreen extends StatelessWidget {
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
-                  QcText.headline6(controller.fcmMsg.value),
+                  QcText.headline6('Token : ' + appController.fcmToken.value),
                   SizedBox(
                     height: 20,
                   ),
-                  QcText.headline6(appController.fcmToken.value),
+                  QcText.bodyText1('FCM msg : ' + controller.fcmMsg.value),
                   SizedBox(
                     height: 20,
                   ),
@@ -61,7 +61,6 @@ class FireMsgScreen extends StatelessWidget {
                         minimumSize: Size.fromHeight(50),
                       ),
                       onPressed: () async {
-                        QcLog.e("FCM msg clear");
                         QcNotificationUtils.instance.cancelAllNotifications();
                       },
                       child: QcText.headline6(
