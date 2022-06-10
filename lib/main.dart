@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/constants/ThemeService.dart';
 import 'package:flutterex/controllers/app_controller.dart';
+import 'package:flutterex/firebase/firebase_options.dart';
 import 'package:flutterex/get_x_router.dart';
 import 'package:flutterex/langs/languages.dart';
 import 'package:flutterex/screens/home_screen.dart';
@@ -42,9 +43,10 @@ Future<void> main() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  print("Handling a background message: ${message.messageId}");
+  QcLog.e("Handling a background message: ${message.messageId}");
 }
 
 Future<void> getDeviceTheme() async {

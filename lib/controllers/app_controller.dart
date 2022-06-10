@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutterex/controllers/fire_msg_controller.dart';
 import 'package:flutterex/screens/fire_msg_screen.dart';
 import 'package:flutterex/service/qc_notification_utils.dart';
 import 'package:flutterex/utils/print_log.dart';
@@ -168,10 +169,13 @@ class AppController extends GetxController with WidgetsBindingObserver {
         onSelectNotification: (String? payload) async {
       // Foreground 에서 수신했을 때 생성되는 heads up notification 클릭했을 때의 동작
       QcLog.e('FCM msg Foreground ======= $payload');
-      Get.toNamed(FireMsgScreen.routeName, arguments: {
-        'name': 'title_firebase_messaging'.tr,
-        'remoteMsg': payload
-      });
+      Get.toNamed(FireMsgScreen.routeName,
+          // //     arguments: {
+          // //   'name': 'title_firebase_messaging'.tr,
+          // //   'remoteMsg': payload
+          // // }
+          arguments: FireMsgArguments('title_firebase_messaging'.tr,
+              RemoteMessage.fromMap(json.decode(payload!)), true));
     });
 
     ///
@@ -273,6 +277,8 @@ class AppController extends GetxController with WidgetsBindingObserver {
           //     styleInformation: bigPictureStyleInformation);
         }
 
+        QcLog.e('rm.toMap ==== ' + json.encode(rm.toMap()));
+
         androidPlatformChannelSpecifics = AndroidNotificationDetails(
             channel.id, channel.name,
             channelDescription: channel.description,
@@ -291,35 +297,39 @@ class AppController extends GetxController with WidgetsBindingObserver {
               iOS: IOSNotificationDetails(subtitle: 'sub title !!!')),
           // 여기서는 간단하게 data 영역의 임의의 필드(ex. argument)를 사용한다.
           // payload: rm.data['argument'],
-          payload: json.encode(rm.data),
+          // payload: json.encode(rm.data),
+          payload: json.encode(rm.toMap()),
         );
       }
     });
 
     // Background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage rm) {
-      QcLog.e('onMessageOpenedApp ===== ${rm.data['argument']}');
+      QcLog.e('onMessageOpenedApp ===== ${rm.data}');
       // Get.toNamed(FireMsgScreen.routeName,  arguments: {'msg': rm.data['argument']});
       // Get.toNamed(FireMsgScreen.routeName, arguments: {rm.data['argument']});
-      Get.toNamed(FireMsgScreen.routeName, arguments: {
-        'name': 'title_firebase_messaging'.tr,
-        'remoteMsg': rm.data
-      });
+      Get.toNamed(FireMsgScreen.routeName,
+          //     arguments: {
+          //   'name': 'title_firebase_messaging'.tr,
+          //   'remoteMsg': rm.data
+          // }
+          arguments: FireMsgArguments('title_firebase_messaging'.tr, rm, true));
     });
 
     /// Terminated 앱종료 상태에서 도착한 메시지에 대한 처리
     /// 앱 백백으로 내린 경우에 푸쉬 클릭시 호출
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        QcLog.e('initialMessage === ${message.data['argument']}');
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? rm) {
+      if (rm != null) {
+        QcLog.e('initialMessage === ${rm.data}');
         // Get.toNamed(FireMsgScreen.routeName, arguments: {'msg': initialMessage.data['argument']});
         // Get.toNamed(FireMsgScreen.routeName, arguments: {initialMessage.data['argument']});
-        Get.toNamed(FireMsgScreen.routeName, arguments: {
-          'name': 'title_firebase_messaging'.tr,
-          'remoteMsg': message.data
-        });
+        Get.toNamed(FireMsgScreen.routeName,
+            //     arguments: {
+            //   'name': 'title_firebase_messaging'.tr,
+            //   'remoteMsg': message.data
+            // }
+            arguments:
+                FireMsgArguments('title_firebase_messaging'.tr, rm, true));
       }
     });
 
