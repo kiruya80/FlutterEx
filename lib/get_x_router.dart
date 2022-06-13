@@ -3,6 +3,7 @@ import 'package:flutterex/bindings/fire_analytics_binding.dart';
 import 'package:flutterex/bindings/fire_crash_binding.dart';
 import 'package:flutterex/bindings/fire_storage_binding.dart';
 import 'package:flutterex/bindings/font_binding.dart';
+import 'package:flutterex/bindings/hero_page_binding.dart';
 import 'package:flutterex/bindings/home_binding.dart';
 import 'package:flutterex/bindings/http_api_binding.dart';
 import 'package:flutterex/bindings/image_binding.dart';
@@ -11,12 +12,15 @@ import 'package:flutterex/bindings/multi_lang_binding.dart';
 import 'package:flutterex/bindings/permission_binding.dart';
 import 'package:flutterex/bindings/printing_binding.dart';
 import 'package:flutterex/bindings/fire_msg_binding.dart';
+import 'package:flutterex/bindings/tran_detail_page_binding.dart';
+import 'package:flutterex/bindings/tran_page_binding.dart';
 import 'package:flutterex/bindings/widget_type_binding.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
 import 'package:flutterex/screens/fire_analytics_screen.dart';
 import 'package:flutterex/screens/fire_crash_screen.dart';
 import 'package:flutterex/screens/fire_storage_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
+import 'package:flutterex/screens/hero_page_screen.dart';
 import 'package:flutterex/screens/home_screen.dart';
 import 'package:flutterex/screens/http_api_screen.dart';
 import 'package:flutterex/screens/image_screen.dart';
@@ -25,6 +29,8 @@ import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
 import 'package:flutterex/screens/fire_msg_screen.dart';
+import 'package:flutterex/screens/tran_detail_page_screen.dart';
+import 'package:flutterex/screens/tran_page_screen.dart';
 import 'package:get/get.dart';
 
 import 'screens/widget_type_screen.dart';
@@ -40,56 +46,84 @@ class GetXRouterContainer {
         page: () => HomeScreen(),
         binding: HomeBinding()),
     GetPage(
-        name: FontScreen.routeName,
-        page: () => FontScreen(),
-        binding: FontBinding()),
+      name: FontScreen.routeName,
+      page: () => FontScreen(),
+      binding: FontBinding(),
+    ),
     GetPage(
-        name: WidgetTypeScreen.routeName,
-        page: () => WidgetTypeScreen(),
-        binding: WidgetTypeBinding()),
+      name: WidgetTypeScreen.routeName,
+      page: () => WidgetTypeScreen(),
+      binding: WidgetTypeBinding(),
+    ),
     GetPage(
-        name: ImageScreen.routeName,
-        page: () => ImageScreen(),
-        binding: ImageBinding()),
+      name: ImageScreen.routeName,
+      page: () => ImageScreen(),
+      binding: ImageBinding(),
+    ),
     GetPage(
-        name: LoadingWidgetScreen.routeName,
-        page: () => LoadingWidgetScreen(),
-        binding: LoadingWidgetBinding()),
+      name: HeroPageScreen.routeName,
+      page: () => HeroPageScreen(),
+      binding: HeroPageBinding(),
+    ),
     GetPage(
-        name: MultiLangScreen.routeName,
-        page: () => MultiLangScreen(),
-        binding: MultiLangBinding()),
+      name: TranPageScreen.routeName,
+      page: () => TranPageScreen(),
+      binding: TranPageBinding(),
+    ),
     GetPage(
-        name: PermissionScreen.routeName,
-        page: () => PermissionScreen(),
-        binding: PermissionBinding()),
+      name: TranDetailPageScreen.routeName,
+      page: () => TranDetailPageScreen(''),
+      binding: TranDetailPageBinding(),
+    ),
     GetPage(
-        name: PrintingScreen.routeName,
-        page: () => PrintingScreen(),
-        binding: PrintingWebviewBinding()),
+      name: LoadingWidgetScreen.routeName,
+      page: () => LoadingWidgetScreen(),
+      binding: LoadingWidgetBinding(),
+    ),
     GetPage(
-        name: HttpApiScreen.routeName,
-        page: () => HttpApiScreen(),
-        binding: HttpApiBinding()),
+      name: MultiLangScreen.routeName,
+      page: () => MultiLangScreen(),
+      binding: MultiLangBinding(),
+    ),
     GetPage(
-        name: DioApiScreen.routeName,
-        page: () => DioApiScreen(),
-        binding: DioApiBinding()),
+      name: PermissionScreen.routeName,
+      page: () => PermissionScreen(),
+      binding: PermissionBinding(),
+    ),
     GetPage(
-        name: FireCrashScreen.routeName,
-        page: () => FireCrashScreen(),
-        binding: FireCrashBinding()),
+      name: PrintingScreen.routeName,
+      page: () => PrintingScreen(),
+      binding: PrintingWebviewBinding(),
+    ),
     GetPage(
-        name: FireAnalyticsScreen.routeName,
-        page: () => FireAnalyticsScreen(),
-        binding: FireAnalyticsBinding()),
+      name: HttpApiScreen.routeName,
+      page: () => HttpApiScreen(),
+      binding: HttpApiBinding(),
+    ),
     GetPage(
-        name: FireStorageScreen.routeName,
-        page: () => FireStorageScreen(),
-        binding: FireStorageBinding()),
+      name: DioApiScreen.routeName,
+      page: () => DioApiScreen(),
+      binding: DioApiBinding(),
+    ),
     GetPage(
-        name: FireMsgScreen.routeName,
-        page: () => FireMsgScreen(),
-        binding: FireMsgBinding()),
+      name: FireCrashScreen.routeName,
+      page: () => FireCrashScreen(),
+      binding: FireCrashBinding(),
+    ),
+    GetPage(
+      name: FireAnalyticsScreen.routeName,
+      page: () => FireAnalyticsScreen(),
+      binding: FireAnalyticsBinding(),
+    ),
+    GetPage(
+      name: FireStorageScreen.routeName,
+      page: () => FireStorageScreen(),
+      binding: FireStorageBinding(),
+    ),
+    GetPage(
+      name: FireMsgScreen.routeName,
+      page: () => FireMsgScreen(),
+      binding: FireMsgBinding(),
+    ),
   ];
 }

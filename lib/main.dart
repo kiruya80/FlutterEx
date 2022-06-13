@@ -18,6 +18,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter/foundation.dart';
+import 'package:logger/logger.dart';
 
 Future<void> main() async {
   // runZonedGuarded : 버튼등 onPressed 에서 발생하는 오류 체크 위해
@@ -115,7 +116,7 @@ class MyApp extends StatelessWidget {
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                 child: child!);
           },
-
+          defaultTransition: Transition.fadeIn,
           // localizationsDelegates: context.localizationDelegates,
           // supportedLocales: context.supportedLocales,
           navigatorObservers: <NavigatorObserver>[

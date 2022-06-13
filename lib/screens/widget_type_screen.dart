@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutterex/controllers/multi_lang_controller.dart';
 import 'package:flutterex/controllers/widget_type_controller.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:flutterex/utils/print_log.dart';

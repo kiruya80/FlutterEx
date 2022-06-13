@@ -12,6 +12,8 @@ import 'package:flutterex/screens/multi_lang_screen.dart';
 import 'package:flutterex/screens/permission_screen.dart';
 import 'package:flutterex/screens/printing_screen.dart';
 import 'package:flutterex/screens/fire_msg_screen.dart';
+import 'package:flutterex/screens/tran_detail_page_screen.dart';
+import 'package:flutterex/screens/tran_page_screen.dart';
 import 'package:flutterex/screens/widget_type_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
@@ -128,6 +130,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         name: 'title_loading_widget'.tr,
         routeName: LoadingWidgetScreen.routeName,
         icon: ''));
+    homeItems.add(new HomeItem(
+        name: 'title_tran'.tr, routeName: TranPageScreen.routeName, icon: ''));
     homeItems.add(new HomeItem(
         name: 'title_permission'.tr,
         routeName: PermissionScreen.routeName,

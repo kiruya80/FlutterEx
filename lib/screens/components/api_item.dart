@@ -2,10 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
 import 'package:flutterex/datas/model/api_item.dart';
-import 'package:flutterex/datas/model/font_item.dart';
-import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/widget/text_widget.dart';
-import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
