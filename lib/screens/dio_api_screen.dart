@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/dio_api_controller.dart';
-import 'package:flutterex/controllers/http_api_controller.dart';
 import 'package:flutterex/datas/model/api_item.dart';
 import 'package:flutterex/screens/components/api_item.dart';
 import 'package:flutterex/utils/print_log.dart';
@@ -19,7 +18,6 @@ class DioApiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QcLog.e("DioApiScreen =============");
     DioApiController controller = Get.find<DioApiController>();
 
     return Obx(() {
@@ -27,7 +25,7 @@ class DioApiScreen extends StatelessWidget {
         appBar: AppBar(
           title: QcText.headline6(controller.title.value),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.back();
             },

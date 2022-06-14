@@ -18,7 +18,6 @@ class HttpApiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QcLog.e("HttpApiScreen =============");
     HttpApiController controller = Get.find<HttpApiController>();
 
     return Obx(() {

@@ -1,17 +1,6 @@
-import 'package:flutterex/utils/print_log.dart';
+import 'package:flutterex/controllers/base_controller.dart';
 import 'package:get/get.dart';
 
-class WidgetTypeController extends GetxController {
-  var title = ''.obs;
+class WidgetTypeController extends BaseController {
   var dropdownValue = ''.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    final args = Get.arguments;
-    final name = args['name'];
-    QcLog.e('name : $name');
-    title.value = name;
-  }
 }

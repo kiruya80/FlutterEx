@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/image_controller.dart';
@@ -24,7 +22,7 @@ class ImageScreen extends StatelessWidget {
       appBar: AppBar(
         title: QcText.headline6(controller.title.value),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Get.back();
           },
@@ -88,7 +86,6 @@ class ImageScreen extends StatelessWidget {
                               return LoadingFadingLine.circle(
                                 backgroundColor: Theme.of(context).primaryColor,
                               );
-                              break;
                             case LoadState.completed:
                               break;
                             case LoadState.failed:
@@ -98,7 +95,7 @@ class ImageScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   InkWell(
@@ -112,29 +109,30 @@ class ImageScreen extends StatelessWidget {
                         "https://i.pinimg.com/originals/e9/73/0a/e9730ab2e35d7ec8ac7e432099b5e6d9.gif",
                         width: 200,
                         shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15.0)),
                         cache: true,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   ExtendedImage.network(
                     "https://search.pstatic.net/common/?src=http%3A%2F%2Fshop1.phinf.naver.net%2F20200423_55%2F1587571654284IyhaI_JPEG%2F24931488833231600_1776065523.jpg&type=sc960_832",
                     width: 200,
                     shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                     cache: true,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   ExtendedImage.network(
                     "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20150411_99%2Fwm8949_1428759701791Lo4O9_JPEG%2FKakaoTalk_20150411_223901651.jpg&type=sc960_832",
                     width: 200,
                     shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                     cache: true,
                   ),
                 ],

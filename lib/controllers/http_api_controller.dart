@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/datas/model/api_item.dart';
 import 'package:flutterex/datas/model/post_model.dart';
 import 'package:flutterex/network/api/api_http_list.dart';
@@ -9,62 +10,52 @@ import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
-class HttpApiController extends GetxController {
-  var title = "HttpApiController".obs;
+class HttpApiController extends BaseController {
   List<ApiItem> apiItems = [];
-
-  @override
-  void onInit() {
-    super.onInit();
-    final args = Get.arguments;
-    final name = args['name'];
-    QcLog.e('name : $name');
-    title.value = name;
-  }
 
   Future<List<ApiItem>> makeApiData() async {
     apiItems = [];
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[GET] Post List',
       apiStr: 'getPostList',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[GET] One Post',
       apiStr: 'getOnePost',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[GET] Post Comments',
       apiStr: 'getPostComments',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[GET] Comments',
       apiStr: 'getComments',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[POST] Sample',
       apiStr: 'postSample',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[PUT] Sample',
       apiStr: 'putSample',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[PATCH] Sample',
       apiStr: 'patchSample',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'Http',
       api: '[DELETE] Sample',
       apiStr: 'deleteSample',
     ));
-    apiItems.add(new ApiItem(
+    apiItems.add(ApiItem(
       apiLibType: 'DIO',
       api: '[DIO] Sample',
       apiStr: 'dioSample',

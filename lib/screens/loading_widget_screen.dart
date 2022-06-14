@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/loading_widget_controller.dart';
-import 'package:flutterex/controllers/multi_lang_controller.dart';
 import 'package:flutterex/screens/components/loading/bouncing_grid_circle_tab.dart';
 import 'package:flutterex/screens/components/loading/bouncing_grid_square_tab.dart';
 import 'package:flutterex/screens/components/loading/bouncing_line_circle_tab.dart';
@@ -18,7 +17,6 @@ import 'package:flutterex/screens/components/loading/jumping_line_circle_tab.dar
 import 'package:flutterex/screens/components/loading/jumping_line_square_tab.dart';
 import 'package:flutterex/screens/components/loading/rotating_square_tab.dart';
 import 'package:flutterex/widget/text_widget.dart';
-import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 import 'package:loading_animations/loading_animations.dart';
 

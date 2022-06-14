@@ -3,15 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
-import 'package:flutterex/screens/fire_analytics_screen.dart';
-import 'package:flutterex/screens/fire_crash_screen.dart';
-import 'package:flutterex/screens/fire_storage_screen.dart';
-import 'package:flutterex/screens/font_screen.dart';
-import 'package:flutterex/screens/multi_lang_screen.dart';
-import 'package:flutterex/screens/widget_type_screen.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:flutterex/utils/print_log.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class HomeListItemCardForm extends StatefulWidget {
@@ -57,7 +50,7 @@ class _HomeListItemCardFormState extends State<HomeListItemCardForm>
             // QcLog.e(
             //     'Get.routing?.settings == ${Get.routing.route} , ${Get.routing.route?.settings.name.toString()}');
 
-            Get.toNamed(item.routeName, arguments: {'name': item.name});
+            Get.toNamed(item.routeName, arguments: {'title': item.title});
 
             // if (item.routeName == FontScreen.routeName ||
             //     item.routeName == MultiLangScreen.routeName ||
@@ -82,7 +75,7 @@ class _HomeListItemCardFormState extends State<HomeListItemCardForm>
             header: GridTileBar(
               backgroundColor: Colors.black26,
               title: QcText.subtitle1('header'),
-              subtitle: QcText.caption('Item ${item.name}'),
+              subtitle: QcText.caption('Item ${item.title}'),
               leading: IconButton(
                 icon: Icon(Icons.favorite),
                 onPressed: () {},
@@ -95,11 +88,11 @@ class _HomeListItemCardFormState extends State<HomeListItemCardForm>
             footer: GridTileBar(
               backgroundColor: Colors.black38,
               title: QcText.subtitle1('footer'),
-              subtitle: QcText.caption('Item ${item.name}'),
+              subtitle: QcText.caption('Item ${item.title}'),
             ),
             child: Center(
                 child: QcText.headline6(
-              item.name,
+              item.title,
               fontColor: Theme.of(context).colorScheme.onSurfaceVariant,
             )),
           ),

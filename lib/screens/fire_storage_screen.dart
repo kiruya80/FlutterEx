@@ -1,15 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterex/controllers/dio_api_controller.dart';
 import 'package:flutterex/controllers/fire_storage_controller.dart';
-import 'package:flutterex/controllers/http_api_controller.dart';
-import 'package:flutterex/controllers/fire_msg_controller.dart';
-import 'package:flutterex/datas/model/api_item.dart';
-import 'package:flutterex/screens/components/api_item.dart';
-import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
-import 'package:loading_animations/loading_animations.dart';
 
 /// https://eunjin3786.tistory.com/280
 ///
@@ -25,7 +18,6 @@ class FireStorageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QcLog.e("PushScreen =============");
     FireStorageController controller = Get.find<FireStorageController>();
 
     return Obx(() {
@@ -33,7 +25,7 @@ class FireStorageScreen extends StatelessWidget {
         appBar: AppBar(
           title: QcText.headline6(controller.title.value),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.back();
             },

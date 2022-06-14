@@ -1,14 +1,6 @@
-import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutterex/datas/model/api_item.dart';
-import 'package:flutterex/datas/model/fcm_data.dart';
-import 'package:flutterex/datas/model/post_model.dart';
-import 'package:flutterex/network/api/api_dio_list.dart';
+import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/utils/print_log.dart';
-import 'package:flutterex/widget/dialog_widget.dart';
-import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
 class FireMsgArguments {
@@ -24,8 +16,7 @@ class FireMsgArguments {
   FireMsgArguments(this.name, this.message, this.openedApplication);
 }
 
-class FireMsgController extends GetxController {
-  var title = "FireMsgController".obs;
+class FireMsgController extends BaseController {
   var fcmMsg = ''.obs;
 
   @override

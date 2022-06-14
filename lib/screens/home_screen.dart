@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/components/home_list_item_card.dart';
-import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -82,15 +81,21 @@ class HomeScreen extends StatelessWidget {
                        *
                        * SliverGridDelegateWithFixedCrossAxisCount 숫자로
                        * ㄴ crossAxisCount crossAxis 방향으로 몇개의 grid를 배치할 것인지 결정
+                         *
+                         * mainAxisExtent
+                         * 주축에 있는 각 타일의 범위. 제공되는 경우 다음을 정의합니다.
+                         * 주축의 각 타일이 차지하는 논리적 픽셀.
+                         * null이면 [childAspectRatio]가 대신 사용됩니다.
+                         *
                        */
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: orientation == Orientation.portrait
                               ? 2
                               : 3, //1 개의 행에 보여줄 item 개수
-                          mainAxisExtent: 256,
+                          // mainAxisExtent: 256,
                           mainAxisSpacing: 10, //그리드 사이의 수직 간격
                           crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
-                          childAspectRatio: 5 / 1, //item 의 가로 1, 세로 2 의 비율
+                          childAspectRatio: 1.5 / 1, //item 의 가로 1, 세로 2 의 비율
                         ),
                         // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         //   maxCrossAxisExtent: screenWidth / 4,

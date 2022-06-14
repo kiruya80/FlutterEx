@@ -3,36 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/hero_page_controller.dart';
 import 'package:flutterex/controllers/tran_detail_page_controller.dart';
 import 'package:flutterex/controllers/tran_page_controller.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 import 'package:loading_animations/loading_animations.dart';
 
-class TranDetailPageScreen extends StatefulWidget {
+class TranDetailPageScreen extends StatelessWidget {
   static const routeName = '/tran/detail';
 
-  static String name = '';
+  final String title;
 
-  const TranDetailPageScreen(String name, {Key? key}) : super(key: key);
-
-  @override
-  _TranDetailPageScreenState createState() => _TranDetailPageScreenState(name);
-}
-
-class _TranDetailPageScreenState extends State<TranDetailPageScreen> {
-  String name;
-  final controller = Get.find<TranDetailPageController>();
-
-  _TranDetailPageScreenState(this.name);
+  const TranDetailPageScreen({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // TranDetailPageController controller = Get.find<TranDetailPageController>();
+    TranDetailPageController controller = Get.find<TranDetailPageController>();
+    controller.title.value = title;
 
     return Scaffold(
       appBar: AppBar(
-        title: QcText.headline6(name),
+        title: QcText.headline6(controller.title.value),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Get.back();
           },

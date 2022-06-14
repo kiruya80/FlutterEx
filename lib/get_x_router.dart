@@ -72,7 +72,7 @@ class GetXRouterContainer {
     ),
     GetPage(
       name: TranDetailPageScreen.routeName,
-      page: () => TranDetailPageScreen(''),
+      page: () => TranDetailPageScreen(title: ''),
       binding: TranDetailPageBinding(),
     ),
     GetPage(

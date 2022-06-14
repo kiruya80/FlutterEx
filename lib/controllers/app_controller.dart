@@ -3,12 +3,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/controllers/fire_msg_controller.dart';
 import 'package:flutterex/screens/fire_msg_screen.dart';
-import 'package:flutterex/service/qc_notification_utils.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,16 +18,11 @@ import 'package:http/http.dart' as http;
 /// https://uaremine.tistory.com/22
 /// https://github.com/nicejhkim/flutter_fcm_sample
 ///
-class AppController extends GetxController with WidgetsBindingObserver {
+class AppController extends BaseController {
   static AppController get to => Get.find();
   var _isDeviceLight = true.obs;
 
   get isDeviceLight => _isDeviceLight;
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   // var result =
   //     await AndroidChannel.platform.invokeMethod('getAppListFutureFromAOS');
@@ -41,21 +35,21 @@ class AppController extends GetxController with WidgetsBindingObserver {
       detached(suspending): 모든 뷰가 제거되고 플러터 엔진만 동작 중이며 앱이 종료되기 직전에 실행된다.
       해당 상황은 앱을 스와이프로 제거하거나, 배터리가 부족해서 종료될 때, 메모리 부족으로 스왑될 경우 동작한다. 이 경우 보통 100%의 관찰을 보장하지 않는다.
    */
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    QcLog.e('didChangeAppLifecycleState : $state');
-    switch (state) {
-      case AppLifecycleState.resumed:
-        break;
-      case AppLifecycleState.inactive:
-        break;
-      case AppLifecycleState.detached:
-        break;
-      case AppLifecycleState.paused:
-        break;
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   QcLog.e('didChangeAppLifecycleState : $state');
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       break;
+  //   }
+  // }
 
   final _prefs = SharedPreferences.getInstance();
 

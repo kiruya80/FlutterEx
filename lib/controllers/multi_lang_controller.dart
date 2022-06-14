@@ -1,18 +1,6 @@
-import 'package:flutterex/utils/print_log.dart';
+import 'package:flutterex/controllers/base_controller.dart';
 import 'package:get/get.dart';
 
-class MultiLangController extends GetxController {
-  var title = ''.obs;
+class MultiLangController extends BaseController {
   var lang = "ko".obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    final args = Get.arguments;
-    final name = args['name'];
-    title.value = name;
-
-    // title.value = 'multi_title'.tr;
-  }
 }

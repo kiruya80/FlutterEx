@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 class HomeItem {
-  String name;
+  String title;
   String routeName;
   String icon;
 
   HomeItem({
-    required this.name,
+    required this.title,
     required this.routeName,
     required this.icon,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
+      'title': title,
       'routeName': routeName,
       'icon': icon,
     };
@@ -21,7 +21,7 @@ class HomeItem {
 
   factory HomeItem.fromMap(Map<String, dynamic> map) {
     return HomeItem(
-      name: map['name'],
+      title: map['title'],
       routeName: map['routeName'],
       icon: map['icon'],
     );
@@ -34,7 +34,7 @@ class HomeItem {
 
   @override
   String toString() {
-    return 'HomeItem{name: $name, routeName: $routeName, icon: $icon}';
+    return 'HomeItem{title: $title, routeName: $routeName, icon: $icon}';
   }
 }
 

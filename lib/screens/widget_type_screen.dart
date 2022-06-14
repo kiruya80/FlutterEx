@@ -17,7 +17,6 @@ class WidgetTypeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QcLog.e("FontScreen =============");
     WidgetTypeController controller = Get.find<WidgetTypeController>();
 
     List<String> options = <String>['One', 'Two', 'Free', 'Four'];
@@ -28,20 +27,20 @@ class WidgetTypeScreen extends StatelessWidget {
         appBar: AppBar(
           title: QcText.headline6(controller.title.value),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.back();
             },
           ),
           actions: [
             PopupMenuButton(
-              icon: Icon(Icons.more_vert),
+              icon: const Icon(Icons.more_vert),
               // elevation: 15,
               color: Theme.of(context).colorScheme.surfaceVariant,
               itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                 const PopupMenuItem(
                   child: ListTile(
-                    leading: Icon(Icons.add),
+                    leading: const Icon(Icons.add),
                     title: Text('Item 1'),
                   ),
                 ),
@@ -168,7 +167,7 @@ class WidgetTypeScreen extends StatelessWidget {
                       decoration: BoxDecoration(color: Colors.grey),
                       child: Stack(
                         alignment: Alignment.centerRight,
-                        children: <Widget>[
+                        children: const <Widget>[
                           Icon(Icons.star, size: 300), // largest child
                           Icon(Icons.star,
                               size: 50,
@@ -206,7 +205,7 @@ class WidgetTypeScreen extends StatelessWidget {
                       child: IndexedStack(
                         index: 1,
                         alignment: FractionalOffset(0.5, 0.5),
-                        children: <Widget>[
+                        children: const <Widget>[
                           Icon(Icons.star, size: 300), // largest child
                           Icon(Icons.star,
                               size: 50,
@@ -476,7 +475,7 @@ class WidgetTypeScreen extends StatelessWidget {
                       child: DecoratedBox(
                         decoration: BoxDecoration(color: Colors.grey),
                         child: Row(
-                          children: <Widget>[
+                          children: const <Widget>[
                             DecoratedBox(
                               decoration: BoxDecoration(color: Colors.red),
                               child: Text('aaa\naaa'),
@@ -506,7 +505,7 @@ class WidgetTypeScreen extends StatelessWidget {
                           decoration: BoxDecoration(color: Colors.grey),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
+                            children: const <Widget>[
                               DecoratedBox(
                                 decoration: BoxDecoration(color: Colors.red),
                                 child: Text('aaa\naaa'),
@@ -538,7 +537,7 @@ class WidgetTypeScreen extends StatelessWidget {
                           decoration: BoxDecoration(color: Colors.grey),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
+                            children: const <Widget>[
                               DecoratedBox(
                                 decoration: BoxDecoration(color: Colors.red),
                                 child: Text('aaaaaa'),

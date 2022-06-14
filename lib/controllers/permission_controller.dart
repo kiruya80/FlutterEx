@@ -1,11 +1,10 @@
+import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/datas/model/permission_item.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class PermissionController extends GetxController {
-  var title = "Permission Sample".obs;
-
+class PermissionController extends BaseController {
   final _permissionList = <PermissionItem>[].obs;
 
   RxList<PermissionItem> get permissionList => _permissionList;
@@ -13,11 +12,6 @@ class PermissionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    final args = Get.arguments;
-    final name = args['name'];
-    QcLog.e('name : $name');
-    title.value = name;
 
     getPermissionItems();
   }
@@ -29,8 +23,7 @@ class PermissionController extends GetxController {
       var status = element.status;
       PermissionItem item;
       status.then((value) {
-        item =
-            new PermissionItem(name: element.toString(), permission: element);
+        item = PermissionItem(name: element.toString(), permission: element);
         item.status.value = value.name.toString().toUpperCase();
         _permissionList.add(item);
       });

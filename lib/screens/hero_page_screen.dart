@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/hero_page_controller.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
-import 'package:loading_animations/loading_animations.dart';
 
 class HeroPageScreen extends StatelessWidget {
   static const routeName = '/image/heropage';
@@ -18,7 +17,7 @@ class HeroPageScreen extends StatelessWidget {
       appBar: AppBar(
         title: QcText.headline6(controller.title.value),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Get.back();
           },

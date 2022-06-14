@@ -72,7 +72,7 @@ class _HomeListItemFormState extends State<HomeListItemForm>
             child: TextButton(
                 onPressed: () async {
                   QcLog.e("item.routeName == ${item.routeName}");
-                  Get.toNamed(item.routeName, arguments: {'name': item.name});
+                  Get.toNamed(item.routeName, arguments: {'title': item.title});
                 },
                 style: TextButton.styleFrom(
                   minimumSize: Size.fromHeight(60),
@@ -81,7 +81,7 @@ class _HomeListItemFormState extends State<HomeListItemForm>
                   // backgroundColor: Colors.white,
                 ),
                 child: QcText.headline6(
-                  item.name,
+                  item.title,
                   fontColor: Theme.of(context).colorScheme.onPrimary,
                 )),
             // child: Text(

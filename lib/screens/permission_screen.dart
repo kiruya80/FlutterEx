@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/permission_controller.dart';
 import 'package:flutterex/screens/components/permission_list_item.dart';
 import 'package:flutterex/widget/text_widget.dart';
-import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
 class PermissionScreen extends StatelessWidget {
@@ -12,7 +11,6 @@ class PermissionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QcLog.e("PermissionScreen =============");
     PermissionController controller = Get.find<PermissionController>();
 
     return Obx(() {
@@ -24,7 +22,7 @@ class PermissionScreen extends StatelessWidget {
             controller.title.value,
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.back();
             },

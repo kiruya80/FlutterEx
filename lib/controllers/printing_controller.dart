@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
-class PrintingController extends GetxController {
-  var title = "Printing Web Sample".obs;
+class PrintingController extends BaseController {
   var webviewUrl = "https://www.naver.com/".obs;
 
   final formKey = GlobalKey<FormState>();
@@ -11,15 +11,6 @@ class PrintingController extends GetxController {
   var url = "".obs;
 
   void setUrl() {}
-  @override
-  void onInit() {
-    super.onInit();
-    final args = Get.arguments;
-    final name = args['name'];
-    QcLog.e('name : $name');
-    title.value = name;
-
-  }
 
   bool? isTextValidate() {
     return formKey.currentState?.validate();

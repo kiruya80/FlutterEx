@@ -12,7 +12,7 @@ mixin RowBuilder {
           padding: const EdgeInsets.all(8.0),
           child: body,
         ),
-        Divider(
+        const Divider(
           height: 30,
         ),
       ],

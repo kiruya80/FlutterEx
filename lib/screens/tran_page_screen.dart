@@ -1,12 +1,9 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/bindings/tran_detail_page_binding.dart';
-import 'package:flutterex/controllers/hero_page_controller.dart';
 import 'package:flutterex/controllers/tran_page_controller.dart';
 import 'package:flutterex/screens/tran_detail_page_screen.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
-import 'package:loading_animations/loading_animations.dart';
 
 class TranPageScreen extends StatelessWidget {
   static const routeName = '/tran';
@@ -71,39 +68,35 @@ class TranPageScreen extends StatelessWidget {
                           crossAxisCount: orientation == Orientation.portrait
                               ? 2
                               : 3, //1 개의 행에 보여줄 item 개수
-                          mainAxisExtent: 256,
+                          // mainAxisExtent: 256,
                           mainAxisSpacing: 10, //그리드 사이의 수직 간격
                           crossAxisSpacing: 10, // 그리드 사이의 좌우 간격
-                          // childAspectRatio: 0.2,
+                          childAspectRatio: 4 / 1, //item 의 가로 1, 세로 2 의 비율
                         ),
                         itemCount: items.length,
                         itemBuilder: (context, position) {
                           Transition item = items[position];
-                          // ClipRRect
-                          // return Card (child: HomeListItemCardForm(item: item));
-
-                          return ConstrainedBox(
-                              constraints:
-                                  BoxConstraints(minHeight: 30, minWidth: 200),
-                              child: TextButton(
-                                  onPressed: () async {
-                                    Get.to(TranDetailPageScreen(item.name),
-                                        transition: item,
-                                        binding: TranDetailPageBinding());
-                                  },
-                                  style: TextButton.styleFrom(
-                                    // minimumSize: Size.fromHeight(30),
-                                    // fixedSize: Size.fromHeight(10),
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
-                                    // primary: Colors.teal,
-                                    // backgroundColor: Colors.white,
-                                  ),
-                                  child: QcText.bodyText1(
-                                    item.name,
-                                    fontColor:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  )));
+                          return TextButton(
+                              onPressed: () async {
+                                Get.to(
+                                    TranDetailPageScreen(
+                                      title: item.name,
+                                    ),
+                                    transition: item,
+                                    binding: TranDetailPageBinding());
+                              },
+                              style: TextButton.styleFrom(
+                                // minimumSize: Size.fromHeight(30),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                // primary: Colors.teal,
+                                // backgroundColor: Colors.white,
+                              ),
+                              child: QcText.bodyText1(
+                                item.name,
+                                fontColor:
+                                    Theme.of(context).colorScheme.onPrimary,
+                              ));
                         }),
                   );
                 }
