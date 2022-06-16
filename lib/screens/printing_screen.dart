@@ -64,10 +64,8 @@ class _PrintingScreenState extends State<PrintingScreen> {
             // maintainBottomViewPadding: false,
             child: GestureDetector(
           onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
+            if (!FocusScope.of(context).hasPrimaryFocus) {
+              FocusScope.of(context).unfocus();
             }
           },
           child: Column(
@@ -176,6 +174,8 @@ class _PrintingScreenState extends State<PrintingScreen> {
                                         .then((value) {
                                       PrintingUtils.readDomFromJS(
                                           value, currentUrl!, true);
+                                    }).catchError((error) {
+                                      QcLog.e('error: $error');
                                     });
                                   },
                                   child: Icon(Icons.print)),

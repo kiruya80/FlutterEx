@@ -325,6 +325,8 @@ class AppController extends BaseController {
             arguments:
                 FireMsgArguments('title_firebase_messaging'.tr, rm, true));
       }
+    }).catchError((error) {
+      QcLog.e('error: $error');
     });
 
     return true;

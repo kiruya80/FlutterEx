@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
-class BaseController extends FullLifeCycleController with FullLifeCycleMixin {
+abstract class BaseController extends FullLifeCycleController
+    with FullLifeCycleMixin {
   var title = "title".obs;
 
   @override
@@ -13,12 +14,15 @@ class BaseController extends FullLifeCycleController with FullLifeCycleMixin {
 
     try {
       final title = args['title'];
-      QcLog.e('title : $title');
       this.title.value = title;
     } catch (e) {
       debugPrint('onInit error : $e');
     }
+
+    init();
   }
+
+  void init() {}
 
   /// detached(suspending): 모든 뷰가 제거되고 플러터 엔진만 동작 중이며 앱이 종료되기 직전에 실행된다.
   @override

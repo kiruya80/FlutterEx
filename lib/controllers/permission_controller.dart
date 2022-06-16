@@ -26,6 +26,8 @@ class PermissionController extends BaseController {
         item = PermissionItem(name: element.toString(), permission: element);
         item.status.value = value.name.toString().toUpperCase();
         _permissionList.add(item);
+      }).catchError((error) {
+        QcLog.e('error: $error');
       });
     });
 

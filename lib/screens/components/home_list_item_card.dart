@@ -44,7 +44,6 @@ class _HomeListItemCardFormState extends State<HomeListItemCardForm>
         color: Theme.of(context).colorScheme.surfaceVariant,
         child: InkWell(
           onTap: () async {
-            QcLog.e("item.routeName == ${item.routeName}");
             // QcLog.e(
             //     'Get.rawRoute?.settings == ${Get.rawRoute?.settings} , ${Get.rawRoute?.settings.name.toString()}');
             // QcLog.e(

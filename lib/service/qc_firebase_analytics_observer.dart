@@ -95,10 +95,7 @@ class QcFirebaseAnalyticsObserver extends RouteObserver<ModalRoute<dynamic>> {
     //   QcLog.e('Exception === $e');
     // }
     final String? screenName = nameExtractor(route.settings);
-    QcLog.e('screenName === ${screenName}');
     if (screenName != null) {
-      QcLog.e(
-          'analytics === screenName : ${screenName} , className : ${className}');
       await analytics
           .setCurrentScreen(
               screenName: screenName, screenClassOverride: className)
