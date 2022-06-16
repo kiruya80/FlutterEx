@@ -2,7 +2,10 @@ import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
 import 'package:flutterex/screens/fire_analytics_screen.dart';
+import 'package:flutterex/screens/fire_app_check_screen.dart';
+import 'package:flutterex/screens/fire_auth_screen.dart';
 import 'package:flutterex/screens/fire_crash_screen.dart';
+import 'package:flutterex/screens/fire_database_screen.dart';
 import 'package:flutterex/screens/fire_storage_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/screens/http_api_screen.dart';
@@ -93,6 +96,28 @@ class HomeController extends BaseController {
         title: 'title_dio_api'.tr,
         routeName: DioApiScreen.routeName,
         icon: ''));
+
+    /// firebase
+    homeItems.add(HomeItem(
+        title: 'title_firebase_auth'.tr,
+        routeName: FireAuthScreen.routeName,
+        icon: ''));
+    homeItems.add(HomeItem(
+        title: 'title_firebase_storage'.tr,
+        routeName: FireStorageScreen.routeName,
+        icon: ''));
+    homeItems.add(HomeItem(
+        title: 'title_firebase_database'.tr,
+        routeName: FireDatabaseScreen.routeName,
+        icon: ''));
+    homeItems.add(HomeItem(
+        title: 'title_firebase_messaging'.tr,
+        routeName: FireMsgScreen.routeName,
+        icon: ''));
+    homeItems.add(HomeItem(
+        title: 'title_firebase_app_check'.tr,
+        routeName: FireAppCheckScreen.routeName,
+        icon: ''));
     homeItems.add(HomeItem(
         title: 'title_firebase_crashlytics'.tr,
         routeName: FireCrashScreen.routeName,
@@ -100,14 +125,6 @@ class HomeController extends BaseController {
     homeItems.add(HomeItem(
         title: 'title_firebase_analytics'.tr,
         routeName: FireAnalyticsScreen.routeName,
-        icon: ''));
-    homeItems.add(HomeItem(
-        title: 'title_firebase_storage'.tr,
-        routeName: FireStorageScreen.routeName,
-        icon: ''));
-    homeItems.add(HomeItem(
-        title: 'title_firebase_messaging'.tr,
-        routeName: FireMsgScreen.routeName,
         icon: ''));
 
     return homeItems;

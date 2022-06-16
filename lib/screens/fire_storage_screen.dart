@@ -38,7 +38,7 @@ class FireStorageScreen extends StatelessWidget {
               color: Theme.of(context).colorScheme.background,
               width: Get.width,
               height: Get.height,
-              child: QcText.headline6('push')),
+              child: QcText.headline6(controller.title.value)),
         ),
       );
     });

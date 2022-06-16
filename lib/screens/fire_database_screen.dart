@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterex/controllers/fire_analytics_controller.dart';
+import 'package:flutterex/controllers/fire_database_controller.dart';
+import 'package:flutterex/controllers/fire_storage_controller.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
-class FireAnalyticsScreen extends StatelessWidget {
-  static const routeName = '/fire/analytics';
+class FireDatabaseScreen extends StatelessWidget {
+  static const routeName = '/fire/database';
 
-  const FireAnalyticsScreen({Key? key}) : super(key: key);
+  const FireDatabaseScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    FireAnalyticsController controller = Get.find<FireAnalyticsController>();
+    FireDatabaseController controller = Get.find<FireDatabaseController>();
 
     return Obx(() {
       return Scaffold(

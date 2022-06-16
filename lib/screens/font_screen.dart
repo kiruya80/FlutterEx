@@ -43,11 +43,9 @@ class FontScreen extends StatelessWidget {
                   AsyncSnapshot<List<FontItem>> snapshot) {
                 //해당 부분은 data를 아직 받아 오지 못했을때 실행되는 부분을 의미한다.
                 if (snapshot.hasData == false) {
-                  return Container(
-                      child: Center(child: CircularProgressIndicator()));
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Container(
-                      child: Padding(
+                  return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'Error: ${snapshot.error}',
@@ -56,23 +54,21 @@ class FontScreen extends StatelessWidget {
                           .bodyText1!
                           .copyWith(color: Colors.white),
                     ),
-                  ));
+                  );
                 } else {
                   List<FontItem> items = snapshot.data!;
-                  return Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: items.length,
-                      itemBuilder: (BuildContext context, int position) {
-                        FontItem item = items[position];
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: items.length,
+                    itemBuilder: (BuildContext context, int position) {
+                      FontItem item = items[position];
 
-                        return Column(
-                          children: <FontListItemForm>[
-                            FontListItemForm(item: item),
-                          ],
-                        );
-                      },
-                    ),
+                      return Column(
+                        children: <FontListItemForm>[
+                          FontListItemForm(item: item),
+                        ],
+                      );
+                    },
                   );
                 }
               },

@@ -116,7 +116,7 @@ class MyApp extends StatelessWidget {
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                 child: child!);
           },
-          defaultTransition: Transition.fadeIn,
+          defaultTransition: Transition.native,
           // localizationsDelegates: context.localizationDelegates,
           // supportedLocales: context.supportedLocales,
           navigatorObservers: <NavigatorObserver>[

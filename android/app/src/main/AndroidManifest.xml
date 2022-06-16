@@ -63,7 +63,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
    <application
-        android:label="flutterex"
+        android:label="FlutterEx"
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"

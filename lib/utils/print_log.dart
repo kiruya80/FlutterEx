@@ -1,13 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
-enum LOG_LEVEL {
-  DEBUG,
-  INFO,
-  WARNING,
-  ERROR,
-}
-
 var logger = Logger(
   printer: PrettyPrinter(
       methodCount: 4,
@@ -25,20 +18,6 @@ var logger = Logger(
 );
 
 class QcLog {
-  // static DateFormat? dateFormat;
-
-  // kDebugMode
-  // bool isShowLog = true;
-  // bool isShowLog = kDebugMode;
-
-  // static const String _APP_TAG = '_MC_'; // middle client
-
-  // static String getTime() {
-  //   if (dateFormat == null) dateFormat = DateFormat('HH:mm:ss.sss');
-  //
-  //   return dateFormat!.format(DateTime.now());
-  // }
-
   static d(msg) {
     if (kDebugMode) logger.d(msg);
   }
@@ -54,26 +33,4 @@ class QcLog {
   static e(msg) {
     if (kDebugMode) logger.e(msg);
   }
-
-  // static void LogPrint(Object object) async {
-  //   int defaultPrintLength = 1020;
-  //   if (object == null || object.toString().length <= defaultPrintLength) {
-  //     print(object);
-  //   } else {
-  //     String log = object.toString();
-  //     int start = 0;
-  //     int endIndex = defaultPrintLength;
-  //     int logLength = log.length;
-  //     int tmpLogLength = log.length;
-  //     while (endIndex < logLength) {
-  //       print(log.substring(start, endIndex));
-  //       endIndex += defaultPrintLength;
-  //       start += defaultPrintLength;
-  //       tmpLogLength -= defaultPrintLength;
-  //     }
-  //     if (tmpLogLength > 0) {
-  //       print(log.substring(start, logLength));
-  //     }
-  //   }
-  // }
 }

@@ -1,17 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterex/controllers/fire_analytics_controller.dart';
+import 'package:flutterex/controllers/fire_app_check_controller.dart';
+import 'package:flutterex/controllers/fire_database_controller.dart';
+import 'package:flutterex/controllers/fire_storage_controller.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
-class FireAnalyticsScreen extends StatelessWidget {
-  static const routeName = '/fire/analytics';
+class FireAppCheckScreen extends StatelessWidget {
+  static const routeName = '/fire/app/check';
 
-  const FireAnalyticsScreen({Key? key}) : super(key: key);
+  const FireAppCheckScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    FireAnalyticsController controller = Get.find<FireAnalyticsController>();
+    FireAppCheckController controller = Get.find<FireAppCheckController>();
 
     return Obx(() {
       return Scaffold(

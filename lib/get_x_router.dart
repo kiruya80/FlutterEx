@@ -1,6 +1,9 @@
 import 'package:flutterex/bindings/dio_api_binding.dart';
 import 'package:flutterex/bindings/fire_analytics_binding.dart';
+import 'package:flutterex/bindings/fire_app_check_binding.dart';
+import 'package:flutterex/bindings/fire_auth_binding.dart';
 import 'package:flutterex/bindings/fire_crash_binding.dart';
+import 'package:flutterex/bindings/fire_database_binding.dart';
 import 'package:flutterex/bindings/fire_storage_binding.dart';
 import 'package:flutterex/bindings/font_binding.dart';
 import 'package:flutterex/bindings/hero_page_binding.dart';
@@ -17,7 +20,10 @@ import 'package:flutterex/bindings/tran_page_binding.dart';
 import 'package:flutterex/bindings/widget_type_binding.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
 import 'package:flutterex/screens/fire_analytics_screen.dart';
+import 'package:flutterex/screens/fire_app_check_screen.dart';
+import 'package:flutterex/screens/fire_auth_screen.dart';
 import 'package:flutterex/screens/fire_crash_screen.dart';
+import 'package:flutterex/screens/fire_database_screen.dart';
 import 'package:flutterex/screens/fire_storage_screen.dart';
 import 'package:flutterex/screens/font_screen.dart';
 import 'package:flutterex/screens/hero_page_screen.dart';
@@ -105,6 +111,33 @@ class GetXRouterContainer {
       page: () => DioApiScreen(),
       binding: DioApiBinding(),
     ),
+
+    /// firebase
+    GetPage(
+      name: FireAuthScreen.routeName,
+      page: () => FireAuthScreen(),
+      binding: FireAuthBinding(),
+    ),
+    GetPage(
+      name: FireStorageScreen.routeName,
+      page: () => FireStorageScreen(),
+      binding: FireStorageBinding(),
+    ),
+    GetPage(
+      name: FireDatabaseScreen.routeName,
+      page: () => FireDatabaseScreen(),
+      binding: FireDatabaseBinding(),
+    ),
+    GetPage(
+      name: FireMsgScreen.routeName,
+      page: () => FireMsgScreen(),
+      binding: FireMsgBinding(),
+    ),
+    GetPage(
+      name: FireAppCheckScreen.routeName,
+      page: () => FireAppCheckScreen(),
+      binding: FireAppCheckBinding(),
+    ),
     GetPage(
       name: FireCrashScreen.routeName,
       page: () => FireCrashScreen(),
@@ -114,16 +147,6 @@ class GetXRouterContainer {
       name: FireAnalyticsScreen.routeName,
       page: () => FireAnalyticsScreen(),
       binding: FireAnalyticsBinding(),
-    ),
-    GetPage(
-      name: FireStorageScreen.routeName,
-      page: () => FireStorageScreen(),
-      binding: FireStorageBinding(),
-    ),
-    GetPage(
-      name: FireMsgScreen.routeName,
-      page: () => FireMsgScreen(),
-      binding: FireMsgBinding(),
     ),
   ];
 }
