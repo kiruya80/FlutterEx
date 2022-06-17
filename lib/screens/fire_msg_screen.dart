@@ -21,7 +21,7 @@ class FireMsgScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QcLog.e("PushScreen =============");
+    QcLog.e("FireMsgScreen =============");
     FireMsgController controller = Get.find<FireMsgController>();
     AppController appController = Get.find<AppController>();
 
@@ -44,11 +44,11 @@ class FireMsgScreen extends StatelessWidget {
               child: Column(
                 children: [
                   QcText.headline6('Token : ' + appController.fcmToken.value),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   QcText.bodyText1('FCM msg : ' + controller.fcmMsg.value),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
@@ -62,7 +62,7 @@ class FireMsgScreen extends StatelessWidget {
                         'FCM msg clear',
                         // fontColor: Theme.of(context).colorScheme.onPrimary,
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],

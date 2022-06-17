@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutterex/controllers/fire_auth_controller.dart';
-import 'package:flutterex/controllers/fire_storage_controller.dart';
-import 'package:flutterex/network/dio_client.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
@@ -22,6 +22,9 @@ import 'package:get/get.dart';
 ///
 /// https://debaeloper.tistory.com/63
 ///
+
+typedef OAuthSignIn = void Function();
+
 class FireAuthScreen extends StatefulWidget {
   static const routeName = '/fire/auth';
 
@@ -32,14 +35,19 @@ class FireAuthScreen extends StatefulWidget {
 }
 
 class _FireAuthScreenState extends State<FireAuthScreen> {
-  FocusNode myFocusNode = new FocusNode();
+  final FocusNode emailFocusNode = new FocusNode();
+  final FocusNode pwdFocusNode = new FocusNode();
   final tedIdController = TextEditingController();
   final tedPwdController = TextEditingController();
+
+  late Map<Buttons, OAuthSignIn> authButtons;
 
   @override
   void initState() {
     super.initState();
-    myFocusNode.addListener(_focusNodeListener);
+
+    emailFocusNode.addListener(_focusNodeListener);
+    pwdFocusNode.addListener(_focusNodeListener);
 
     //      FocusScope.of(context).unfocus();
     // KeyboardVisibilityNotification().addNewListener(
@@ -47,20 +55,41 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
     //     print(visible);
     //   },
     // );
+    if (kIsWeb) {
+      authButtons = {
+        // Buttons.Google: _signInWithGoogle,
+        // Buttons.GitHub: _signInWithGitHub,
+        // Buttons.Twitter: _signInWithTwitter,
+      };
+    } else {
+      authButtons = {
+        // if (!Platform.isMacOS) Buttons.Google: _signInWithGoogle,
+        // if (!Platform.isMacOS) Buttons.GitHub: _signInWithGitHub,
+        // if (!Platform.isMacOS) Buttons.Twitter: _signInWithTwitter,
+      };
+    }
   }
 
   @override
   void dispose() {
-    myFocusNode.removeListener(_focusNodeListener);
+    emailFocusNode.removeListener(_focusNodeListener);
+    pwdFocusNode.removeListener(_focusNodeListener);
 
+    emailFocusNode.dispose();
+    pwdFocusNode.dispose();
     super.dispose();
   }
 
   Future<Null> _focusNodeListener() async {
-    if (myFocusNode.hasFocus) {
-      QcLog.e('TextField got the focus');
+    if (emailFocusNode.hasFocus) {
+      QcLog.e('emailFocusNode got the focus');
     } else {
-      QcLog.e('TextField lost the focus');
+      QcLog.e('emailFocusNode lost the focus');
+    }
+    if (pwdFocusNode.hasFocus) {
+      QcLog.e('pwdFocusNode got the focus');
+    } else {
+      QcLog.e('pwdFocusNode lost the focus');
     }
   }
 
@@ -108,13 +137,10 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                     scrollDirection: Axis.vertical,
                     child: Column(
                       children: [
-                        QcText.headline6(controller.userCredential.value),
-                        const SizedBox(
-                          height: 20,
-                        ),
                         TextButton(
                             onPressed: () async {
-                              await FirebaseAuth.instance.signOut();
+                              controller.signOut();
+                              // await FirebaseAuth.instance.signOut();
                             },
                             style: TextButton.styleFrom(
                               minimumSize: Size.fromHeight(60),
@@ -127,12 +153,21 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                   Theme.of(context).colorScheme.onPrimary,
                             )),
                         const SizedBox(
+                          height: 20,
+                        ),
+                        QcText.headline6(controller.userCredential.value),
+                        const SizedBox(
                           height: 50,
                         ),
+                        // Buttons.Google,
+                        // SignInButton(
+                        //   button,
+                        //   onPressed: authButtons[button]!,
+                        // ),
                         TextButton(
                             onPressed: () async {
-                              controller.anonymously().then((value) {
-                                QcLog.e('anonymously : $value');
+                              controller.anonymousAuth().then((value) {
+                                QcLog.e('anonymousAuth : $value');
                                 QcDialog.dissmissProgress();
 
                                 /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {}, providerId: null, username: null), credential: null,
@@ -174,43 +209,59 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                   validator: (value) {
                                     QcLog.e("validator : $value");
                                     if (value != null && value.isEmpty) {
-                                      return 'validator ID를 입력해주세요';
+                                      return 'validator Email 를 입력해주세요';
                                     }
                                     return null;
                                   },
-                                  hintText: 'ID를 입력해주세요',
-                                  labelText: 'ID',
-                                  keyboardType: TextInputType.url,
+                                  hintText: 'Email 입력해주세요',
+                                  labelText: 'Email',
+                                  keyboardType: TextInputType.emailAddress,
                                   controller: tedIdController,
                                   maxLines: 1,
-                                  focusNode: myFocusNode,
-                                  prefixIcon: Icon(Icons.web_outlined),
+                                  focusNode: emailFocusNode,
+                                  prefixIcon: Icon(Icons.email_outlined),
                                 )),
                             const SizedBox(
                               width: 10,
                             ),
                             Expanded(
                                 flex: 1,
-                                child: QcTextFormField.bodyText1(
-                                  onSaved: (value) {
-                                    // controller.saveTextValidate(); 필요
-                                    QcLog.e("onSaved : $value");
-                                    if (value != null && value.isNotEmpty) {}
-                                  },
-                                  validator: (value) {
-                                    QcLog.e("validator : $value");
-                                    if (value != null && value.isEmpty) {
-                                      return 'validator PWD를 입력해주세요';
-                                    }
-                                    return null;
-                                  },
-                                  hintText: 'PWD를 입력해주세요',
-                                  labelText: 'PWD',
-                                  keyboardType: TextInputType.url,
-                                  controller: tedPwdController,
-                                  maxLines: 1,
-                                  // focusNode: myFocusNode,
-                                  prefixIcon: Icon(Icons.web_outlined),
+                                child: Container(
+                                  margin: const EdgeInsets.only(top: 22),
+                                  child: QcTextFormField.bodyText1(
+                                    onSaved: (value) {
+                                      // controller.saveTextValidate(); 필요
+                                      QcLog.e("onSaved : $value");
+                                      if (value != null && value.isNotEmpty) {}
+                                    },
+                                    // validator: (value) => CheckValidate().validatePassword(_passwordFocus, value),
+                                    validator: (value) {
+                                      QcLog.e("validator : $value");
+                                      if (value != null && value.isEmpty) {
+                                        return 'validator PWD를 입력해주세요';
+                                      }
+                                      return null;
+                                    },
+                                    hintText: 'PWD를 입력해주세요',
+                                    labelText: 'PWD',
+                                    keyboardType: TextInputType.visiblePassword,
+                                    obscureText: controller.isObscureText.value,
+                                    controller: tedPwdController,
+                                    maxLines: 1,
+                                    maxLength: 10,
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        QcLog.e('suffixIcon clear ');
+                                        controller.isObscureText.value =
+                                            !controller.isObscureText.value;
+                                      },
+                                      icon: Icon(controller.isObscureText.value
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined),
+                                    ),
+                                    focusNode: pwdFocusNode,
+                                    prefixIcon: Icon(Icons.password_outlined),
+                                  ),
                                 )),
                             const SizedBox(
                               width: 10,
@@ -221,34 +272,43 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                     onPressed: () async {
                                       FocusScope.of(context).unfocus();
 
-                                      if (tedIdController.text.isEmpty) {
+                                      if (tedIdController.text.isEmpty ||
+                                          !tedIdController.text.isEmail) {
                                         Fluttertoast.showToast(
-                                            msg: 'ID를 입력해주세요',
+                                            msg: 'Email형식으로 입력해주세요',
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
                                             timeInSecForIosWeb: 1);
+                                        // FocusScope.of(context).requestFocus(emailFocusNode)
+                                        emailFocusNode.requestFocus();
                                         return;
                                       }
-                                      if (tedPwdController.text.isEmpty) {
+                                      if (tedPwdController.text.isEmpty ||
+                                          tedPwdController.text.length < 6) {
                                         Fluttertoast.showToast(
-                                            msg: 'PWD를 입력해주세요',
+                                            msg: '패스워드는 6자리 이상 입력해주세요',
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
                                             timeInSecForIosWeb: 1);
+                                        pwdFocusNode.requestFocus();
                                         return;
                                       }
 
-                                      /// ignInWithGoogle : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {given_name: 웅진, locale: ko, family_name: 김,
-                                      /// picture: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c, aud: 656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com, azp: 656621123867-l5k7l2udh06907oocnha0bkirafm8h71.apps.googleusercontent.com, exp: 1655363051, iat: 1655359451, iss: https://accounts.google.com, sub: 109492054029226968010, name: 김웅진, email: wjdev.iosdev.004@gmail.com, email_verified: true}, providerId: google.com, username: null), credential: AuthCredential(providerId: google.com, signInMethod: google.com, token: null), user: User(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com, emailVerified: true, isAnonymous: false, metadata: UserMetadata(creationTime: 2022-06-16 15:04:12.849, lastSignInTime: 2022-06-16 15:04:12.849),
-                                      /// phoneNumber: null, photoURL: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZ
                                       controller
                                           .signInWithEmail(tedIdController.text,
                                               tedPwdController.text)
                                           .then((value) {
                                         QcLog.e('signInWithEmail : $value');
                                         QcDialog.dissmissProgress();
+
+                                        /// signInWithEmail : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {}, providerId: null, username: null), credential: null,
+                                        /// user: User(displayName: null, email: hfhfhhg@huu.mji, emailVerified: false, isAnonymous: false,
+                                        /// metadata: UserMetadata(creationTime: 2022-06-17 16:28:22.556, lastSignInTime: 2022-06-17 16:28:22.556), phoneNumber: null, photoURL: null, providerData,
+                                        /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
                                       }).catchError((error) {
                                         QcLog.e('error: $error');
+
+                                        /// error: [firebase_auth/email-already-in-use] The email address is already in use by another account.
                                         QcDialog.dissmissProgress();
                                         Fluttertoast.showToast(
                                             msg: '$error',
@@ -271,6 +331,71 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                             const SizedBox(
                               width: 20,
                             ),
+                            Expanded(
+                                // flex: 1,
+                                child: TextButton(
+                                    onPressed: () async {
+                                      FocusScope.of(context).unfocus();
+
+                                      if (tedIdController.text.isEmpty ||
+                                          !tedIdController.text.isEmail) {
+                                        Fluttertoast.showToast(
+                                            msg: 'Email형식으로 입력해주세요',
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1);
+                                        // FocusScope.of(context).requestFocus(emailFocusNode)
+                                        emailFocusNode.requestFocus();
+                                        return;
+                                      }
+                                      if (tedPwdController.text.isEmpty ||
+                                          tedPwdController.text.length < 6) {
+                                        Fluttertoast.showToast(
+                                            msg: '패스워드는 6자리 이상 입력해주세요',
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1);
+                                        pwdFocusNode.requestFocus();
+                                        return;
+                                      }
+
+                                      controller
+                                          .signInWithEmailAndPassword(
+                                              tedIdController.text,
+                                              tedPwdController.text)
+                                          .then((value) {
+                                        QcLog.e(
+                                            'signInWithEmailAndPassword : $value');
+                                        QcDialog.dissmissProgress();
+
+                                        /// signInWithEmailAndPassword : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: false, profile: {}, providerId: null, username: null), credential: null,
+                                        /// user: User(displayName: null, email: hfhfhhg@huu.mji, emailVerified: false, isAnonymous: false,
+                                        /// metadata: UserMetadata(creationTime: 2022-06-17 16:28:22.556, lastSignInTime: 2022-06-17 16:33:18.320), phoneNumber: null, photoURL: null, providerData,
+                                        /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
+                                      }).catchError((error) {
+                                        QcLog.e('error: $error');
+                                        QcDialog.dissmissProgress();
+                                        Fluttertoast.showToast(
+                                            msg: '$error',
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1);
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                      minimumSize: Size.fromHeight(60),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    child: QcText.headline6(
+                                      'email Log in',
+                                      fontColor: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ))),
+                            const SizedBox(
+                              width: 20,
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -282,7 +407,7 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                 QcLog.e('signInWithGoogle : $value');
                                 QcDialog.dissmissProgress();
 
-                                /// ignInWithGoogle : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {given_name: 웅진, locale: ko, family_name: 김,
+                                /// signInWithGoogle : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {given_name: 웅진, locale: ko, family_name: 김,
                                 /// picture: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c, aud: 656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com, azp: 656621123867-l5k7l2udh06907oocnha0bkirafm8h71.apps.googleusercontent.com, exp: 1655363051, iat: 1655359451, iss: https://accounts.google.com, sub: 109492054029226968010, name: 김웅진, email: wjdev.iosdev.004@gmail.com, email_verified: true}, providerId: google.com, username: null), credential: AuthCredential(providerId: google.com, signInMethod: google.com, token: null), user: User(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com, emailVerified: true, isAnonymous: false, metadata: UserMetadata(creationTime: 2022-06-16 15:04:12.849, lastSignInTime: 2022-06-16 15:04:12.849),
                                 /// phoneNumber: null, photoURL: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZ
                               }).catchError((error) {
@@ -332,6 +457,104 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                             )),
                         const SizedBox(
                           height: 20,
+                        ),
+
+                        SignInButtonBuilder(
+                          text: 'Get going with Email',
+                          icon: Icons.email,
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'Email');
+                          },
+                          backgroundColor: Colors.blueGrey[700]!,
+                          width: 220.0,
+                        ),
+                        Divider(),
+                        SignInButton(
+                          Buttons.Google,
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'Google');
+                          },
+                        ),
+                        Divider(),
+                        SignInButton(
+                          Buttons.GoogleDark,
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'Google (dark)');
+                          },
+                        ),
+                        Divider(),
+                        SignInButton(
+                          Buttons.FacebookNew,
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'FacebookNew');
+                          },
+                        ),
+                        Divider(),
+                        SignInButton(
+                          Buttons.Apple,
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'Apple');
+                          },
+                        ),
+                        Divider(),
+                        SignInButton(
+                          Buttons.GitHub,
+                          text: "Sign up with GitHub",
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'Github');
+                          },
+                        ),
+                        Divider(),
+                        SignInButton(
+                          Buttons.Microsoft,
+                          text: "Sign up with Microsoft ",
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'Microsoft ');
+                          },
+                        ),
+                        Divider(),
+                        SignInButton(
+                          Buttons.Twitter,
+                          text: "Use Twitter",
+                          onPressed: () {
+                            // _showButtonPressDialog(context, 'Twitter');
+                          },
+                        ),
+                        Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SignInButton(
+                              Buttons.LinkedIn,
+                              mini: true,
+                              onPressed: () {
+                                // _showButtonPressDialog(context, 'LinkedIn (mini)');
+                              },
+                            ),
+                            SignInButton(
+                              Buttons.Tumblr,
+                              mini: true,
+                              onPressed: () {
+                                // _showButtonPressDialog(context, 'Tumblr (mini)');
+                              },
+                            ),
+                            SignInButton(
+                              Buttons.Facebook,
+                              mini: true,
+                              onPressed: () {
+                                // _showButtonPressDialog(context, 'Facebook (mini)');
+                              },
+                            ),
+                            SignInButtonBuilder(
+                              icon: Icons.email,
+                              text: "Ignored for mini button",
+                              mini: true,
+                              onPressed: () {
+                                // _showButtonPressDialog(context, 'Email (mini)');
+                              },
+                              backgroundColor: Colors.cyan,
+                            ),
+                          ],
                         ),
                       ],
                     ),

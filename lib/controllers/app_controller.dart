@@ -157,7 +157,7 @@ class AppController extends BaseController {
 
     // FlutterLocalNotificationsPlugin 초기화. 이 부분은 notification icon 부분에서 다시 다룬다.
     await flutterLocalNotificationsPlugin.initialize(
-        InitializationSettings(
+        const InitializationSettings(
             android: AndroidInitializationSettings('@mipmap/ic_launcher'),
             iOS: IOSInitializationSettings()),
         onSelectNotification: (String? payload) async {

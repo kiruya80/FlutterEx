@@ -14,6 +14,7 @@ class QcTextFormField extends TextFormField {
     bool expands = false,
     bool readOnly = false, // true - 클릭 가능하고 편집 불가능 , 키보드 감추기??
     bool enabled = true, // false - 클릭 및 편집 여부
+    bool obscureText = false, // 비밀번호 ***
     FocusNode? focusNode,
     TextStyle? textStyle,
     String? fontFamily,
@@ -23,6 +24,7 @@ class QcTextFormField extends TextFormField {
     TextInputAction? textInputAction,
     Icon? icon,
     Icon? prefixIcon,
+    Widget? suffixIcon,
     double? fontSize,
     int? hintMaxLines,
     Color? fontColor,
@@ -50,35 +52,38 @@ class QcTextFormField extends TextFormField {
             initialValue: initialValue,
             textInputAction: textInputAction,
             decoration: InputDecoration(
-                // 텍스트필드의 외각선
-                //   hintMaxLines: hintMaxLines,
-                filled: true,
-                hintText: hintText,
-                labelText: labelText,
-                // focusedBorder: OutlineInputBorder(
-                //   borderRadius:
-                //       BorderRadius.all(Radius.circular(10.0)),
-                // ),
-                // unfocused
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                // focused
-                // border: InputBorder.none,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  // borderSide: BorderSide(
-                  //     width: 1, color: Colors.redAccent),
-                ),
-                icon: icon,
-                prefixIcon: prefixIcon,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    QcLog.e('suffixIcon clear ');
-                    controller?.clear();
-                  },
-                  icon: Icon(Icons.cancel_outlined),
-                )),
+              // 텍스트필드의 외각선
+              //   hintMaxLines: hintMaxLines,
+              filled: true,
+              hintText: hintText,
+              labelText: labelText,
+              // focusedBorder: OutlineInputBorder(
+              //   borderRadius:
+              //       BorderRadius.all(Radius.circular(10.0)),
+              // ),
+              // unfocused
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              // focused
+              // border: InputBorder.none,
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                // borderSide: BorderSide(
+                //     width: 1, color: Colors.redAccent),
+              ),
+              icon: icon,
+              prefixIcon: prefixIcon,
+              suffixIcon: suffixIcon ??
+                  IconButton(
+                    onPressed: () {
+                      QcLog.e('suffixIcon clear ');
+                      controller?.clear();
+                    },
+                    icon: Icon(Icons.cancel_outlined),
+                  ),
+              // suffixIconColor:Colors.red
+            ),
             maxLines: expands == true
                 ? null
                 : getMaxLines(maxLines ?? 1, minLines ?? 1),
@@ -86,6 +91,7 @@ class QcTextFormField extends TextFormField {
             maxLength: maxLength,
             expands: expands,
             enabled: enabled,
+            obscureText: obscureText,
             focusNode: focusNode,
             autofocus: autofocus);
 
@@ -112,6 +118,7 @@ class QcTextFormField extends TextFormField {
     bool expands = false,
     bool readOnly = false,
     bool enabled = true,
+    bool obscureText = false,
     FocusNode? focusNode,
     TextStyle? textStyle = const TextStyle(),
     TextInputType? keyboardType,
@@ -120,6 +127,7 @@ class QcTextFormField extends TextFormField {
     double? fontSize,
     Icon? icon,
     Icon? prefixIcon,
+    Widget? suffixIcon,
     int? hintMaxLines,
     Color? fontColor,
     String? initialValue,
@@ -139,6 +147,7 @@ class QcTextFormField extends TextFormField {
           expands: expands,
           readOnly: readOnly,
           enabled: enabled,
+          obscureText: obscureText,
           focusNode: focusNode,
           textStyle: textStyle,
           keyboardType: keyboardType,
@@ -147,6 +156,7 @@ class QcTextFormField extends TextFormField {
           fontSize: fontSize,
           icon: icon,
           prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
           hintMaxLines: hintMaxLines,
           fontColor: fontColor,
           initialValue: initialValue,
@@ -166,6 +176,7 @@ class QcTextFormField extends TextFormField {
     bool expands = false,
     bool readOnly = false,
     bool enabled = true,
+    bool obscureText = false,
     FocusNode? focusNode,
     TextInputType? keyboardType,
     InputDecoration? decoration,
@@ -173,6 +184,7 @@ class QcTextFormField extends TextFormField {
     double? fontSize,
     Icon? icon,
     Icon? prefixIcon,
+    Widget? suffixIcon,
     int? hintMaxLines,
     Color? fontColor,
     String? initialValue,
@@ -192,6 +204,7 @@ class QcTextFormField extends TextFormField {
           expands: expands,
           readOnly: readOnly,
           enabled: enabled,
+          obscureText: obscureText,
           focusNode: focusNode,
           textStyle: Get.theme.textTheme.headline6,
           keyboardType: keyboardType,
@@ -200,6 +213,7 @@ class QcTextFormField extends TextFormField {
           fontSize: fontSize,
           icon: icon,
           prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
           hintMaxLines: hintMaxLines,
           fontColor: fontColor,
           initialValue: initialValue,
@@ -217,6 +231,7 @@ class QcTextFormField extends TextFormField {
     String? hintText,
     bool autofocus = false,
     bool expands = false,
+    bool obscureText = false,
     // bool readOnly = false,
     FocusNode? focusNode,
     TextInputType? keyboardType,
@@ -225,6 +240,7 @@ class QcTextFormField extends TextFormField {
     double? fontSize,
     Icon? icon,
     Icon? prefixIcon,
+    Widget? suffixIcon,
     int? hintMaxLines,
     Color? fontColor,
     String? initialValue,
@@ -242,6 +258,7 @@ class QcTextFormField extends TextFormField {
           hintText: hintText,
           autofocus: autofocus,
           expands: expands,
+          obscureText: obscureText,
           // readOnly: readOnly,
           focusNode: focusNode,
           textStyle: Get.theme.textTheme.bodyText1,
@@ -251,6 +268,7 @@ class QcTextFormField extends TextFormField {
           fontSize: fontSize,
           icon: icon,
           prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
           hintMaxLines: hintMaxLines,
           fontColor: fontColor,
           initialValue: initialValue,
