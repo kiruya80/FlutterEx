@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutterex/controllers/base_controller.dart';
+import 'package:flutterex/firebase/auth_exception.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+/// The mode of the current auth session, either [AuthMode.login] or [AuthMode.register].
+// ignore: public_member_api_docs
+enum AuthMode { LOG_IN, REGISTER, PHONE }
 
 ///
 /// https://firebase.google.com/docs/auth/flutter/federated-auth
@@ -80,49 +84,107 @@ class FireAuthController extends BaseController {
     try {
       result = await FirebaseAuth.instance.signInAnonymously();
     } on FirebaseAuthException catch (e) {
-      QcLog.e('FirebaseAuthException error : $e');
+      return Future.error(e);
     } catch (e) {
-      QcLog.e('FirebaseAuthException catch : $e');
+      return Future.error(e);
     } finally {
       QcDialog.dissmissProgress();
     }
     return result;
   }
 
-  Future<UserCredential> signInWithEmail(
-      String emailAddress, String password) async {
-    QcDialog.showProgress();
-    return await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailAddress, password: password);
-  }
+  // Future<UserCredential> createWithEmail(
+  //     String emailAddress, String password) async {
+  //   QcDialog.showProgress();
+  //   return await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //       email: emailAddress, password: password);
+  // }
 
   Future<UserCredential> signInWithEmailAndPassword(
-      String emailAddress, String password) async {
+      AuthMode mode, String emailAddress, String password) async {
     QcDialog.showProgress();
-    return await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: emailAddress, password: password);
+    // return await FirebaseAuth.instance
+    //     .signInWithEmailAndPassword(email: emailAddress, password: password);
+
+    var result;
+
+    try {
+      if (mode == AuthMode.LOG_IN) {
+        result = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailAddress,
+          password: password,
+        );
+      } else if (mode == AuthMode.REGISTER) {
+        result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailAddress,
+          password: password,
+        );
+      } else {}
+    } on FirebaseAuthException catch (e) {
+      // return Future.error(e.code);
+      return Future.error(e);
+    } catch (e) {
+      return Future.error(e);
+      // throw FireException(errorMessage: "Unknown Error");
+      // QcDialog.showMsg(e);
+    } finally {
+      QcLog.e('finally : ');
+      QcDialog.dissmissProgress();
+    }
+    return result;
   }
 
   Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    QcLog.e('googleUser : $googleUser');
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-    QcLog.e('googleAuth : $googleAuth');
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    QcLog.e('credential : $credential');
-
-    // Once signed in, return the UserCredential
     QcDialog.showProgress();
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // // Trigger the authentication flow
+    // final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    // QcLog.e('googleUser : $googleUser');
+    //
+    // // Obtain the auth details from the request
+    // final GoogleSignInAuthentication? googleAuth =
+    //     await googleUser?.authentication;
+    // QcLog.e('googleAuth : $googleAuth');
+    //
+    // // Create a new credential
+    // final credential = GoogleAuthProvider.credential(
+    //   accessToken: googleAuth?.accessToken,
+    //   idToken: googleAuth?.idToken,
+    // );
+    // QcLog.e('credential : $credential');
+    //
+    // // Once signed in, return the UserCredential
+    // return await FirebaseAuth.instance.signInWithCredential(credential);
+
+    var result;
+
+    try {
+      // Trigger the authentication flow
+      final googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final googleAuth = await googleUser?.authentication;
+
+      if (googleAuth != null) {
+        // Create a new credential
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        // Once signed in, return the UserCredential
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      }
+    } on FirebaseAuthException catch (e) {
+      return Future.error(e);
+    } catch (e) {
+      return Future.error(e);
+    } finally {
+      QcLog.e('finally : ');
+      QcDialog.dissmissProgress();
+    }
+
+    return result;
   }
 
   // Future<void> _signInWithGoogle() async {
@@ -226,4 +288,75 @@ class FireAuthController extends BaseController {
   //
   //   return photoURL;
   // }
+
+  ///
+  /// account-exists-with-different-credential오류 처리
+  // Firebase 콘솔 에서 이메일 주소당 하나의 계정 설정을 활성화한 경우
+  // 사용자가 다른 Firebase 사용자의 제공자(예: Facebook)에 대해 이미 존재하는 이메일로 제공자(예: Google)에 로그인을 시도하면 오류가 발생합니다.
+  // 클래스(Google ID 토큰) auth/account-exists-with-different-credential와 함께 발생 합니다.
+  // AuthCredential원하는 제공자에 대한 로그인 절차를 완료하려면 사용자는 먼저 기존 제공자(예: Facebook)에 로그인한 다음
+  // 이전 제공자 AuthCredential(Google ID 토큰)에 연결해야 합니다.
+  ///
+//   Future<String?> diffCredential() async {
+//     FirebaseAuth auth = FirebaseAuth.instance;
+//
+// // Create a credential from a Google Sign-in Request
+//     var googleAuthCredential =
+//         GoogleAuthProvider.credential(accessToken: 'xxxx');
+//
+//     try {
+//       // Attempt to sign in the user in with Google
+//       await auth.signInWithCredential(googleAuthCredential);
+//     } on FirebaseAuthException catch (e) {
+//       if (e.code == 'account-exists-with-different-credential') {
+//         // The account already exists with a different credential
+//         String? email = e.email;
+//         AuthCredential? pendingCredential = e.credential;
+//
+//         // Fetch a list of what sign-in methods exist for the conflicting user
+//         List<String> userSignInMethods =
+//             await auth.fetchSignInMethodsForEmail(email);
+//
+//         // If the user has several sign-in methods,
+//         // the first method in the list will be the "recommended" method to use.
+//         if (userSignInMethods.first == 'password') {
+//           // Prompt the user to enter their password
+//           String password = '...';
+//
+//           // Sign the user in to their account with the password
+//           UserCredential userCredential = await auth.signInWithEmailAndPassword(
+//             email: email,
+//             password: password,
+//           );
+//
+//           // Link the pending credential with the existing account
+//           await userCredential.user.linkWithCredential(pendingCredential);
+//
+//           // Success! Go back to your application flow
+//           return goToApplication();
+//         }
+//
+//         // Since other providers are now external, you must now sign the user in with another
+//         // auth provider, such as Facebook.
+//         if (userSignInMethods.first == 'facebook.com') {
+//           // Create a new Facebook credential
+//           String accessToken = await triggerFacebookAuthentication();
+//           var facebookAuthCredential =
+//               FacebookAuthProvider.credential(accessToken);
+//
+//           // Sign the user in with the credential
+//           UserCredential userCredential =
+//               await auth.signInWithCredential(facebookAuthCredential);
+//
+//           // Link the pending credential with the existing account
+//           await userCredential.user.linkWithCredential(pendingCredential);
+//
+//           // Success! Go back to your application flow
+//           return goToApplication();
+//         }
+//
+//         // Handle other OAuth providers...
+//       }
+//     }
+//   }
 }
