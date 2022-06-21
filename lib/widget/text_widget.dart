@@ -186,4 +186,24 @@ class QcText extends Text {
           textAlign: textAlign,
           maxLines: maxLines,
           decoration: decoration);
+
+  factory QcText.button(String text,
+          {Key? key,
+          Color? fontColor,
+          double? fontSize,
+          FontWeight? fontWeight,
+          String? fontFamily,
+          TextAlign? textAlign,
+          int? maxLines,
+          TextDecoration? decoration}) =>
+      QcText(text,
+          key: key,
+          textStyle: Get.theme.textTheme.button,
+          fontColor: fontColor,
+          fontSize: fontSize,
+          fontWeight: fontWeight ?? FontWeight.bold,
+          fontFamily: fontFamily,
+          textAlign: textAlign,
+          maxLines: maxLines,
+          decoration: decoration);
 }

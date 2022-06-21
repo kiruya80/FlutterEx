@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/src/widgets/focus_manager.dart';
 import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/firebase/auth_exception.dart';
+import 'package:flutterex/firebase/firebase_auth_utils.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
+import 'package:flutterex/widget/text_widget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-/// The mode of the current auth session, either [AuthMode.login] or [AuthMode.register].
-// ignore: public_member_api_docs
-enum AuthMode { LOG_IN, REGISTER, PHONE }
 
 ///
 /// https://firebase.google.com/docs/auth/flutter/federated-auth
@@ -63,300 +63,134 @@ class FireAuthController extends BaseController {
     });
   }
 
-  // GoogleSignIn _googleSignIn = GoogleSignIn(
-  //   // Optional clientId
-  //   // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
-  //   scopes: <String>[
-  //     'email',
-  //     'https://www.googleapis.com/auth/contacts.readonly',
-  //   ],
-  // );
-
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
 
-  Future<UserCredential> anonymousAuth() async {
-    QcDialog.showProgress();
-    var result;
-
-    try {
-      result = await FirebaseAuth.instance.signInAnonymously();
-    } on FirebaseAuthException catch (e) {
-      return Future.error(e);
-    } catch (e) {
-      return Future.error(e);
-    } finally {
+  void anonymousAuth() {
+    FirebaseAuthUtils.instance.anonymousAuth().then((value) {
+      QcLog.e('anonymousAuth : $value');
       QcDialog.dissmissProgress();
-    }
-    return result;
+
+      /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {}, providerId: null, username: null), credential: null,
+      /// user: User(displayName: null, email: null, emailVerified: false, isAnonymous: true, metadata: UserMetadata(creationTime: 2022-06-16 15:38:42.049, lastSignInTime: 2022-06-16 15:38:42.049), phoneNumber: null, photoURL: null, providerData, [], refreshToken: , tenantId: null, uid: 0Wy5wOSxZ3R7MjPTCjgtND0zbAy2))
+      ///
+    }).catchError((error) {
+      QcLog.e('error: $error');
+      QcDialog.showMsg(title: 'notice'.tr, msg: error);
+    });
   }
 
-  // Future<UserCredential> createWithEmail(
-  //     String emailAddress, String password) async {
-  //   QcDialog.showProgress();
-  //   return await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //       email: emailAddress, password: password);
-  // }
-
-  Future<UserCredential> signInWithEmailAndPassword(
-      AuthMode mode, String emailAddress, String password) async {
-    QcDialog.showProgress();
-    // return await FirebaseAuth.instance
-    //     .signInWithEmailAndPassword(email: emailAddress, password: password);
-
-    var result;
-
-    try {
-      if (mode == AuthMode.LOG_IN) {
-        result = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailAddress,
-          password: password,
-        );
-      } else if (mode == AuthMode.REGISTER) {
-        result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailAddress,
-          password: password,
-        );
-      } else {}
-    } on FirebaseAuthException catch (e) {
-      // return Future.error(e.code);
-      return Future.error(e);
-    } catch (e) {
-      return Future.error(e);
-      // throw FireException(errorMessage: "Unknown Error");
-      // QcDialog.showMsg(e);
-    } finally {
-      QcLog.e('finally : ');
-      QcDialog.dissmissProgress();
+  bool checkIdPwd(FocusNode emailFocusNode, String emailAddress,
+      FocusNode pwdFocusNode, String password) {
+    if (emailAddress.isEmpty || !emailAddress.isEmail) {
+      Fluttertoast.showToast(
+          msg: 'Email형식으로 입력해주세요',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1);
+      // FocusScope.of(context).requestFocus(emailFocusNode)
+      emailFocusNode.requestFocus();
+      return false;
     }
-    return result;
+    if (password.isEmpty || password.length < 6) {
+      Fluttertoast.showToast(
+          msg: '패스워드는 6자리 이상 입력해주세요',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1);
+      pwdFocusNode.requestFocus();
+      return false;
+    }
+    return true;
   }
 
-  Future<UserCredential> signInWithGoogle() async {
-    QcDialog.showProgress();
+  void createUserWithEmailAndPassword(String emailAddress, String password) {
+    FirebaseAuthUtils.instance
+        .createUserWithEmailAndPassword(
+            AuthMode.SIGN_UP, emailAddress, password)
+        .then((value) {
+      QcLog.e('createUserWithEmailAndPassword : $value');
 
-    // // Trigger the authentication flow
-    // final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    // QcLog.e('googleUser : $googleUser');
-    //
-    // // Obtain the auth details from the request
-    // final GoogleSignInAuthentication? googleAuth =
-    //     await googleUser?.authentication;
-    // QcLog.e('googleAuth : $googleAuth');
-    //
-    // // Create a new credential
-    // final credential = GoogleAuthProvider.credential(
-    //   accessToken: googleAuth?.accessToken,
-    //   idToken: googleAuth?.idToken,
-    // );
-    // QcLog.e('credential : $credential');
-    //
-    // // Once signed in, return the UserCredential
-    // return await FirebaseAuth.instance.signInWithCredential(credential);
+      /// signInWithEmail : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {}, providerId: null, username: null), credential: null,
+      /// user: User(displayName: null, email: hfhfhhg@huu.mji, emailVerified: false, isAnonymous: false,
+      /// metadata: UserMetadata(creationTime: 2022-06-17 16:28:22.556, lastSignInTime: 2022-06-17 16:28:22.556), phoneNumber: null, photoURL: null, providerData,
+      /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
+    }).catchError((error) {
+      QcLog.e('error: $error');
+      String errorMsg = error.toString();
+      if (error is FirebaseAuthException) {
+        // var fireError =  error as FirebaseAuthException;
+        var fireError = error;
+        QcLog.e(
+            'fireError :, ${fireError.plugin} , ${fireError.code} , ${fireError.message}');
 
-    var result;
-
-    try {
-      // Trigger the authentication flow
-      final googleUser = await GoogleSignIn().signIn();
-
-      // Obtain the auth details from the request
-      final googleAuth = await googleUser?.authentication;
-
-      if (googleAuth != null) {
-        // Create a new credential
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        // Once signed in, return the UserCredential
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        errorMsg = FireAuthException.getErrorMsg(fireError.code);
       }
-    } on FirebaseAuthException catch (e) {
-      return Future.error(e);
-    } catch (e) {
-      return Future.error(e);
-    } finally {
-      QcLog.e('finally : ');
-      QcDialog.dissmissProgress();
-    }
 
-    return result;
+      QcDialog.showMsg(title: 'notice'.tr, msg: errorMsg);
+    });
   }
 
-  // Future<void> _signInWithGoogle() async {
-  //   setIsLoading();
-  //   try {
-  //     // Trigger the authentication flow
-  //     final googleUser = await GoogleSignIn().signIn();
-  //
-  //     // Obtain the auth details from the request
-  //     final googleAuth = await googleUser?.authentication;
-  //
-  //     if (googleAuth != null) {
-  //       // Create a new credential
-  //       final credential = GoogleAuthProvider.credential(
-  //         accessToken: googleAuth.accessToken,
-  //         idToken: googleAuth.idToken,
-  //       );
-  //
-  //       // Once signed in, return the UserCredential
-  //       await _auth.signInWithCredential(credential);
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     setState(() {
-  //       error = '${e.message}';
-  //     });
-  //   } finally {
-  //     setIsLoading();
-  //   }
-  // }
+  void signInWithEmailAndPassword(String emailAddress, String password) {
+    FirebaseAuthUtils.instance
+        .signInWithEmailAndPassword(AuthMode.SIGN_UP, emailAddress, password)
+        .then((value) {
+      QcLog.e('signInWithEmailAndPassword : $value');
 
-  ///
-  /// facebook login
-  ///
-  // Future<UserCredential> signInWithFacebook() async {
-  //   // Trigger the sign-in flow
-  //   final LoginResult loginResult = await FacebookAuth.instance.login();
-  //
-  //   // Create a credential from the access token
-  //   final OAuthCredential facebookAuthCredential =
-  //       FacebookAuthProvider.credential(loginResult.accessToken.token);
-  //
-  //   // Once signed in, return the UserCredential
-  //   return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  // }
+      /// signInWithEmail : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {}, providerId: null, username: null), credential: null,
+      /// user: User(displayName: null, email: hfhfhhg@huu.mji, emailVerified: false, isAnonymous: false,
+      /// metadata: UserMetadata(creationTime: 2022-06-17 16:28:22.556, lastSignInTime: 2022-06-17 16:28:22.556), phoneNumber: null, photoURL: null, providerData,
+      /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
+    }).catchError((error) {
+      QcLog.e('error: $error');
+      String errorMsg = error.toString();
+      if (error is FirebaseAuthException) {
+        // var fireError =  error as FirebaseAuthException;
+        var fireError = error;
+        QcLog.e(
+            'fireError :, ${fireError.plugin} , ${fireError.code} , ${fireError.message}');
+        errorMsg = FireAuthException.getErrorMsg(fireError.code);
+        if ("user-not-found" == fireError.code) {
+          /// 회원가입 유도
+          errorMsg =
+              errorMsg + '\n\n ${emailAddress}\n' + 'msg_sign_up_email'.tr;
+        }
+      }
 
-  // String validatePassword(FocusNode focusNode, String value){
-  //   if(value.isEmpty){
-  //     focusNode.requestFocus();
-  //     return '비밀번호를 입력하세요.';
-  //   }else {
-  //     Pattern pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,15}$';
-  //     RegExp regExp = new RegExp(pattern);
-  //     if(!regExp.hasMatch(value)){
-  //       focusNode.requestFocus();
-  //       return '특수문자, 대소문자, 숫자 포함 8자 이상 15자 이내로 입력하세요.';
-  //     }else{
-  //       return null;
-  //     }
-  //   }
-  // }
+      /// 회원이 아닌 경우 회원가입 유도 팝업
+      QcDialog.showMsgTwoBtn(
+          title: 'notice'.tr,
+          content: QcText.bodyText1('$errorMsg'),
+          lBtnStr: 'cancel'.tr,
+          rBtnStr: 'ok'.tr,
+          callback: (idx) {
+            if (idx == DialogBtn.RIGHT) {
+              createUserWithEmailAndPassword(emailAddress, password);
+            }
+          });
+    });
+  }
 
-  /// google user photo
-  // Future<String?> getPhotoURLFromUser() async {
-  //   String? photoURL;
-  //
-  //   // Update the UI - wait for the user to enter the SMS code
-  //   await showDialog<String>(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title: const Text('New image Url:'),
-  //         actions: [
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: const Text('Update'),
-  //           ),
-  //           OutlinedButton(
-  //             onPressed: () {
-  //               photoURL = null;
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: const Text('Cancel'),
-  //           ),
-  //         ],
-  //         content: Container(
-  //           padding: const EdgeInsets.all(20),
-  //           child: TextField(
-  //             onChanged: (value) {
-  //               photoURL = value;
-  //             },
-  //             textAlign: TextAlign.center,
-  //             autofocus: true,
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  //
-  //   return photoURL;
-  // }
+  void signInWithGoogle() {
+    FirebaseAuthUtils.instance.signInWithGoogle().then((value) {
+      QcLog.e('anonymousAuth : $value');
 
-  ///
-  /// account-exists-with-different-credential오류 처리
-  // Firebase 콘솔 에서 이메일 주소당 하나의 계정 설정을 활성화한 경우
-  // 사용자가 다른 Firebase 사용자의 제공자(예: Facebook)에 대해 이미 존재하는 이메일로 제공자(예: Google)에 로그인을 시도하면 오류가 발생합니다.
-  // 클래스(Google ID 토큰) auth/account-exists-with-different-credential와 함께 발생 합니다.
-  // AuthCredential원하는 제공자에 대한 로그인 절차를 완료하려면 사용자는 먼저 기존 제공자(예: Facebook)에 로그인한 다음
-  // 이전 제공자 AuthCredential(Google ID 토큰)에 연결해야 합니다.
-  ///
-//   Future<String?> diffCredential() async {
-//     FirebaseAuth auth = FirebaseAuth.instance;
-//
-// // Create a credential from a Google Sign-in Request
-//     var googleAuthCredential =
-//         GoogleAuthProvider.credential(accessToken: 'xxxx');
-//
-//     try {
-//       // Attempt to sign in the user in with Google
-//       await auth.signInWithCredential(googleAuthCredential);
-//     } on FirebaseAuthException catch (e) {
-//       if (e.code == 'account-exists-with-different-credential') {
-//         // The account already exists with a different credential
-//         String? email = e.email;
-//         AuthCredential? pendingCredential = e.credential;
-//
-//         // Fetch a list of what sign-in methods exist for the conflicting user
-//         List<String> userSignInMethods =
-//             await auth.fetchSignInMethodsForEmail(email);
-//
-//         // If the user has several sign-in methods,
-//         // the first method in the list will be the "recommended" method to use.
-//         if (userSignInMethods.first == 'password') {
-//           // Prompt the user to enter their password
-//           String password = '...';
-//
-//           // Sign the user in to their account with the password
-//           UserCredential userCredential = await auth.signInWithEmailAndPassword(
-//             email: email,
-//             password: password,
-//           );
-//
-//           // Link the pending credential with the existing account
-//           await userCredential.user.linkWithCredential(pendingCredential);
-//
-//           // Success! Go back to your application flow
-//           return goToApplication();
-//         }
-//
-//         // Since other providers are now external, you must now sign the user in with another
-//         // auth provider, such as Facebook.
-//         if (userSignInMethods.first == 'facebook.com') {
-//           // Create a new Facebook credential
-//           String accessToken = await triggerFacebookAuthentication();
-//           var facebookAuthCredential =
-//               FacebookAuthProvider.credential(accessToken);
-//
-//           // Sign the user in with the credential
-//           UserCredential userCredential =
-//               await auth.signInWithCredential(facebookAuthCredential);
-//
-//           // Link the pending credential with the existing account
-//           await userCredential.user.linkWithCredential(pendingCredential);
-//
-//           // Success! Go back to your application flow
-//           return goToApplication();
-//         }
-//
-//         // Handle other OAuth providers...
-//       }
-//     }
-//   }
+      /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: false, profile: {given_name: 웅진, locale: ko, family_name: 김,
+      /// picture: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c, aud: 656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com,
+      /// azp: 656621123867-l5k7l2udh06907oocnha0bkirafm8h71.apps.googleusercontent.com, exp: 1655797854, iat: 1655794254, iss: https://accounts.google.com, sub: 109492054029226968010, name: 김웅진, email: wjdev.iosdev.004@gmail.com, email_verified: true},
+      /// providerId: google.com, username: null), credential: AuthCredential(providerId: google.com, signInMethod: google.com, token: null),
+      /// user: User(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com, emailVerified: true, isAnonymous: false,
+      /// metadata: UserMetadata(creationTime: 2022-06-16 15:04:12.849, lastSignInTime: 2022-06-21 16:31:50.753), phoneNumber: null, photoURL: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZul
+      ///
+    }).catchError((error) {
+      QcLog.e('error: $error');
+      QcDialog.showMsg(title: 'notice'.tr, msg: error);
+    });
+  }
+
+  void signInWithFacebook() {}
+
+  void signInWithApple() {}
 }

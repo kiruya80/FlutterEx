@@ -1,14 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/fire_auth_controller.dart';
-import 'package:flutterex/firebase/auth_exception.dart';
+import 'package:flutterex/firebase/firebase_auth_utils.dart';
 import 'package:flutterex/utils/print_log.dart';
-import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:flutterex/widget/textformfield_widget.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 ///
@@ -122,7 +119,8 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                       children: [
                         TextButton(
                             onPressed: () async {
-                              controller.signOut();
+                              FirebaseAuthUtils.instance.signOut();
+                              // controller.signOut();
                             },
                             style: TextButton.styleFrom(
                               minimumSize: Size.fromHeight(60),
@@ -143,17 +141,7 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                         ),
                         TextButton(
                             onPressed: () async {
-                              controller.anonymousAuth().then((value) {
-                                QcLog.e('anonymousAuth : $value');
-                                QcDialog.dissmissProgress();
-
-                                /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {}, providerId: null, username: null), credential: null,
-                                /// user: User(displayName: null, email: null, emailVerified: false, isAnonymous: true, metadata: UserMetadata(creationTime: 2022-06-16 15:38:42.049, lastSignInTime: 2022-06-16 15:38:42.049), phoneNumber: null, photoURL: null, providerData, [], refreshToken: , tenantId: null, uid: 0Wy5wOSxZ3R7MjPTCjgtND0zbAy2))
-                                ///
-                              }).catchError((error) {
-                                QcLog.e('error: $error');
-                                QcDialog.dissmissProgress();
-                              });
+                              controller.anonymousAuth();
                             },
                             style: TextButton.styleFrom(
                               minimumSize: Size.fromHeight(60),
@@ -249,50 +237,16 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                     onPressed: () async {
                                       FocusScope.of(context).unfocus();
 
-                                      if (tedIdController.text.isEmpty ||
-                                          !tedIdController.text.isEmail) {
-                                        Fluttertoast.showToast(
-                                            msg: 'Email형식으로 입력해주세요',
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1);
-                                        // FocusScope.of(context).requestFocus(emailFocusNode)
-                                        emailFocusNode.requestFocus();
-                                        return;
+                                      if (controller.checkIdPwd(
+                                          emailFocusNode,
+                                          tedIdController.text,
+                                          pwdFocusNode,
+                                          tedPwdController.text)) {
+                                        controller
+                                            .createUserWithEmailAndPassword(
+                                                tedIdController.text,
+                                                tedPwdController.text);
                                       }
-                                      if (tedPwdController.text.isEmpty ||
-                                          tedPwdController.text.length < 6) {
-                                        Fluttertoast.showToast(
-                                            msg: '패스워드는 6자리 이상 입력해주세요',
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1);
-                                        pwdFocusNode.requestFocus();
-                                        return;
-                                      }
-
-                                      controller
-                                          .signInWithEmailAndPassword(
-                                              AuthMode.REGISTER,
-                                              tedIdController.text,
-                                              tedPwdController.text)
-                                          .then((value) {
-                                        QcLog.e('createWithEmail : $value');
-
-                                        /// signInWithEmail : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {}, providerId: null, username: null), credential: null,
-                                        /// user: User(displayName: null, email: hfhfhhg@huu.mji, emailVerified: false, isAnonymous: false,
-                                        /// metadata: UserMetadata(creationTime: 2022-06-17 16:28:22.556, lastSignInTime: 2022-06-17 16:28:22.556), phoneNumber: null, photoURL: null, providerData,
-                                        /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
-
-                                        // }).catchError((error) {
-                                        //   QcLog.e('error: $error');
-                                        //   /// error: [firebase_auth/email-already-in-use] The email address is already in use by another account.
-                                        //   Fluttertoast.showToast(
-                                        //       msg: '$error',
-                                        //       toastLength: Toast.LENGTH_SHORT,
-                                        //       gravity: ToastGravity.BOTTOM,
-                                        //       timeInSecForIosWeb: 1);
-                                      });
                                     },
                                     style: TextButton.styleFrom(
                                       minimumSize: Size.fromHeight(60),
@@ -314,58 +268,15 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                     onPressed: () async {
                                       FocusScope.of(context).unfocus();
 
-                                      if (tedIdController.text.isEmpty ||
-                                          !tedIdController.text.isEmail) {
-                                        Fluttertoast.showToast(
-                                            msg: 'Email형식으로 입력해주세요',
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1);
-                                        // FocusScope.of(context).requestFocus(emailFocusNode)
-                                        emailFocusNode.requestFocus();
-                                        return;
+                                      if (controller.checkIdPwd(
+                                          emailFocusNode,
+                                          tedIdController.text,
+                                          pwdFocusNode,
+                                          tedPwdController.text)) {
+                                        controller.signInWithEmailAndPassword(
+                                            tedIdController.text,
+                                            tedPwdController.text);
                                       }
-                                      if (tedPwdController.text.isEmpty ||
-                                          tedPwdController.text.length < 6) {
-                                        Fluttertoast.showToast(
-                                            msg: '패스워드는 6자리 이상 입력해주세요',
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1);
-                                        pwdFocusNode.requestFocus();
-                                        return;
-                                      }
-
-                                      controller
-                                          .signInWithEmailAndPassword(
-                                              AuthMode.LOG_IN,
-                                              tedIdController.text,
-                                              tedPwdController.text)
-                                          .then((value) {
-                                        QcLog.e(
-                                            'signInWithEmailAndPassword : $value');
-
-                                        /// signInWithEmailAndPassword : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: false, profile: {}, providerId: null, username: null), credential: null,
-                                        /// user: User(displayName: null, email: hfhfhhg@huu.mji, emailVerified: false, isAnonymous: false,
-                                        /// metadata: UserMetadata(creationTime: 2022-06-17 16:28:22.556, lastSignInTime: 2022-06-17 16:33:18.320), phoneNumber: null, photoURL: null, providerData,
-                                        /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
-                                      }).catchError((error) {
-                                        QcLog.e('error: $error');
-                                        String errorMsg = error.toString();
-                                        if (error is FirebaseAuthException) {
-                                          // var fireError =  error as FirebaseAuthException;
-                                          var fireError = error;
-                                          QcLog.e(
-                                              'fireError :, ${fireError.plugin} , ${fireError.code} , ${fireError.message}');
-
-                                          errorMsg =
-                                              FireAuthException.getErrorMsg(
-                                                  fireError.code);
-                                        }
-
-                                        // QcDialog.dissmissProgress();
-                                        QcDialog.showMsg('notice'.tr, errorMsg);
-                                      });
                                     },
                                     style: TextButton.styleFrom(
                                       minimumSize: Size.fromHeight(60),
@@ -388,15 +299,7 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                         ),
                         TextButton(
                             onPressed: () async {
-                              controller.signInWithGoogle().then((value) {
-                                QcLog.e('signInWithGoogle : $value');
-
-                                /// signInWithGoogle : UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {given_name: 웅진, locale: ko, family_name: 김,
-                                /// picture: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c, aud: 656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com, azp: 656621123867-l5k7l2udh06907oocnha0bkirafm8h71.apps.googleusercontent.com, exp: 1655363051, iat: 1655359451, iss: https://accounts.google.com, sub: 109492054029226968010, name: 김웅진, email: wjdev.iosdev.004@gmail.com, email_verified: true}, providerId: google.com, username: null), credential: AuthCredential(providerId: google.com, signInMethod: google.com, token: null), user: User(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com, emailVerified: true, isAnonymous: false, metadata: UserMetadata(creationTime: 2022-06-16 15:04:12.849, lastSignInTime: 2022-06-16 15:04:12.849),
-                                /// phoneNumber: null, photoURL: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZ
-                              }).catchError((error) {
-                                QcLog.e('error: $error');
-                              });
+                              controller.signInWithGoogle();
                             },
                             style: TextButton.styleFrom(
                               minimumSize: Size.fromHeight(60),
@@ -412,7 +315,9 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                           height: 20,
                         ),
                         TextButton(
-                            onPressed: () async {},
+                            onPressed: () async {
+                              controller.signInWithFacebook();
+                            },
                             style: TextButton.styleFrom(
                               minimumSize: Size.fromHeight(60),
                               backgroundColor:
@@ -427,7 +332,9 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                           height: 20,
                         ),
                         TextButton(
-                            onPressed: () async {},
+                            onPressed: () async {
+                              controller.signInWithApple();
+                            },
                             style: TextButton.styleFrom(
                               minimumSize: Size.fromHeight(60),
                               backgroundColor:

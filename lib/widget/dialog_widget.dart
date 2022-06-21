@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
+
+enum DialogBtn { LEFT, RIGHT }
 
 class QcDialog {
   static showProgress({bool barrierDismissible = false}) async {
@@ -20,27 +21,46 @@ class QcDialog {
     }
   }
 
-  static void showMsg(String? title, var msg) {
-    QcLog.e('showMsg : $msg');
+  static void showMsg({String? title, required String msg, Function? callback}) {
+    show(
+        title: title,
+        content: QcText.bodyText1('$msg'),
+        rBtnStr: 'ok'.tr,
+        callback: callback);
+  }
 
+  static void showMsgTwoBtn(
+      {String? title,
+      required Widget content,
+      String? lBtnStr,
+      String? rBtnStr,
+      Function? callback}) {
+    show(
+        title: title,
+        content: content,
+        lBtnStr: lBtnStr,
+        rBtnStr: rBtnStr,
+        callback: callback);
+  }
+
+  static void show(
+      {String? title,
+      required Widget content,
+      String? lBtnStr,
+      String? rBtnStr,
+      Function? callback}) {
     double gWidth = (Get.width / 3);
     double gHeight = (Get.height / 3);
     double gHeightMin = gHeight / 3;
 
     if (Get.width >= Get.height) {
-      QcLog.e('가로 ========');
       gWidth = (Get.width / 3);
       gHeight = (Get.height / 3);
       gHeightMin = gHeight / 3;
-      QcLog.e(
-          'gWidth : $gWidth , gHeight : $gHeight , gHeightMin : $gHeightMin');
     } else {
-      QcLog.e('세로 ========');
       gWidth = (Get.width / 2);
       gHeight = (Get.height / 4);
       gHeightMin = gHeight / 3;
-      QcLog.e(
-          'gWidth : $gWidth , gHeight : $gHeight , gHeightMin : $gHeightMin');
     }
 
     Get.dialog(
@@ -53,21 +73,32 @@ class QcDialog {
               maxHeight: gHeight,
               maxWidth: gWidth),
           child: SingleChildScrollView(
-            // child: ListBody(
-            //   children: <Widget>[
-            //     Text('$msg'),
-            //   ],
-            // ),
-            // child: Text('$msg'),
-            child: QcText.bodyText1('$msg'),
+            child: content,
           ),
         ),
         actions: <Widget>[
+          Visibility(
+            visible: lBtnStr != null && lBtnStr.isNotEmpty,
+            child: TextButton(
+              child: QcText.button(
+                lBtnStr ?? 'cancel'.tr,
+                // fontWeight: FontWeight.bold,
+                fontColor: Theme.of(Get.overlayContext!).colorScheme.secondary,
+              ),
+              onPressed: () {
+                Get.back();
+                callback?.call(DialogBtn.LEFT);
+              },
+            ),
+          ),
           TextButton(
-            child: Text('close'.tr),
-            // child: QcText.bodyText1('닫기'),
+            child: QcText.button(
+              rBtnStr ?? 'ok'.tr,
+              // fontColor: Theme.of(Get.overlayContext!).colorScheme.primary,
+            ),
             onPressed: () {
               Get.back();
+              callback?.call(DialogBtn.RIGHT);
             },
           ),
         ],

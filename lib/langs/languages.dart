@@ -38,6 +38,7 @@ class Languages extends Translations {
           'api_put_posts': 'PUT	/posts/1',
           'api_patch_posts': 'PATCH	/posts/1',
           'api_delete_posts': 'DELETE	/posts/1',
+          'msg_sign_up_email': '해당 이메일로 회원가입을 하시겠습니까?',
           'fire_auth_error_invalid_email':
               'email 사용자 속성에 제공된 값이 잘못되었습니다. 이 값은 문자열 이메일 주소여야 합니다.',
           'fire_auth_error_user_disabled': '이메일에 해당하는 사용자가 비활성화되었습니다.',
