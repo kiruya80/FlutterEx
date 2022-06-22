@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FlutterEx</string>
+    <string name="facebook_app_id">583545319854335</string>
+    <string name="fb_login_protocol_scheme">fb583545319854335</string>
+    <string name="facebook_client_token">67deec921b1938d53a19bb48bba10a1f</string>
+</resources>

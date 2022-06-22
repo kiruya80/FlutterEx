@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/focus_manager.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/firebase/auth_exception.dart';
 import 'package:flutterex/firebase/firebase_auth_utils.dart';
@@ -57,6 +58,15 @@ class FireAuthController extends BaseController {
         /// [UserInfo(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com, phoneNumber: null,
         /// photoURL: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c, providerId: google.com, uid: 109492054029226968010)],
         /// refreshToken: , tenantId: null, uid: pToTGwTyQyNYUlCMXHGAdn6PlCA3)
+
+        /// facebook
+        /// FirebaseAuth user : User(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com, emailVerified: false, isAnonymous: false,
+        /// metadata: UserMetadata(creationTime: 2022-06-22 15:48:51.264, lastSignInTime: 2022-06-22 15:48:51.265), phoneNumber: null,
+        /// photoURL: https://graph.facebook.com/109825618435551/picture, providerData,
+        /// [UserInfo(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com, phoneNumber: null,
+        /// photoURL: https://graph.facebook.com/109825618435551/picture, providerId: facebook.com, uid: 109825618435551)], refreshToken: ,
+        /// tenantId: null, uid: 4zzw6Q3C1KYgTFOmwfHm24M5mFC3)
+        ///
       } else {
         userCredential.value = 'Sign Out';
       }
@@ -66,6 +76,7 @@ class FireAuthController extends BaseController {
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
+    await FacebookAuth.instance.logOut();
   }
 
   void anonymousAuth() {
@@ -175,7 +186,7 @@ class FireAuthController extends BaseController {
 
   void signInWithGoogle() {
     FirebaseAuthUtils.instance.signInWithGoogle().then((value) {
-      QcLog.e('anonymousAuth : $value');
+      QcLog.e('signInWithGoogle : $value');
 
       /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: false, profile: {given_name: 웅진, locale: ko, family_name: 김,
       /// picture: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c, aud: 656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com,
@@ -186,11 +197,44 @@ class FireAuthController extends BaseController {
       ///
     }).catchError((error) {
       QcLog.e('error: $error');
-      QcDialog.showMsg(title: 'notice'.tr, msg: error);
+      String errorMsg = error.toString();
+      if (error is FirebaseAuthException) {
+        // var fireError =  error as FirebaseAuthException;
+        var fireError = error;
+        QcLog.e(
+            'fireError :, ${fireError.plugin} , ${fireError.code} , ${fireError.message}');
+
+        errorMsg = FireAuthException.getErrorMsg(fireError.code);
+      }
+
+      QcDialog.showMsg(title: 'notice'.tr, msg: errorMsg);
     });
   }
 
-  void signInWithFacebook() {}
+  void signInWithFacebook() {
+    FirebaseAuthUtils.instance.signInWithFacebook().then((value) {
+      QcLog.e('signInWithFacebook : $value');
+
+      /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {picture:
+      /// {data: {height: 100, url: https://scontent-dfw5-1.xx.fbcdn.net/v/t1.30497-1/84628273_176159830277856_972693363922829312_n.jpg?stp=c29.0.100.100a_dst-jpg_p100x100&_nc_cat=1&ccb=1-7&_nc_sid=12b3be&_nc_ohc=znOHiwVT5CwAX_xPYWE&_nc_ht=scontent-dfw5-1.xx&edm=AP4hL3IEAAAA&oh=00_AT8B0nbJdXgRlm7s03Wa1kcDtan8dPLszZFieRjSkL58Cg&oe=62D83899, width: 100, is_silhouette: true}},
+      /// first_name: 웅진, id: 109825618435551, name: 김웅진, email: wjdev.iosdev.004@gmail.com, last_name: 김}, providerId: facebook.com, username: null),
+      /// credential: AuthCredential(providerId: facebook.com, signInMethod: facebook.com, token: null), user: User(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com,
+      /// emailVerified: false, isAnonymous: false, metadata: UserMetadata(creationTime: 2022-06-22 15:48:51.264, lastSignInTime: 2022-06-22 15:48:51.265), phoneNumber: null, photoURL: https://graph.facebook.com/1098256184
+    }).catchError((error) {
+      QcLog.e('error: $error');
+      String errorMsg = error.toString();
+      if (error is FirebaseAuthException) {
+        // var fireError =  error as FirebaseAuthException;
+        var fireError = error;
+        QcLog.e(
+            'fireError :, ${fireError.plugin} , ${fireError.code} , ${fireError.message}');
+
+        errorMsg = FireAuthException.getErrorMsg(fireError.code);
+      }
+
+      QcDialog.showMsg(title: 'notice'.tr, msg: errorMsg);
+    });
+  }
 
   void signInWithApple() {}
 }

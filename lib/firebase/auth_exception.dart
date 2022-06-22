@@ -17,7 +17,14 @@ class FireAuthException {
       case "user-not-found":
         errorMessage = 'fire_auth_error_user_not_found'.tr;
         break;
+
+      /// wrong-password : 구글, 페이스북에 가입된 이메일인 경우 이렇게 에러가 나온다
       case "wrong-password":
+        errorMessage = 'fire_auth_error_wrong_password'.tr;
+        break;
+
+      /// 구글, 페이스북에 가입된 이메일인 경우 에러처리됨
+      case "email-already-in-use":
         errorMessage = 'fire_auth_error_wrong_password'.tr;
         break;
 

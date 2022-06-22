@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,6 +8,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 // ignore: public_member_api_docs
 enum AuthMode { SIGN_IN, SIGN_UP, PHONE }
 
+///
+/// 페이스북 로그인 참고
+/// https://unsungit.tistory.com/71
+///
+///
 class FirebaseAuthUtils {
   static FirebaseAuthUtils get instance {
     return FirebaseAuthUtils();
@@ -96,14 +102,14 @@ class FirebaseAuthUtils {
   }
 
   Future<UserCredential> signInWithGoogle() async {
-    // QcDialog.showProgress();
-
     try {
       // Trigger the authentication flow
       final googleUser = await GoogleSignIn().signIn();
+      QcLog.e('googleUser : $googleUser');
 
       // Obtain the auth details from the request
       final googleAuth = await googleUser?.authentication;
+      QcLog.e('googleAuth : $googleAuth');
 
       if (googleAuth != null) {
         // Create a new credential
@@ -112,11 +118,52 @@ class FirebaseAuthUtils {
           idToken: googleAuth.idToken,
         );
 
+        QcLog.e('credential : $credential');
         QcDialog.showProgress();
         // Once signed in, return the UserCredential
         return await FirebaseAuth.instance.signInWithCredential(credential);
       }
       return Future.error('구글 계정을 선택하거나 구글 로그인을 해주세요.');
+    } on FirebaseAuthException catch (e) {
+      QcLog.e('FirebaseAuthException : $e');
+      return Future.error(e);
+    } catch (e) {
+      QcLog.e('catch : $e');
+      return Future.error(e);
+    } finally {
+      QcLog.e('finally : ');
+      QcDialog.dissmissProgress();
+    }
+  }
+
+  /// todo 페이스북 가입 로그인 이후 > 구글 로그인 시도하면 회원 제공업체가 구글로 변경됨
+  /// 이후 페이스북으로 로그인이 안되는 현상이 발생
+  /// 반대로 구글 가입 로그인 이후 >페이스북 로그인 시도시 중복이메일로 가입 로그인이 안됨
+  ///
+  Future<UserCredential> signInWithFacebook() async {
+    try {
+      // Trigger the sign-in flow
+      final LoginResult facebookUser = await FacebookAuth.instance.login();
+      QcLog.e('facebookUser : $facebookUser');
+      QcLog.e(
+          'facebookUser status : ${facebookUser.status}'); // LoginStatus.success
+      QcLog.e(
+          'facebookUser accessToken : ${facebookUser.accessToken?.toJson().toString()}');
+
+      final facebookAuth = facebookUser.accessToken?.token;
+      QcLog.e('facebookAuth : $facebookAuth');
+      // facebookAuth : EAAISuzuAEP8BAA7Ff3awRQ78uIO35j40xYfxBXN3vwVPEKZAtP8cVNONk5dWj91MS9sBeCDZCfMUXXtpRolMVTbMubK1KbL8Ou8SGUL2puvxBd6VL7kZC8kEmLK3wBsW9RnCGuLqKGxZAw7VuVkilbdz2ppQt0BKzue7Lp8fzllFaJLYU3nle0tDoNCSdy4Ro7C9GWFGQXvbZCZCsAlZBza2VSHEi1cZBFOqKxXkvSbTByiLNo0W0Asi49WyA5lv5AsZD
+
+      if (facebookAuth != null) {
+        final OAuthCredential credential =
+            FacebookAuthProvider.credential(facebookAuth);
+
+        QcLog.e('credential : $credential');
+        QcDialog.showProgress();
+        // Once signed in, return the UserCredential
+        return await FirebaseAuth.instance.signInWithCredential(credential);
+      }
+      return Future.error('페이스북 계정을 선택하거나 페이스북 로그인을 해주세요.');
     } on FirebaseAuthException catch (e) {
       QcLog.e('FirebaseAuthException : $e');
       return Future.error(e);

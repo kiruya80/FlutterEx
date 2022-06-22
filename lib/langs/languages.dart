@@ -45,6 +45,7 @@ class Languages extends Translations {
           'fire_auth_error_user_not_found': '이메일에 해당하는 사용자가 없습니다.',
           'fire_auth_error_wrong_password':
               '주어진 이메일에 대한 비밀번호가 유효하지 않거나 이메일에 해당하는 계정에 비밀번호가 설정되지 않았습니다.',
+          'fire_auth_error_email_already_in_use': '해당 이메일은 이미 가입되어 있습니다.',
           'fire_auth_error_account_exists_with_different_credential':
               '이메일 주소를 가진 계정이 이미 있습니다.',
           'fire_auth_error_invalid_credential': '자격 증명의 형식이 잘못되었거나 만료되었습니다.',
@@ -66,6 +67,7 @@ class Languages extends Translations {
               'There is no user corresponding to the given email.',
           'fire_auth_error_wrong_password':
               'The password is invalid for the given email, or the account corresponding to the email does not have a password set.',
+          'fire_auth_error_email_already_in_use': '해당 이메일은 이미 가입되어 있습니다.',
           'fire_auth_error_account_exists_with_different_credential':
               'Email already associated with another account.',
           'fire_auth_error_invalid_credential':
