@@ -47,7 +47,7 @@ class Languages extends Translations {
               '주어진 이메일에 대한 비밀번호가 유효하지 않거나 이메일에 해당하는 계정에 비밀번호가 설정되지 않았습니다.',
           'fire_auth_error_email_already_in_use': '해당 이메일은 이미 가입되어 있습니다.',
           'fire_auth_error_account_exists_with_different_credential':
-              '이메일 주소를 가진 계정이 이미 있습니다.',
+              '이메일 주소는 같지만 로그인 자격 증명이 다른 계정이 이미 존재합니다. 이 이메일 주소와 연결된 제공업체를 사용하여 로그인합니다.',
           'fire_auth_error_invalid_credential': '자격 증명의 형식이 잘못되었거나 만료되었습니다.',
           'fire_auth_error_operation_not_allowed': '회원가입이 허용되지 않은 계정 유형입니다.',
           'fire_auth_error_invali_dverification_code':
@@ -69,7 +69,7 @@ class Languages extends Translations {
               'The password is invalid for the given email, or the account corresponding to the email does not have a password set.',
           'fire_auth_error_email_already_in_use': '해당 이메일은 이미 가입되어 있습니다.',
           'fire_auth_error_account_exists_with_different_credential':
-              'Email already associated with another account.',
+              'An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.',
           'fire_auth_error_invalid_credential':
               'The credential is malformed or has expired.',
           'fire_auth_error_operation_not_allowed':

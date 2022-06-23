@@ -237,11 +237,10 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                     onPressed: () async {
                                       FocusScope.of(context).unfocus();
 
-                                      if (controller.checkIdPwd(
-                                          emailFocusNode,
-                                          tedIdController.text,
-                                          pwdFocusNode,
-                                          tedPwdController.text)) {
+                                      if (controller.checkEmail(emailFocusNode,
+                                              tedIdController.text) &&
+                                          controller.checkPwd(pwdFocusNode,
+                                              tedPwdController.text)) {
                                         controller
                                             .createUserWithEmailAndPassword(
                                                 tedIdController.text,
@@ -268,11 +267,10 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                     onPressed: () async {
                                       FocusScope.of(context).unfocus();
 
-                                      if (controller.checkIdPwd(
-                                          emailFocusNode,
-                                          tedIdController.text,
-                                          pwdFocusNode,
-                                          tedPwdController.text)) {
+                                      if (controller.checkEmail(emailFocusNode,
+                                              tedIdController.text) &&
+                                          controller.checkPwd(pwdFocusNode,
+                                              tedPwdController.text)) {
                                         controller.signInWithEmailAndPassword(
                                             tedIdController.text,
                                             tedPwdController.text);
@@ -285,6 +283,32 @@ class _FireAuthScreenState extends State<FireAuthScreen> {
                                     ),
                                     child: QcText.headline6(
                                       'email Log in',
+                                      fontColor: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ))),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                                // flex: 1,
+                                child: TextButton(
+                                    onPressed: () async {
+                                      FocusScope.of(context).unfocus();
+
+                                      if (controller.checkEmail(emailFocusNode,
+                                          tedIdController.text)) {
+                                        controller.fetchSignInMethodsForEmail(
+                                            tedIdController.text);
+                                      }
+                                    },
+                                    style: TextButton.styleFrom(
+                                      minimumSize: Size.fromHeight(60),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    child: QcText.headline6(
+                                      '중복emil체크',
                                       fontColor: Theme.of(context)
                                           .colorScheme
                                           .onPrimary,

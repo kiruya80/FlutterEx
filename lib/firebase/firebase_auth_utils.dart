@@ -1,13 +1,20 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 /// The mode of the current auth session, either [AuthMode.login] or [AuthMode.register].
 // ignore: public_member_api_docs
 enum AuthMode { SIGN_IN, SIGN_UP, PHONE }
 
+// enum class DeviceModel (val model : String) {
+// SPAD("SM-T530"),
+// OTHER("unknown");
+// }
 ///
 /// 페이스북 로그인 참고
 /// https://unsungit.tistory.com/71
@@ -53,6 +60,47 @@ class FirebaseAuthUtils {
   //       email: emailAddress, password: password);
   // }
 
+  /// 같은이메일 존재하는지 체크 후 존재하는경우 제공업체 리스트 가져오기
+  ///
+  Future<List<String>> fetchSignInMethodsForEmail(String emailAddress) async {
+    QcDialog.showProgress();
+
+    try {
+      // 같은 이메일이 존재하는지 체크
+      return await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(emailAddress);
+    } on FirebaseAuthException catch (e) {
+      return Future.error(e);
+    } catch (e) {
+      return Future.error(e);
+    } finally {
+      QcDialog.dissmissProgress();
+    }
+  }
+
+  // Future<void> check(e) async {
+  //   if (e.code == 'account-exists-with-different-credential') {
+  //     // 1. 구글가입되어 있는 경우
+  //     var url = 'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.width(400)&access_token=${facebookAuth}';
+  //     var graphResponse = await http.get(Uri.parse(url));
+  //     Map<String, dynamic> profile = json.decode(graphResponse.body);
+  //     // var profileData = profile;
+  //
+  //     var email = profile["email"];
+  //
+  //     // 같은 이메일이 존재하는지 체크
+  //     final signInMethods = await fetchSignInMethodsForEmail(email);
+  //     QcLog.e('signInMethods : $signInMethods');
+  //     if (signInMethods.contains("google.com")) {
+  //       // final authGoogleResult = await googleLogin();
+  //       //
+  //       // if (authGoogleResult.user.email == e.email) {
+  //       //   await authGoogleResult.user.linkWithCredential(e.credential);
+  //       // }
+  //     }
+  //   }
+  // }
+
   Future<UserCredential> createUserWithEmailAndPassword(
       AuthMode mode, String emailAddress, String password) async {
     QcDialog.showProgress();
@@ -64,12 +112,9 @@ class FirebaseAuthUtils {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      // return Future.error(e.code);
       return Future.error(e);
     } catch (e) {
       return Future.error(e);
-      // throw FireException(errorMessage: "Unknown Error");
-      // QcDialog.showMsg(e);
     } finally {
       QcLog.e('finally : ');
       QcDialog.dissmissProgress();
@@ -141,6 +186,7 @@ class FirebaseAuthUtils {
   /// 반대로 구글 가입 로그인 이후 >페이스북 로그인 시도시 중복이메일로 가입 로그인이 안됨
   ///
   Future<UserCredential> signInWithFacebook() async {
+    var facebookAuth;
     try {
       // Trigger the sign-in flow
       final LoginResult facebookUser = await FacebookAuth.instance.login();
@@ -150,7 +196,7 @@ class FirebaseAuthUtils {
       QcLog.e(
           'facebookUser accessToken : ${facebookUser.accessToken?.toJson().toString()}');
 
-      final facebookAuth = facebookUser.accessToken?.token;
+      facebookAuth = facebookUser.accessToken?.token;
       QcLog.e('facebookAuth : $facebookAuth');
       // facebookAuth : EAAISuzuAEP8BAA7Ff3awRQ78uIO35j40xYfxBXN3vwVPEKZAtP8cVNONk5dWj91MS9sBeCDZCfMUXXtpRolMVTbMubK1KbL8Ou8SGUL2puvxBd6VL7kZC8kEmLK3wBsW9RnCGuLqKGxZAw7VuVkilbdz2ppQt0BKzue7Lp8fzllFaJLYU3nle0tDoNCSdy4Ro7C9GWFGQXvbZCZCsAlZBza2VSHEi1cZBFOqKxXkvSbTByiLNo0W0Asi49WyA5lv5AsZD
 
@@ -160,12 +206,17 @@ class FirebaseAuthUtils {
 
         QcLog.e('credential : $credential');
         QcDialog.showProgress();
+
+        // FirebaseAuth.instance.signInWithCredential(credential).
+
         // Once signed in, return the UserCredential
         return await FirebaseAuth.instance.signInWithCredential(credential);
       }
       return Future.error('페이스북 계정을 선택하거나 페이스북 로그인을 해주세요.');
     } on FirebaseAuthException catch (e) {
       QcLog.e('FirebaseAuthException : $e');
+      QcLog.e('FirebaseAuthException : ${e.code}');
+
       return Future.error(e);
     } catch (e) {
       QcLog.e('catch : $e');

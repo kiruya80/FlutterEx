@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/focus_manager.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -9,6 +11,7 @@ import 'package:flutterex/widget/dialog_widget.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 
 ///
@@ -93,8 +96,7 @@ class FireAuthController extends BaseController {
     });
   }
 
-  bool checkIdPwd(FocusNode emailFocusNode, String emailAddress,
-      FocusNode pwdFocusNode, String password) {
+  bool checkEmail(FocusNode emailFocusNode, String emailAddress) {
     if (emailAddress.isEmpty || !emailAddress.isEmail) {
       Fluttertoast.showToast(
           msg: 'Email형식으로 입력해주세요',
@@ -105,6 +107,10 @@ class FireAuthController extends BaseController {
       emailFocusNode.requestFocus();
       return false;
     }
+    return true;
+  }
+
+  bool checkPwd(FocusNode pwdFocusNode, String password) {
     if (password.isEmpty || password.length < 6) {
       Fluttertoast.showToast(
           msg: '패스워드는 6자리 이상 입력해주세요',
@@ -130,6 +136,14 @@ class FireAuthController extends BaseController {
       /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
     }).catchError((error) {
       QcLog.e('error: $error');
+
+      ///
+      /// 페이스북 같은 이메일이 존재하는데 가입하는 경우
+      ///  error: [firebase_auth/email-already-in-use] The email address is already in use by another account.
+      ///
+      ///  이메일로 가입되어있는 상태에서 이메일 가입을 선택한 경우로 비번확인 알림과 비번 리셋유도
+      /// error: [firebase_auth/email-already-in-use] The email address is already in use by another account.
+      ///
       String errorMsg = error.toString();
       if (error is FirebaseAuthException) {
         // var fireError =  error as FirebaseAuthException;
@@ -156,6 +170,10 @@ class FireAuthController extends BaseController {
       /// [UserInfo(displayName: null, email: hfhfhhg@huu.mji, phoneNumber: null, photoURL: null, providerId: password, uid: hfhfhhg@huu.mji)], refreshToken: , tenantId: null, uid: N3P9YEXu8mUqDMOcWy2jAdNS1eu1))
     }).catchError((error) {
       QcLog.e('error: $error');
+
+      /// 페이스북 같은 이메일이 존재하는데 로그인하는 경우
+      /// error: [firebase_auth/wrong-password] The password is invalid or the user does not have a password.
+      ///
       String errorMsg = error.toString();
       if (error is FirebaseAuthException) {
         // var fireError =  error as FirebaseAuthException;
@@ -184,9 +202,25 @@ class FireAuthController extends BaseController {
     });
   }
 
+  void fetchSignInMethodsForEmail(String emailAddress) {
+    FirebaseAuthUtils.instance
+        .fetchSignInMethodsForEmail(emailAddress)
+        .then((providerList) {
+      QcLog.e('fetchSignInMethodsForEmail : $providerList');
+    }).catchError((error) {
+      QcLog.e('error: $error');
+    });
+  }
+
   void signInWithGoogle() {
     FirebaseAuthUtils.instance.signInWithGoogle().then((value) {
       QcLog.e('signInWithGoogle : $value');
+
+      // providerData ==  [UserInfo(displayName: 김웅진,
+      // email: wjdev.iosdev.004@gmail.com, phoneNumber: null,
+      // photoURL: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c,
+      // providerId: google.com, uid: 109492054029226968010)]
+      QcLog.e('providerData ==  ${value.user?.providerData.toString()}');
 
       /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: false, profile: {given_name: 웅진, locale: ko, family_name: 김,
       /// picture: https://lh3.googleusercontent.com/a/AATXAJzZmiYnMwnEH_GZulUPsYyIuhe3xNwfibcvOXn4=s96-c, aud: 656621123867-fmpg2hup4fj6ko27pctkru5bp7hv4idg.apps.googleusercontent.com,
@@ -212,15 +246,23 @@ class FireAuthController extends BaseController {
   }
 
   void signInWithFacebook() {
-    FirebaseAuthUtils.instance.signInWithFacebook().then((value) {
+    FirebaseAuthUtils.instance.signInWithFacebook().whenComplete(() {
+      QcLog.e('whenComplete');
+    })
+        // .onError((error, stackTrace) {
+        //   QcLog.e('error $error');
+        // })
+        .then((value) {
       QcLog.e('signInWithFacebook : $value');
+      // value.user.linkWithCredential(credential)
+      // value.user.unlink(providerId)
 
       /// UserCredential(additionalUserInfo: AdditionalUserInfo(isNewUser: true, profile: {picture:
       /// {data: {height: 100, url: https://scontent-dfw5-1.xx.fbcdn.net/v/t1.30497-1/84628273_176159830277856_972693363922829312_n.jpg?stp=c29.0.100.100a_dst-jpg_p100x100&_nc_cat=1&ccb=1-7&_nc_sid=12b3be&_nc_ohc=znOHiwVT5CwAX_xPYWE&_nc_ht=scontent-dfw5-1.xx&edm=AP4hL3IEAAAA&oh=00_AT8B0nbJdXgRlm7s03Wa1kcDtan8dPLszZFieRjSkL58Cg&oe=62D83899, width: 100, is_silhouette: true}},
       /// first_name: 웅진, id: 109825618435551, name: 김웅진, email: wjdev.iosdev.004@gmail.com, last_name: 김}, providerId: facebook.com, username: null),
       /// credential: AuthCredential(providerId: facebook.com, signInMethod: facebook.com, token: null), user: User(displayName: 김웅진, email: wjdev.iosdev.004@gmail.com,
       /// emailVerified: false, isAnonymous: false, metadata: UserMetadata(creationTime: 2022-06-22 15:48:51.264, lastSignInTime: 2022-06-22 15:48:51.265), phoneNumber: null, photoURL: https://graph.facebook.com/1098256184
-    }).catchError((error) {
+    }).catchError((error) async {
       QcLog.e('error: $error');
       String errorMsg = error.toString();
       if (error is FirebaseAuthException) {
@@ -233,6 +275,10 @@ class FireAuthController extends BaseController {
       }
 
       QcDialog.showMsg(title: 'notice'.tr, msg: errorMsg);
+
+      User? user = FirebaseAuth.instance.currentUser;
+      QcLog.e('user : $user');
+      QcLog.e('user : ${user.toString()}');
     });
   }
 

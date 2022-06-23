@@ -4,6 +4,8 @@ class FireAuthException {
   ///
   /// https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#signinwithcredential
   ///
+  /// https://firebase.flutter.dev/docs/auth/usage/
+  ///
   static String getErrorMsg(String code) {
     String errorMessage = '';
     switch (code) {
@@ -30,6 +32,7 @@ class FireAuthException {
 
       // signInWithCredential
       case "account-exists-with-different-credential":
+        // 이메일 주소는 같지만 로그인 자격 증명이 다른 계정이 이미 존재합니다. 이 이메일 주소와 연결된 제공업체를 사용하여 로그인합니다.
         errorMessage =
             'fire_auth_error_account_exists_with_different_credential'.tr;
         break;
