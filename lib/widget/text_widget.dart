@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 
 /// NAME         SIZE  WEIGHT  SPACING
@@ -33,6 +34,7 @@ class QcText extends Text {
             key: key,
             overflow: TextOverflow.ellipsis,
             maxLines: maxLines ?? MAX_LINES,
+            // maxLines: multiline == true ? (maxLine ?? MAX_LINES) : 1,
             style: TextStyle(
                 color: fontColor,
                 fontSize: fontSize ?? textStyle?.fontSize,
@@ -41,7 +43,13 @@ class QcText extends Text {
                 leadingDistribution: textStyle?.leadingDistribution,
                 fontFamily: fontFamily ?? "NanumSquare",
                 decoration: decoration),
-            textAlign: textAlign ?? TextAlign.left);
+            textAlign: textAlign ?? TextAlign.left) {
+    // var maxLines_ = multiline == true ? (maxLine ?? MAX_LINES) : 1;
+    // QcLog.e('text ========== $text');
+    // QcLog.e('multiline === $multiline');
+    // QcLog.e('maxLine === $maxLine');
+    // QcLog.e('maxLines_ === $maxLines_');
+  }
 
   factory QcText.common(String text,
           {Key? key,

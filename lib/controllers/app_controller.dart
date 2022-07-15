@@ -18,6 +18,11 @@ import 'package:http/http.dart' as http;
 /// https://uaremine.tistory.com/22
 /// https://github.com/nicejhkim/flutter_fcm_sample
 ///
+/// push test
+/// https://testfcm.com/
+/// https://pushtry.com/
+///
+///
 class AppController extends BaseController {
   static AppController get to => Get.find();
   var _isDeviceLight = true.obs;
@@ -63,6 +68,7 @@ class AppController extends BaseController {
 
   final Rxn<RemoteMessage> message = Rxn<RemoteMessage>();
   var fcmToken = ''.obs;
+  var apnsToken = ''.obs;
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
@@ -104,23 +110,7 @@ class AppController extends BaseController {
 
     if (Platform.isAndroid) {
       // Android 에서는 별도의 확인 없이 리턴되지만, requestPermission()을 호출하지 않으면 수신되지 않는다.
-      await FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        announcement: true,
-        badge: true,
-        carPlay: true,
-        criticalAlert: true,
-        provisional: true,
-        sound: true,
-      );
-
-      await FirebaseMessaging.instance.getToken().then((value) {
-        fcmToken.value = value!;
-        QcLog.e('fcmToken === $fcmToken');
-      }).catchError((error) {
-        // error가 해당 에러를 출력
-        QcLog.e('error: $error');
-      });
+      await FirebaseMessaging.instance.requestPermission();
 
       // final fcmToken = await FirebaseMessaging.instance.getToken();
       // QcLog.e('fcmToken === $fcmToken');
@@ -133,6 +123,11 @@ class AppController extends BaseController {
         badge: true,
         sound: true,
       );
+      // await FirebaseMessaging.instance.requestPermission(
+      //   alert: true,
+      //   badge: true,
+      //   sound: true,
+      // );
 
 // iOS 권한 요청
 //       FirebaseMessaging.instance.requestPermission()
@@ -142,9 +137,22 @@ class AppController extends BaseController {
 //         print("Settings registered: $settings");
 //       });
 
-      var getAPNSToken = await FirebaseMessaging.instance.getAPNSToken();
-      QcLog.e('getAPNSToken === $getAPNSToken');
+      await FirebaseMessaging.instance.getAPNSToken().then((value) {
+        apnsToken.value = value!;
+        QcLog.e('apnsToken === $apnsToken');
+      }).catchError((error) {
+        QcLog.e('error: $error');
+      });
     }
+
+    /// fcmToken === elzglGJpQ1O2dWzNV3U8Xa:APA91bFKOfllgrobLOyOyDlzak3cFK-LIN_6eBcmzQbVw4Sxv6AzsR2jx-smS92V_Zrg_sfUA0ZmaM0Yjcme07dwTvZteFTStO3PGz31SK1hWSqJk4vsHrv78tfJu7cyoXcIBvqjouMA
+    await FirebaseMessaging.instance.getToken().then((value) {
+      fcmToken.value = value!;
+      QcLog.e('fcmToken === $fcmToken');
+    }).catchError((error) {
+      // error가 해당 에러를 출력
+      QcLog.e('error: $error');
+    });
 
     FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
       QcLog.e('onTokenRefresh === $fcmToken');
@@ -236,13 +244,23 @@ class AppController extends BaseController {
     //   ttl: 2419200
     // }
     ///
+    ///
     FirebaseMessaging.onMessage.listen((RemoteMessage rm) async {
       QcLog.e('Got a message whilst in the foreground!');
       QcLog.e('onMessage ===== ${rm.toMap()}');
+
+      /// onMessage =====
+      /// {senderId: null, category: null, collapseKey: com.example.flutterex, contentAvailable: false, data: {},
+      /// from: 656621123867, messageId: 0:1657861341285002%14bdfb1e14bdfb1e, messageType: null, mutableContent: false,
+      /// notification: {title: null, titleLocArgs: [], titleLocKey: null, body: test message !!, bodyLocArgs: [], bodyLocKey: null,
+      /// android: {channelId: null, clickAction: null, color: null, count: null, imageUrl: , link: null, priority: 0, smallIcon: null, sound: default, ticker: null, tag: null, visibility: 0},
+      /// apple: null,
+      /// web: null},
+      /// sentTime: 1657861341237, threadId: null, ttl: 2419200}
       // QcLog.e('onMessage ===== ${rm.toMap().toString()}');
       message.value = rm;
       RemoteNotification? notification = rm.notification;
-      AndroidNotification? android = rm.notification?.android;
+      AndroidNotification? android = notification?.android;
 
       BigPictureStyleInformation? bigPictureStyleInformation = null;
       AndroidNotificationDetails androidPlatformChannelSpecifics;
@@ -250,8 +268,8 @@ class AppController extends BaseController {
       if (notification != null && android != null && !kIsWeb) {
         QcLog.e(
             'onMessage show NotificationDetails ===== ${notification.toMap()}');
-        if (notification.android?.imageUrl != null) {
-          String? imgUrl = notification.android?.imageUrl;
+        if (android.imageUrl?.isNotEmpty == true) {
+          String? imgUrl = android.imageUrl;
           final ByteArrayAndroidBitmap bigPicture =
               // ByteArrayAndroidBitmap(  await _getByteArrayFromUrl( 'https://via.placeholder.com/400x800'));
               ByteArrayAndroidBitmap(await _getByteArrayFromUrl(imgUrl!));

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterex/controllers/permission_controller.dart';
 import 'package:flutterex/screens/components/permission_list_item.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +13,9 @@ class PermissionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    QcLog.e('build ========= ');
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     PermissionController controller = Get.find<PermissionController>();
 
     return Obx(() {

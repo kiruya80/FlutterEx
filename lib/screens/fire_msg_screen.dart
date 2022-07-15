@@ -14,7 +14,8 @@ import 'package:get/get.dart';
 /// https://babbab2.tistory.com/58?category=831129
 ///
 ///
-class FireMsgScreen extends StatelessWidget {
+// class FireMsgScreen extends StatelessWidget {
+class FireMsgScreen extends GetView<FireMsgController> {
   static const routeName = '/fire/Msg';
 
   const FireMsgScreen({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class FireMsgScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QcLog.e("FireMsgScreen =============");
-    FireMsgController controller = Get.find<FireMsgController>();
+    // FireMsgController controller = Get.find<FireMsgController>();
     AppController appController = Get.find<AppController>();
 
     return Obx(() {
@@ -30,7 +31,7 @@ class FireMsgScreen extends StatelessWidget {
         appBar: AppBar(
           title: QcText.headline6(controller.title.value),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.back();
             },
@@ -60,6 +61,23 @@ class FireMsgScreen extends StatelessWidget {
                       },
                       child: QcText.headline6(
                         'FCM msg clear',
+                        // fontColor: Theme.of(context).colorScheme.onPrimary,
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size.fromHeight(50),
+                      ),
+                      onPressed: () async {
+                        controller.sendFcmHttpApi(
+                          controller.serverKey,
+                          controller.fcmToken,
+                        );
+                      },
+                      child: QcText.headline6(
+                        'FCM msg send',
                         // fontColor: Theme.of(context).colorScheme.onPrimary,
                       )),
                   const SizedBox(

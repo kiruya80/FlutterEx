@@ -11,9 +11,16 @@ class PermissionController extends BaseController {
 
   @override
   void onInit() {
+    QcLog.e('onInit ========= ');
     super.onInit();
 
     getPermissionItems();
+  }
+
+  @override
+  void onReady() {
+    QcLog.e('onReady ========= ');
+    super.onReady();
   }
 
   Future<List<PermissionItem>> getPermissionItems() async {

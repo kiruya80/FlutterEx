@@ -1,0 +1,118 @@
+package com.ulling.myapplication.fcm;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.ulling.myapplication.QcLog;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+/**
+ * https://team-platform.tistory.com/23
+ * https://testfcm.com/
+ * https://pushtry.com/
+ */
+public class FcmSender {
+    private static FcmSender SINGLE_U;
+
+    public static synchronized FcmSender getInstance() {
+        if (SINGLE_U == null) {
+            SINGLE_U = new FcmSender();
+        }
+        return SINGLE_U;
+    }
+
+    //flutterex
+//    static String serverKey = "AAAAmOGrORs:APA91bF1fV0MSoSEAyDMGnUePd";
+//    public static String fcmTokenSample = "elzglGJpQ1O2dWzNV3U8Xa:APA91bFKOfllgrobLOyOyDlzak3cFK-";
+
+    public void sendFcmFirebaseAdminSdk(String token) {
+
+    }
+
+    /**
+     * 기존 http api
+     * 단일기기 , 기기그룹, 주제 구독
+     * 멀티캐스트 (여러기기 가능)
+     *
+     * @param token
+     */
+    public void sendFcmHttpApi(String token) {
+        //메시지 가공
+        JsonObject jsonObj = new JsonObject();
+        //token
+        Gson gson = new Gson();
+        JsonElement jsonElement = gson.toJsonTree(token);
+        // to는 기기 토큰, 기기 그룹 토큰, 주제가 들어갈수 있다.
+        //멀티 캐스트로 발송하려면 to를 사용하지 않고 registration_ids를 사용한다.
+        jsonObj.add("to", jsonElement);
+        //Notification
+        JsonObject notification = new JsonObject();
+        notification.addProperty("title", "타이틀입니다");
+        notification.addProperty("body", "바디내용입니다 기존 http api 방식");
+        jsonObj.add("notification", notification);
+        QcLog.e("jsonObj ========== " + jsonObj.toString());
+        // {"to":"cjUuB_i6S4-XCxuXX3XPq1:APA91bH42xmfs-bTvsFyLsCT6qoI6uNpMuKQgOyZ3J-PLRlNKhc7ovM62vH1hqUl7uOW859l2vtCL7Y_dbDpXoDS_W0gtvwzbDat-4IHTFsRDx4DeDE4ombdhRLMg7yVQldR3VjO2bzF",
+        // "notification":{"title":"타이틀HTTP","body":"바디HTTP"}}
+
+        /*발송*/
+        final MediaType mediaType = MediaType.parse("application/json");
+        OkHttpClient httpClient = new OkHttpClient();
+        try {
+            Request request = new Request.Builder().url("https://fcm.googleapis.com/fcm/send")
+                    .addHeader("Content-Type", "application/json; UTF-8")
+                    .addHeader("Authorization", "key=" + serverKey)
+                    .post(RequestBody.create(mediaType, jsonObj.toString())).build();
+            QcLog.e("request url ============== " + request.url().toString());
+            QcLog.e("request method =========== " + request.method().toString());
+            QcLog.e("request headers ========== " + request.headers().toString());
+            QcLog.e("request body ============= " + request.body().toString());
+            Response response = httpClient.newCall(request).execute();
+            String res = response.body().string();
+            QcLog.e("notification response " + res);
+        } catch (IOException e) {
+            e.printStackTrace();
+            QcLog.e("Error in sending message to FCM server " + e);
+        }
+    }
+
+
+    /**
+     * http v1 api
+     * 단일기기 , 기기그룹, 주제 구독
+     * <p>
+     * <p>
+     * implementation 'com.google.api-client:google-api-client:1.32.2'
+     *
+     * @param token
+     */
+    public void sendFcmHttpV1Api(String token) {
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("token", "토큰정보");
+        JsonObject notification = new JsonObject();
+        notification.addProperty("body", "\uD83D\uDE03바디V1");
+        notification.addProperty("title", "\uD83D\uDE03타이틀V1");
+        jsonObj.add("notification", notification);
+        JsonObject message = new JsonObject();
+        message.add("message", jsonObj);
+
+//        GoogleCredential googleCredential = null;
+//        InputStream serviceAccount = null;
+//        String SCOPES = "https://www.googleapis.com/auth/firebase.messaging";
+//        try {
+//            ClassPathResource resource = new ClassPathResource("fcmmsg.json");
+//            serviceAccount = resource.getInputStream();
+//            googleCredential = GoogleCredential
+//                    .fromStream(serviceAccount)
+//                    .createScoped(Arrays.asList(SCOPES));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+}

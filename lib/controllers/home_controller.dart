@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:flutterex/constants/android_channel.dart';
 import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
@@ -17,6 +21,7 @@ import 'package:flutterex/screens/printing_screen.dart';
 import 'package:flutterex/screens/fire_msg_screen.dart';
 import 'package:flutterex/screens/tran_page_screen.dart';
 import 'package:flutterex/screens/widget_type_screen.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,6 +63,34 @@ class HomeController extends BaseController {
 // final number = 0.obs;
 // final items = <String>[].obs;
 // final myMap = <String, int>{}.obs;
+
+  @override
+  void onInit() {
+    QcLog.e('onInit ========= ');
+    super.onInit();
+
+    getStartIntent().then((value) {
+      QcLog.e('getStartIntent ========= ');
+    });
+  }
+
+  Future<void> getStartIntent() async {
+    try {
+      final String result =
+          await AndroidChannel.platform.invokeMethod('getIntentValues');
+
+      var intentData = json.decode(result);
+      QcLog.e('intentData : $intentData ');
+    } on PlatformException catch (e) {
+      QcLog.d("InFlutter getIntentValues  Exception: $e");
+    } finally {}
+  }
+
+  @override
+  void onReady() {
+    QcLog.e('onReady ========= ');
+    super.onReady();
+  }
 
   Future<List<HomeItem>> getHomeItems() async {
     List<HomeItem> homeItems = [];

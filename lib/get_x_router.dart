@@ -18,6 +18,7 @@ import 'package:flutterex/bindings/fire_msg_binding.dart';
 import 'package:flutterex/bindings/tran_detail_page_binding.dart';
 import 'package:flutterex/bindings/tran_page_binding.dart';
 import 'package:flutterex/bindings/widget_type_binding.dart';
+import 'package:flutterex/controllers/app_controller.dart';
 import 'package:flutterex/screens/dio_api_screen.dart';
 import 'package:flutterex/screens/fire_analytics_screen.dart';
 import 'package:flutterex/screens/fire_app_check_screen.dart';
@@ -43,7 +44,7 @@ import 'screens/widget_type_screen.dart';
 
 class GetXRouterContainer {
   GetXRouterContainer() {
-    // Get.put(SessionBinding());
+    Get.put(AppController());
   }
 
   final allPageRouter = [

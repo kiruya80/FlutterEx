@@ -13,7 +13,7 @@ import android.os.Bundle
 
 class MainActivity: FlutterActivity() {
     private val TAG = "MainActivity"
-    private val CHANNEL = "flutterex/client"
+    private val CHANNEL = "com.example.flutterex/client"
     private lateinit var _result: MethodChannel.Result
     private val intents = mutableMapOf<String, String?>()
 
@@ -65,8 +65,10 @@ class MainActivity: FlutterActivity() {
 
             if (call.method.contentEquals("getIntentValues")) {
                 Log.e(TAG, "call.method :!!!! getIntentValues ")
-//                result.success(JSONObject(intents as Map<*, *>).toString())
-                //intents.clear()
+                result.success(JSONObject(intents as Map<*, *>).toString())
+
+            } else  if (call.method.contentEquals("sendFcmMsg")) {
+                Log.e(TAG, "call.method :!!!! sendFcmMsg ")
 
             } else {
                 result.notImplemented();

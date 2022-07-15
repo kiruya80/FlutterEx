@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterex/constants/ThemeService.dart';
+import 'package:flutterex/constants/theme_service.dart';
 import 'package:flutterex/controllers/app_controller.dart';
 import 'package:flutterex/firebase/firebase_options.dart';
 import 'package:flutterex/get_x_router.dart';
@@ -47,7 +47,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // await Firebase.initializeApp();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  QcLog.e("Handling a background message: ${message.messageId}");
+  QcLog.e(
+      "Handling a background message: ${message.messageId}, ${message.data.toString()}");
 }
 
 Future<void> getDeviceTheme() async {

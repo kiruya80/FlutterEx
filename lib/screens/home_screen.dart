@@ -1,22 +1,33 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterex/controllers/home_controller.dart';
 import 'package:flutterex/datas/model/home_item.dart';
 import 'package:flutterex/screens/components/home_list_item_card.dart';
+import 'package:flutterex/utils/print_log.dart';
 import 'package:flutterex/widget/text_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 /// 가이드 화면
-class HomeScreen extends StatelessWidget {
+// class HomeScreen extends StatelessWidget {
+class HomeScreen extends GetView<HomeController> {
   static const routeName = '/';
 
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    QcLog.e('build ========= ');
+
+    /// todo 전체 화면을 사용하는 경우 시스템 팝업등이 나오면 앱 시작메인화면을 새로 build한다
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     FocusScope.of(context).unfocus();
     HomeController controller = Get.find<HomeController>();
 
+    if (kDebugMode) {
+      Fluttertoast.showToast(msg: '홈 시작 !!!!');
+    }
     controller.title.value = 'title_main'.tr;
     final screenWidth = MediaQuery.of(context).size.width;
     var orientation = MediaQuery.of(context).orientation;
@@ -24,6 +35,7 @@ class HomeScreen extends StatelessWidget {
     // return Obx(() {
     // return KeyboardWidget(
     return Scaffold(
+      // resizeToAvoidBottomInset: false, // Scaffold의 resizeToAvoidBottomInset: false, 속성
       // Scaffold 기본 UI형태 appBar, body, BottomNavigationBar, FloatingActionButton, FloatingActionButtonLocation
       appBar: AppBar(
         // backgroundColor: Theme.of(context).colorScheme.primaryContainer,
