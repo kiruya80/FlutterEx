@@ -9,6 +9,7 @@ import 'package:flutterex/controllers/base_controller.dart';
 import 'package:flutterex/controllers/fire_msg_controller.dart';
 import 'package:flutterex/screens/fire_msg_screen.dart';
 import 'package:flutterex/utils/print_log.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -72,7 +73,12 @@ class AppController extends BaseController {
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  Future<bool> initialize() async {
+  void init() {
+    initialize();
+    initFirebaseMessaging();
+  }
+
+  Future<void> initialize() async {
     QcLog.e('initialize =====');
     // Firebase 초기화부터 해야 Firebase Messaging 을 사용할 수 있다.
     // await Firebase.initializeApp();
@@ -314,25 +320,33 @@ class AppController extends BaseController {
         );
       }
     });
+  }
 
-    // Background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage rm) {
-      QcLog.e('onMessageOpenedApp ===== ${rm.data}');
-      // Get.toNamed(FireMsgScreen.routeName,  arguments: {'msg': rm.data['argument']});
-      // Get.toNamed(FireMsgScreen.routeName, arguments: {rm.data['argument']});
-      Get.toNamed(FireMsgScreen.routeName,
-          //     arguments: {
-          //   'name': 'title_firebase_messaging'.tr,
-          //   'remoteMsg': rm.data
-          // }
-          arguments: FireMsgArguments('title_firebase_messaging'.tr, rm, true));
-    });
+  void initFirebaseMessaging() async {
+    QcLog.e("initFirebaseMessaging ======");
 
+    ////
+    /// todo 앱 실행중 상태에서 push 들어온다
     /// Terminated 앱종료 상태에서 도착한 메시지에 대한 처리
-    /// 앱 백백으로 내린 경우에 푸쉬 클릭시 호출
-    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? rm) {
-      if (rm != null) {
-        QcLog.e('initialMessage === ${rm.data}');
+    ///
+    FirebaseMessaging.instance.getInitialMessage().then((_) {
+      QcLog.e('getInitialMessage foreground =========== ');
+      FirebaseMessaging.onMessage.listen((rm) {
+        QcLog.e('onMessage =========== ' + rm.toMap().toString());
+        //  {senderId: null, category: null, collapseKey: com.wjthinkbig.nfmiddle.client, contentAvailable: false, data: {}, from: 54034015632, messageId: 0:1657869609815067%4d2ad6cc4d2ad6cc, messageType: null, mutableContent: false, notification: {title: 타이틀HTTP, titleLocArgs: [], titleLocKey: null, body: 바디HTTP, bodyLocArgs: [], bodyLocKey: null, android: {channelId: null, clickAction: null, color: null, count: null, imageUrl: null, link: null, priority: 0, smallIcon: null, sound: null, ticker: null, tag: null, visibility: 0}, apple: null, web: null}, sentTime: 1657869609806, threadId: null, ttl: 2419200}
+        var msg = rm.notification?.toMap();
+        QcLog.e('onMessage =========== $msg');
+        // {title: 타이틀HTTP, titleLocArgs: [], titleLocKey: null, body: 바디HTTP, bodyLocArgs: [], bodyLocKey: null, android: {channelId: null, clickAction: null, color: null, count: null, imageUrl: null, link: null, priority: 0, smallIcon: null, sound: null, ticker: null, tag: null, visibility: 0}, apple: null, web: null}
+
+        String? title = rm.notification?.title.toString();
+        String? body = rm.notification?.body.toString();
+
+        Fluttertoast.showToast(
+            msg: "title : $title \n body : $body",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1);
+
         // Get.toNamed(FireMsgScreen.routeName, arguments: {'msg': initialMessage.data['argument']});
         // Get.toNamed(FireMsgScreen.routeName, arguments: {initialMessage.data['argument']});
         Get.toNamed(FireMsgScreen.routeName,
@@ -342,12 +356,48 @@ class AppController extends BaseController {
             // }
             arguments:
                 FireMsgArguments('title_firebase_messaging'.tr, rm, true));
-      }
-    }).catchError((error) {
-      QcLog.e('error: $error');
+      });
     });
+    // FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? rm) {
+    //   if (rm != null) {
+    //     QcLog.e('initialMessage === ${rm.data}');
+    //     // Get.toNamed(FireMsgScreen.routeName, arguments: {'msg': initialMessage.data['argument']});
+    //     // Get.toNamed(FireMsgScreen.routeName, arguments: {initialMessage.data['argument']});
+    //     Get.toNamed(FireMsgScreen.routeName,
+    //         //     arguments: {
+    //         //   'name': 'title_firebase_messaging'.tr,
+    //         //   'remoteMsg': message.data
+    //         // }
+    //         arguments:
+    //         FireMsgArguments('title_firebase_messaging'.tr, rm, true));
+    //   }
+    // }).catchError((error) {
+    //   QcLog.e('error: $error');
+    // });
 
-    return true;
+    ///
+    /// todo Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
+    ///
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage rm) {
+      QcLog.e('onMessageOpenedApp ===== ${rm.data}');
+
+      var msg = rm.notification?.toMap();
+      QcLog.e('onMessage =========== $msg');
+      // {title: title입니다, titleLocArgs: [], titleLocKey: null, body: body 입니다, bodyLocArgs: [], bodyLocKey: null,
+      // android: {channelId: null, clickAction: null, color: null, count: null, imageUrl: null, link: null, priority: 0, smallIcon: null, sound: null, ticker: null, tag: null, visibility: 0}, apple: null, web: null}
+
+      String? title = rm.notification?.title.toString();
+      String? body = rm.notification?.body.toString();
+
+      // Get.toNamed(FireMsgScreen.routeName,  arguments: {'msg': rm.data['argument']});
+      // Get.toNamed(FireMsgScreen.routeName, arguments: {rm.data['argument']});
+      Get.toNamed(FireMsgScreen.routeName,
+          //     arguments: {
+          //   'name': 'title_firebase_messaging'.tr,
+          //   'remoteMsg': rm.data
+          // }
+          arguments: FireMsgArguments('title_firebase_messaging'.tr, rm, true));
+    });
   }
 
   Future<Uint8List> _getByteArrayFromUrl(String url) async {

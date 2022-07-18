@@ -44,6 +44,7 @@ import 'screens/widget_type_screen.dart';
 
 class GetXRouterContainer {
   GetXRouterContainer() {
+    /// runApp MyApp 이후 실행됨
     Get.put(AppController());
   }
 
@@ -53,15 +54,17 @@ class GetXRouterContainer {
         page: () => HomeScreen(),
         binding: HomeBinding()),
     GetPage(
-      name: FontScreen.routeName,
-      page: () => FontScreen(),
-      binding: FontBinding(),
-    ),
+        name: FontScreen.routeName,
+        page: () => FontScreen(),
+        binding: FontBinding(),
+        popGesture:
+            true // popGesture이 true인 경우, 스와이프하여 뒤로가기 기능을 사용할 수 있으며, false인 경우 스와이프하여 뒤로가기 기능을 사용할 수 없습니다.
+        ),
     GetPage(
-      name: WidgetTypeScreen.routeName,
-      page: () => WidgetTypeScreen(),
-      binding: WidgetTypeBinding(),
-    ),
+        name: WidgetTypeScreen.routeName,
+        page: () => WidgetTypeScreen(),
+        binding: WidgetTypeBinding(),
+        popGesture: true),
     GetPage(
       name: ImageScreen.routeName,
       page: () => ImageScreen(),

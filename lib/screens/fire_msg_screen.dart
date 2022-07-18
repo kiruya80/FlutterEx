@@ -83,6 +83,25 @@ class FireMsgScreen extends GetView<FireMsgController> {
                   const SizedBox(
                     height: 20,
                   ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size.fromHeight(50),
+                      ),
+                      onPressed: () async {
+                        Future.delayed(const Duration(seconds: 5), () {
+                          controller.sendFcmHttpApi(
+                            controller.serverKey,
+                            controller.fcmToken,
+                          );
+                        });
+                      },
+                      child: QcText.headline6(
+                        'FCM msg send (after 5 second)',
+                        // fontColor: Theme.of(context).colorScheme.onPrimary,
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
                 ],
               )),
         ),

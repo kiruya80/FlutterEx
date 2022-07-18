@@ -21,8 +21,13 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 Future<void> main() async {
-  // runZonedGuarded : 버튼등 onPressed 에서 발생하는 오류 체크 위해
+  /// runZonedGuarded : 버튼등 onPressed 에서 발생하는 오류 체크 위해
+  /// zone은 프로그램이 예상치 못한 에러로부터 종료하는 걸 막을 때 쓰입니다.
+  /// 일반적인 상황이면 프로그램이 종료되는 경우더라도 zone(존)을 쓰면 잘 돌아가게 되는 거죠.
+  /// Zone을 쓰면 계속 프로그램이 실행됩니다.
+  ///
   await runZonedGuarded(() async {
+    /// WidgetsFlutterBinding.ensureInitialized()은 반드시 runZonedGuarded 내부에서 호출
     WidgetsFlutterBinding.ensureInitialized();
     getDeviceTheme();
 
@@ -41,14 +46,32 @@ Future<void> main() async {
   });
 }
 
+///
+/// todo 앱이 백그라운드에 있거나 종료될 때 트리거할 백그라운드 메시지 핸들러를 설정합니다.
+/// todo 앱종료시 테스트는 릴리즈로 빌드하면 나온다
+///
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  // await Firebase.initializeApp();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   QcLog.e(
       "Handling a background message: ${message.messageId}, ${message.data.toString()}");
+
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  /// 종료되었을 경우등 Firebase 초기화 필수
+  await Firebase.initializeApp();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  var msg = message.notification?.toMap();
+  // {title: title입니다, titleLocArgs: [], titleLocKey: null, body: body 입니다, bodyLocArgs: [], bodyLocKey: null,
+  // android: {channelId: null, clickAction: null, color: null, count: null, imageUrl: null, link: null, priority: 0, smallIcon: null, sound: null, ticker: null, tag: null, visibility: 0}, apple: null, web: null}
+
+  String? title = message.notification?.title.toString();
+  String? body = message.notification?.body.toString();
+
+  Fluttertoast.showToast(
+      msg: "title : $title \n body : $body",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1);
 }
 
 Future<void> getDeviceTheme() async {
@@ -96,9 +119,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).unfocus();
-    var seedColor = Colors.green;
+    // var seedColor = Colors.green;
     logAppOpen();
-    appController.initialize();
+    appController.init();
 
     // var seedColorScheme = ColorScheme.fromSeed(seedColor: SEED_COLOR);
     // seedColorScheme.secondary
